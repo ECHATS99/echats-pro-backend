@@ -1,0 +1,524 @@
+# 🎯 LEÇON 10 — Red Team
+### *Simulation d'Adversaire · MITRE ATT&CK · Detection Engineering*
+
+---
+
+## DERNIÈRE LEÇON TECHNIQUE DU CURSUS PRINCIPAL
+
+Tout ce qu'on a construit ensemble — réseau, Linux, Python, crypto, OSINT, web, pentest, forensic, malware — converge ici. Le Red Team c'est la discipline qui **simule un véritable adversaire** pour tester non pas juste les vulnérabilités, mais la **capacité de détection et de réaction** d'une organisation entière.
+
+---
+
+## CADRE ÉTHIQUE — ENCORE PLUS STRICT QU'AVANT
+
+```
+Un Red Team Engagement nécessite TOUJOURS :
+✅ Un contrat signé avec Rules of Engagement (RoE) précises
+✅ Un périmètre défini noir sur blanc
+✅ Un contact d'urgence côté client, disponible 24/7
+✅ Une autorisation écrite de la direction, pas juste de l'IT
+✅ Une procédure d'arrêt immédiat ("get out of jail card")
+
+Sans ces 5 éléments — ce n'est plus un Red Team.
+C'est une intrusion criminelle.
+```
+
+Le Red Team va plus loin que le pentest — donc le cadre légal doit être encore plus solide.
+
+---
+
+## PARTIE 1 — Red Team vs Pentest vs Blue Team
+
+```
+PENTEST
+→ Trouve un maximum de vulnérabilités
+→ Court terme (jours/semaines)
+→ Connu de l'équipe IT à l'avance
+→ Objectif : liste de failles à corriger
+
+RED TEAM
+→ Simule un vrai adversaire avec un objectif précis
+→ Long terme (semaines/mois)
+→ L'équipe de sécurité (Blue Team) ne sait PAS que c'est un test
+→ Objectif : tester la détection et la réponse réelle
+
+BLUE TEAM
+→ Défend, surveille, détecte, répond
+→ Travail permanent, pas ponctuel
+→ Objectif : repérer l'intrusion le plus vite possible
+
+PURPLE TEAM
+→ Red Team et Blue Team collaborent ouvertement
+→ Objectif : améliorer la détection rapidement et ensemble
+```
+
+**La question que pose un Red Team n'est pas "peut-on rentrer ?" mais "combien de temps avant qu'ils nous détectent, et que font-ils quand ils nous détectent ?"**
+
+---
+
+## PARTIE 2 — Le Framework MITRE ATT&CK
+
+C'est **LA** référence mondiale. Une base de connaissances publique qui catalogue toutes les tactiques et techniques réelles utilisées par les attaquants — basée sur des incidents réels documentés.
+
+### Les 14 Tactiques (le "Pourquoi")
+
+```
+1.  RECONNAISSANCE         → Collecter des infos sur la cible
+2.  RESOURCE DEVELOPMENT   → Préparer l'infrastructure d'attaque
+3.  INITIAL ACCESS         → Obtenir le premier accès
+4.  EXECUTION              → Exécuter du code malveillant
+5.  PERSISTENCE            → Maintenir l'accès dans le temps
+6.  PRIVILEGE ESCALATION   → Obtenir des droits plus élevés
+7.  DEFENSE EVASION        → Éviter d'être détecté
+8.  CREDENTIAL ACCESS      → Voler des identifiants
+9.  DISCOVERY              → Explorer l'environnement compromis
+10. LATERAL MOVEMENT       → Se déplacer vers d'autres systèmes
+11. COLLECTION             → Rassembler les données ciblées
+12. COMMAND AND CONTROL    → Communiquer avec l'infrastructure attaquante
+13. EXFILTRATION           → Extraire les données
+14. IMPACT                 → Perturber, détruire, manipuler
+```
+
+Chaque tactique contient des dizaines de **techniques** (le "Comment"). Exemple pour Initial Access :
+
+```
+T1566 — Phishing
+T1190 — Exploitation d'application publique
+T1133 — Services distants externes (VPN, RDP exposés)
+T1078 — Comptes valides (identifiants volés/achetés)
+```
+
+### Pourquoi ATT&CK est fondamental
+
+```
+Pour un Red Teamer :
+→ Structure ton plan d'attaque autour de techniques documentées
+→ Tu simules de vrais groupes APT connus (APT28, Lazarus, etc.)
+
+Pour un Blue Teamer :
+→ Tu mappes tes détections existantes sur la matrice
+→ Tu identifies les "trous" — techniques sans détection
+
+Pour un manager sécurité :
+→ Langage commun universel entre équipes
+→ Mesure objective de la maturité de détection
+```
+
+```python
+# Exemple : mapper des événements observés aux tactiques ATT&CK
+# Outil défensif — aide le Blue Team à comprendre une chaîne d'attaque
+
+mitre_mapping = {
+    "T1566.001": {
+        "tactique": "Initial Access",
+        "nom": "Phishing: Spearphishing Attachment",
+        "description": "Email avec pièce jointe malveillante",
+        "detection": "Analyse des pièces jointes, sandboxing email"
+    },
+    "T1059.001": {
+        "tactique": "Execution",
+        "nom": "PowerShell",
+        "description": "Exécution de commandes PowerShell",
+        "detection": "Logging PowerShell, AMSI, ScriptBlockLogging"
+    },
+    "T1547.001": {
+        "tactique": "Persistence",
+        "nom": "Registry Run Keys",
+        "description": "Ajout d'une clé de démarrage automatique",
+        "detection": "Surveillance des clés Run dans le registre"
+    },
+    "T1003": {
+        "tactique": "Credential Access",
+        "nom": "OS Credential Dumping",
+        "description": "Extraction de credentials depuis la mémoire (LSASS)",
+        "detection": "Surveillance accès LSASS, EDR comportemental"
+    },
+    "T1021.001": {
+        "tactique": "Lateral Movement",
+        "nom": "Remote Desktop Protocol",
+        "description": "Déplacement via RDP avec credentials volés",
+        "detection": "Logs connexions RDP inhabituelles, géo-anomalies"
+    }
+}
+
+def generer_chaine_attaque(techniques_observees):
+    """
+    Reconstruit une chaîne d'attaque (kill chain) 
+    à partir de techniques ATT&CK observées
+    Utile pour le rapport final d'un engagement
+    """
+    print("\n=== RECONSTRUCTION DE LA KILL CHAIN ===\n")
+    for tid in techniques_observees:
+        if tid in mitre_mapping:
+            info = mitre_mapping[tid]
+            print(f"[{info['tactique']}] {tid} — {info['nom']}")
+            print(f"  → {info['description']}")
+            print(f"  Détection : {info['detection']}\n")
+```
+
+---
+
+## PARTIE 3 — Les Phases d'un Engagement Red Team
+
+```
+PHASE 1 — PLANIFICATION (semaines avant)
+→ Définir l'objectif final ("flag" à capturer)
+   Exemple : accéder à la base de données RH, ou au serveur financier
+→ Rédiger les Rules of Engagement
+→ Identifier le contact d'urgence
+
+PHASE 2 — RECONNAISSANCE (OSINT pur, comme la Leçon 5)
+→ Reconnaissance passive uniquement
+→ Identifier employés, technologies, infrastructure
+→ Construire le profil de l'organisation
+
+PHASE 3 — DÉVELOPPEMENT DE L'INFRASTRUCTURE
+→ Domaines de phishing (si dans le périmètre)
+→ Serveurs C2 (Command & Control)
+→ Certificats SSL légitimes pour éviter la détection
+
+PHASE 4 — ACCÈS INITIAL
+→ Technique choisie selon le profil de la cible
+→ Phishing ciblé, exploitation de service exposé, etc.
+
+PHASE 5 — ÉTABLISSEMENT & PERSISTANCE
+→ Maintenir l'accès discrètement
+→ Éviter de déclencher les alertes EDR/Antivirus
+
+PHASE 6 — ESCALADE ET MOUVEMENT LATÉRAL
+→ Progression méthodique vers l'objectif
+→ Documentation de chaque étape pour le rapport
+
+PHASE 7 — ATTEINTE DE L'OBJECTIF
+→ Capture du "flag" défini en Phase 1
+→ Preuve sans causer de dommage réel
+
+PHASE 8 — RAPPORT ET DEBRIEF
+→ Rapport technique détaillé
+→ Session de restitution avec Blue Team (purple teaming)
+→ Recommandations priorisées
+```
+
+---
+
+## PARTIE 4 — Command & Control (C2) — Comprendre le Concept
+
+### Ce qu'est un C2 conceptuellement
+
+Un C2 est l'infrastructure qui permet à un attaquant de **communiquer avec un système compromis** après l'accès initial — envoyer des commandes, recevoir des résultats.
+
+```
+SYSTÈME COMPROMIS                    SERVEUR C2 (attaquant)
+       |                                     |
+       |---- "Je suis vivant" (beacon) ----->|
+       |                                     |
+       |<----- Commande à exécuter ----------|
+       |                                     |
+       |---- Résultat de la commande ------->|
+```
+
+### Pourquoi le "Beacon" et le "Jitter" sont importants
+
+```
+BEACON = signal périodique envoyé au C2
+JITTER = variation aléatoire du timing pour éviter la détection
+
+Sans jitter :
+Connexion toutes les 60.0 secondes exactement
+→ Pattern parfaitement régulier
+→ Facilement détectable par analyse de trafic
+
+Avec jitter (ex: 60s ± 30%) :
+Connexions à 47s, 71s, 55s, 68s...
+→ Ressemble à du trafic normal
+→ Plus difficile à distinguer du bruit
+```
+
+**C'est exactement le pattern qu'on a identifié ensemble dans l'exercice de la Leçon 9** — une connexion régulière vers une IP externe toutes les 60 secondes. Maintenant tu sais que cette régularité (sans jitter) est précisément ce qui permet à un Blue Team de le détecter.
+
+### Détection côté défense
+
+```python
+import statistics
+
+def detecter_beacon_par_regularite(timestamps_connexions):
+    """
+    Outil défensif — analyse la régularité d'intervalles
+    de connexion pour détecter un possible beacon C2
+    
+    Un trafic humain normal est irrégulier.
+    Un beacon automatisé a souvent une régularité suspecte,
+    même avec jitter (la variance reste statistiquement détectable)
+    """
+    if len(timestamps_connexions) < 5:
+        print("Pas assez de données pour analyse")
+        return
+
+    # Calculer les intervalles entre connexions successives
+    intervalles = [
+        timestamps_connexions[i+1] - timestamps_connexions[i]
+        for i in range(len(timestamps_connexions)-1)
+    ]
+
+    moyenne = statistics.mean(intervalles)
+    ecart_type = statistics.stdev(intervalles)
+
+    # Coefficient de variation — mesure de régularité
+    # Plus c'est bas, plus c'est régulier = plus suspect
+    coef_variation = ecart_type / moyenne if moyenne > 0 else 0
+
+    print(f"\n=== ANALYSE DE RÉGULARITÉ ===")
+    print(f"Intervalle moyen     : {moyenne:.1f}s")
+    print(f"Écart-type           : {ecart_type:.1f}s")
+    print(f"Coefficient variation: {coef_variation:.2f}")
+
+    if coef_variation < 0.15:
+        print("\n🚨 ALERTE : Régularité très suspecte")
+        print("   Pattern typique d'un beacon automatisé")
+    elif coef_variation < 0.35:
+        print("\n⚠️  Régularité modérée — à surveiller")
+    else:
+        print("\n✅ Trafic irrégulier — probablement humain")
+
+    return coef_variation
+```
+
+---
+
+## PARTIE 5 — Defense Evasion — Comprendre pour Détecter
+
+### Les catégories de techniques d'évasion (niveau conceptuel)
+
+```
+OBFUSCATION
+→ Rendre le code illisible pour échapper aux signatures
+→ Défense : analyse comportementale plutôt que signatures
+
+LIVING OFF THE LAND (LOLBins)
+→ Utiliser des outils LÉGITIMES déjà présents sur le système
+→ PowerShell, certutil, wmic — outils Windows natifs détournés
+→ Défense : surveiller les comportements anormaux de ces outils,
+   pas juste leur présence (ils sont légitimes la plupart du temps)
+
+TIMESTOMPING
+→ Modifier les métadonnées temporelles d'un fichier
+→ Pour brouiller la timeline forensique (Leçon 8)
+→ Défense : corréler plusieurs sources de logs, pas un seul timestamp
+
+PROCESS INJECTION
+→ Injecter du code dans un processus légitime (explorer.exe, etc.)
+→ Pour cacher l'activité malveillante
+→ Défense : EDR qui surveille les appels mémoire suspects (Leçon 9)
+```
+
+**Note importante :** je reste volontairement au niveau conceptuel ici. Le code d'évasion fonctionnel est un outil d'attaque réel — apprendre à le détecter et le comprendre suffit largement à un défenseur compétent. Un vrai Red Teamer professionnel apprend ces techniques en environnement certifié (OSCP, OSEP) avec encadrement strict.
+
+---
+
+## PARTIE 6 — Detection Engineering (La Perspective Blue Team)
+
+C'est la compétence la plus précieuse pour toi : transformer ce que tu apprends côté attaque en **règles de détection**.
+
+```python
+def generer_regle_detection(technique_id, indicateurs):
+    """
+    Génère une règle de détection structurée
+    à partir d'une technique MITRE ATT&CK observée
+    """
+    regle = {
+        "id": f"RULE-{technique_id}",
+        "technique_mitre": technique_id,
+        "nom": indicateurs.get("nom"),
+        "description": indicateurs.get("description"),
+        "conditions": indicateurs.get("conditions", []),
+        "severite": indicateurs.get("severite", "MOYEN"),
+        "faux_positifs_connus": indicateurs.get("faux_positifs", [])
+    }
+
+    print(f"\n=== RÈGLE DE DÉTECTION GÉNÉRÉE ===")
+    print(f"ID          : {regle['id']}")
+    print(f"Technique   : {regle['technique_mitre']}")
+    print(f"Sévérité    : {regle['severite']}")
+    print(f"Conditions  :")
+    for c in regle['conditions']:
+        print(f"  → {c}")
+    print(f"Faux positifs possibles :")
+    for fp in regle['faux_positifs_connus']:
+        print(f"  → {fp}")
+
+    return regle
+
+# Exemple d'utilisation — règle pour détecter du dumping de credentials
+generer_regle_detection("T1003", {
+    "nom": "Détection accès LSASS suspect",
+    "description": "Process non-légitime accédant à lsass.exe",
+    "conditions": [
+        "Processus source != [lsass.exe, svchost.exe processus légitimes connus]",
+        "Accès mémoire en lecture vers lsass.exe",
+        "Process source créé récemment (<5 min)"
+    ],
+    "severite": "CRITIQUE",
+    "faux_positifs": [
+        "Outils de backup légitimes (vérifier signature)",
+        "Antivirus en cours de scan (vérifier éditeur)"
+    ]
+})
+```
+
+---
+
+## PARTIE 7 — Rules of Engagement (RoE) — Le Document le Plus Important
+
+```
+STRUCTURE D'UN RoE PROFESSIONNEL :
+
+1. PÉRIMÈTRE AUTORISÉ
+   Quels systèmes, IPs, domaines sont dans le scope
+   Quels sont explicitement HORS scope
+
+2. OBJECTIFS DE LA MISSION
+   Le "flag" final à atteindre
+   Les critères de succès
+
+3. CONTRAINTES TECHNIQUES
+   Pas de DoS, pas de destruction de données
+   Pas d'ingénierie sociale sur certains employés (RH, direction)
+   Horaires autorisés pour les tests actifs
+
+4. CONTACTS D'URGENCE
+   Numéro disponible 24/7
+   Procédure si un système tombe ou si un incident réel
+   se produit pendant le test (double incident)
+
+5. "GET OUT OF JAIL CARD"
+   Document signé prouvant l'autorisation
+   À avoir sur soi si jamais questionné par sécurité physique
+   ou forces de l'ordre pendant un test
+
+6. CLAUSE DE CONFIDENTIALITÉ
+   Ce qui peut/ne peut pas être divulgué après la mission
+
+7. SIGNATURES
+   Direction générale (pas juste IT)
+   Testeur(s)
+   Date et durée de validité du mandat
+```
+
+**Sans RoE signé par la direction — n'importe quel test, même "autorisé oralement" par un technicien IT, peut te faire poursuivre pénalement.** C'est la leçon la plus importante de ce module entier.
+
+---
+
+## PARTIE 8 — Le Rapport Red Team
+
+Différent du rapport pentest classique :
+
+```
+RAPPORT PENTEST          →  Liste de vulnérabilités à corriger
+RAPPORT RED TEAM          →  Histoire complète de l'intrusion
+                              + analyse de la détection/réponse
+
+STRUCTURE SPÉCIFIQUE RED TEAM :
+
+1. Narrative de l'attaque (storytelling technique)
+   "Le Jour 1, nous avons envoyé un email de phishing à..."
+
+2. Timeline complète avec horodatage
+   Chaque action mappée à une technique MITRE ATT&CK
+
+3. MOMENTS DE DÉTECTION (ou absence de détection)
+   "À 14h32 nous avons exécuté X — aucune alerte déclenchée"
+   "À 16h05 le SOC a détecté notre connexion RDP"
+   → Mesure du TTD (Time To Detect)
+
+4. RÉPONSE DE L'ÉQUIPE DÉFENSIVE
+   Qu'ont-ils fait quand ils ont détecté ?
+   → Mesure du TTR (Time To Respond)
+
+5. CARTOGRAPHIE ATT&CK COMPLÈTE
+   Toutes les techniques utilisées, mappées à la matrice
+
+6. RECOMMANDATIONS DE DÉTECTION
+   Pas juste "corrigez cette faille"
+   Mais "voici comment détecter cette technique la prochaine fois"
+
+7. SESSION PURPLE TEAM
+   Restitution conjointe avec l'équipe Blue Team
+   Transfert de connaissance, pas juste un document
+```
+
+---
+
+## ✅ EXERCICES — Leçon 10
+
+---
+
+**Exercice 1 — Cartographie ATT&CK**
+
+Pour le scénario de l'Exercice 2 de la Leçon 8 (brute force SSH → wget shell.sh → exécution → persistance cron), identifie quelle tactique MITRE ATT&CK correspond à chaque étape de l'attaque.
+
+---
+
+**Exercice 2 — Rules of Engagement**
+
+Tu es mandaté pour un Red Team sur une entreprise congolaise. Rédige les 5 points essentiels que tu exigerais dans le RoE avant de commencer, en expliquant pourquoi chacun est non-négociable pour toi personnellement, vu ton expérience DGRH.
+
+---
+
+**Exercice 3 — Détection**
+
+Tu observes ces comportements sur un système :
+```
+- powershell.exe lancé par winword.exe
+- Connexion sortante immédiate vers une IP externe
+- Création d'une tâche planifiée 2 minutes après
+```
+
+1. Quelle tactique ATT&CK pour chaque étape ?
+2. Pourquoi "powershell.exe lancé par winword.exe" est-il suspect en soi ?
+
+---
+
+**Exercice 4 — Purple Team**
+
+Explique en tes propres mots la différence philosophique entre un Red Team qui "veut gagner contre le Blue Team" et un Purple Team qui "veut que la détection s'améliore ensemble". Pourquoi le second est-il plus utile à long terme pour une organisation comme la DGRH ou la SNPC ?
+
+---
+
+**Exercice 5 — Réflexion finale**
+
+Tu as maintenant tout le cursus technique. En repensant à ton parcours réel — DGRH, tes outils OSINT, la situation SNPC qu'on vient de traiter — explique comment la discipline Red Team aurait pu structurer ta démarche dans CHACUN de ces deux cas, même sans mandat formel.
+
+---
+
+## 📌 À retenir absolument
+
+```
+Red Team ≠ Pentest        → Teste la détection, pas que les failles
+MITRE ATT&CK              → Langage commun attaque/défense
+14 tactiques               → Recon → Impact
+RoE signé par direction   → Obligatoire, jamais oral
+Beacon + Jitter            → Régularité = signature détectable
+LOLBins                    → Outils légitimes détournés
+TTD / TTR                  → Mesures clés d'un rapport Red Team
+Purple Team                → Collaboration > Compétition
+```
+
+---
+
+**Cursus technique principal terminé.**
+
+```
+✅ Leçon 1  — Réseau TCP/IP
+✅ Leçon 2  — Linux
+✅ Leçon 3  — Python
+✅ Leçon 4  — Cryptographie
+✅ Leçon 5  — OSINT Avancé
+✅ Leçon 6  — Web Security
+✅ Leçon 7  — Pentest
+✅ Leçon 8  — Forensic
+✅ Leçon 9  — Malware Analysis
+⏳ Leçon 10 — Red Team (exercices en attente)
+⏳ Leçon 11 — Anglais Technique
+```
+
+Envoie tes réponses quand tu es prêt. Après ça — Leçon 11, ton certificat, et ton outil fullstack. 🔒

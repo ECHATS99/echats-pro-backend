@@ -1,0 +1,732 @@
+# 🎯 LEÇON 7 — Pentest
+### *Méthodologie · Reconnaissance · Exploitation · Rapport*
+
+---
+
+## IMPORTANT — CADRE ÉTHIQUE ET LÉGAL
+
+Avant de commencer cette leçon, une règle absolue :
+
+```
+TOUT ce que tu apprendras ici s'applique UNIQUEMENT sur :
+✅ Tes propres systèmes
+✅ Des environnements de lab (TryHackMe, HackTheBox)
+✅ Des systèmes pour lesquels tu as un mandat écrit signé
+
+JAMAIS sur des systèmes tiers sans autorisation écrite.
+C'est la loi partout dans le monde.
+Un pentest non autorisé = crime informatique.
+```
+
+Cette leçon t'apprend à penser comme un attaquant pour **défendre et protéger**. Pas pour attaquer.
+
+---
+
+## PARTIE 1 — Qu'est-ce que le Pentest
+
+### Définition
+
+Un test d'intrusion (pentest) c'est une **attaque simulée et autorisée** contre un système pour identifier ses vulnérabilités avant qu'un vrai attaquant ne le fasse.
+
+```
+Attaquant malveillant          Pentesteur professionnel
+──────────────────────         ───────────────────────
+Pas d'autorisation             Mandat écrit signé
+Objectif : voler/détruire      Objectif : identifier/corriger
+Cache ses traces               Documente tout
+Pas de rapport                 Rapport détaillé
+Crime                          Service payant
+```
+
+### Types de pentest
+
+```
+BLACK BOX
+→ Le testeur ne sait rien du système
+→ Simule un attaquant externe
+→ Plus réaliste, plus long
+
+GREY BOX
+→ Le testeur a des informations partielles
+→ Simule un employé ou partenaire
+→ Équilibre réalisme et efficacité
+
+WHITE BOX
+→ Le testeur a accès à tout le code, l'architecture
+→ Audit complet et profond
+→ Plus efficace pour trouver toutes les failles
+```
+
+---
+
+## PARTIE 2 — Les 5 Phases du Pentest
+
+C'est la méthodologie standard. Chaque phase a un objectif précis.
+
+```
+PHASE 1 → RECONNAISSANCE
+PHASE 2 → SCANNING & ENUMERATION
+PHASE 3 → EXPLOITATION
+PHASE 4 → POST-EXPLOITATION
+PHASE 5 → RAPPORT
+```
+
+---
+
+## PARTIE 3 — Phase 1 : Reconnaissance
+
+### Reconnaissance Passive
+
+Tu collectes des informations **sans toucher** la cible. Elle ne sait pas que tu existes.
+
+```python
+import socket
+import requests
+import json
+
+def reconnaissance_passive(domaine):
+    """
+    Collecte d'informations sans contacter la cible directement
+    """
+    resultats = {}
+    print(f"\n{'='*50}")
+    print(f"RECONNAISSANCE PASSIVE : {domaine}")
+    print(f"{'='*50}")
+
+    # 1. Résolution DNS
+    print("\n[*] Résolution DNS...")
+    try:
+        ip = socket.gethostbyname(domaine)
+        resultats["ip"] = ip
+        print(f"  IP principale : {ip}")
+    except:
+        print("  Résolution échouée")
+
+    # 2. Informations WHOIS via API
+    print("\n[*] WHOIS...")
+    try:
+        r = requests.get(
+            f"https://api.whois.vu/?q={domaine}",
+            timeout=5
+        )
+        if r.status_code == 200:
+            print(f"  Données WHOIS récupérées")
+            resultats["whois"] = r.text[:500]
+    except:
+        pass
+
+    # 3. Headers HTTP — révèle les technologies
+    print("\n[*] Analyse des headers HTTP...")
+    try:
+        r = requests.get(f"https://{domaine}", timeout=5)
+        headers_interessants = [
+            "Server", "X-Powered-By",
+            "X-Generator", "X-Frame-Options",
+            "Content-Security-Policy"
+        ]
+        resultats["headers"] = {}
+        for h in headers_interessants:
+            valeur = r.headers.get(h)
+            if valeur:
+                print(f"  {h}: {valeur}")
+                resultats["headers"][h] = valeur
+
+        # Headers absents = vulnérabilités potentielles
+        headers_securite = [
+            "Strict-Transport-Security",
+            "Content-Security-Policy",
+            "X-Frame-Options"
+        ]
+        print("\n[*] Headers de sécurité manquants :")
+        for h in headers_securite:
+            if h not in r.headers:
+                print(f"  ❌ {h} absent")
+
+    except Exception as e:
+        print(f"  Erreur : {e}")
+
+    return resultats
+```
+
+### Reconnaissance Active
+
+Tu interagis directement avec la cible. Elle peut détecter ta présence.
+
+```
+Scan de ports     → Quels services tournent ?
+Enumération web   → Quelles pages existent ?
+Fingerprinting    → Quelles versions des logiciels ?
+```
+
+---
+
+## PARTIE 4 — Phase 2 : Scanning et Enumération
+
+### Scanner de ports avancé
+
+```python
+import socket
+import concurrent.futures
+import datetime
+
+def scan_port(ip, port, timeout=0.5):
+    """Scanner un port unique"""
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(timeout)
+        resultat = sock.connect_ex((ip, port))
+        sock.close()
+        return port, resultat == 0
+    except:
+        return port, False
+
+def scan_complet(ip, debut=1, fin=1024):
+    """
+    Scanner une plage de ports
+    Utilise le multithreading pour la vitesse
+    """
+    print(f"\n[*] Scan de {ip} ports {debut}-{fin}")
+    print(f"[*] Démarré : {datetime.datetime.now().strftime('%H:%M:%S')}")
+
+    services = {
+        21:"FTP", 22:"SSH", 23:"Telnet", 25:"SMTP",
+        53:"DNS", 80:"HTTP", 110:"POP3", 143:"IMAP",
+        443:"HTTPS", 445:"SMB", 3306:"MySQL",
+        3389:"RDP", 5432:"PostgreSQL", 6379:"Redis",
+        8080:"HTTP-Alt", 8443:"HTTPS-Alt", 27017:"MongoDB"
+    }
+
+    risques = {
+        23: "CRITIQUE — Telnet non chiffré",
+        445: "CRITIQUE — SMB, risque EternalBlue",
+        3389: "ÉLEVÉ — RDP, cible ransomware",
+        6379: "ÉLEVÉ — Redis souvent sans auth",
+        27017: "ÉLEVÉ — MongoDB souvent sans auth",
+        3306: "MOYEN — MySQL exposé"
+    }
+
+    ouverts = []
+
+    # ThreadPoolExecutor = scanner plusieurs ports en parallèle
+    # max_workers = nombre de threads simultanés
+    with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:
+        futures = {
+            executor.submit(scan_port, ip, port): port
+            for port in range(debut, fin + 1)
+        }
+
+        for future in concurrent.futures.as_completed(futures):
+            port, est_ouvert = future.result()
+            if est_ouvert:
+                service = services.get(port, "Inconnu")
+                risque = risques.get(port, "")
+                print(f"  [OUVERT] {port}/tcp → {service} {risque}")
+                ouverts.append(port)
+
+    print(f"\n[+] {len(ouverts)} ports ouverts trouvés")
+    return sorted(ouverts)
+```
+
+### Enumération Web — Trouver les pages cachées
+
+```python
+import requests
+from concurrent.futures import ThreadPoolExecutor
+
+def enumerer_web(url_base, wordlist=None):
+    """
+    Cherche des pages et répertoires cachés
+    par force brute sur une liste de mots
+    """
+    if wordlist is None:
+        # Liste minimale de répertoires courants
+        wordlist = [
+            "admin", "login", "dashboard", "api",
+            "backup", "config", "database", "db",
+            "dev", "test", "staging", "old",
+            "wp-admin", "phpmyadmin", "cpanel",
+            "uploads", "files", "images", "static",
+            "robots.txt", "sitemap.xml", ".env",
+            "web.config", ".htaccess", "README.md"
+        ]
+
+    print(f"\n[*] Enumération web : {url_base}")
+    trouves = []
+
+    def tester_url(chemin):
+        url = f"{url_base}/{chemin}"
+        try:
+            r = requests.get(url, timeout=3, allow_redirects=False)
+            # Codes intéressants :
+            # 200 = existe et accessible
+            # 301/302 = redirection (existe)
+            # 403 = existe mais interdit (intéressant)
+            if r.status_code in [200, 301, 302, 403]:
+                print(f"  [{r.status_code}] {url}")
+                return {"url": url, "status": r.status_code}
+        except:
+            pass
+        return None
+
+    with ThreadPoolExecutor(max_workers=20) as executor:
+        resultats = list(executor.map(tester_url, wordlist))
+
+    trouves = [r for r in resultats if r]
+    return trouves
+```
+
+---
+
+## PARTIE 5 — Phase 3 : Exploitation
+
+### Comprendre la vulnérabilité avant d'exploiter
+
+```
+PROCESSUS CORRECT :
+
+1. Identifier la vulnérabilité (scanning)
+2. Comprendre le mécanisme (recherche)
+3. Trouver ou créer le exploit (développement)
+4. Tester dans un lab d'abord (validation)
+5. Appliquer sur la cible autorisée (exploitation)
+6. Documenter immédiatement (rapport)
+```
+
+### Exploitation d'une SQLi — Exemple pédagogique
+
+```python
+import requests
+
+def tester_sqli(url, parametre, valeur_normale):
+    """
+    Teste si un paramètre est vulnérable à l'injection SQL
+    Usage éducatif uniquement — sur tes propres systèmes
+    """
+    print(f"\n[*] Test SQLi sur {url}")
+    print(f"    Paramètre : {parametre}")
+
+    # Payloads de détection — causent des erreurs si vulnérable
+    payloads_detection = [
+        "'",                    # Apostrophe simple
+        "''",                   # Double apostrophe
+        "' OR '1'='1",         # Toujours vrai
+        "' AND '1'='2",        # Toujours faux
+        "' AND SLEEP(3) --",   # Time-based
+    ]
+
+    resultats = []
+
+    # Requête normale pour référence
+    try:
+        r_normal = requests.get(
+            url,
+            params={parametre: valeur_normale},
+            timeout=5
+        )
+        taille_normale = len(r_normal.text)
+        print(f"  Réponse normale : {taille_normale} bytes, "
+              f"status {r_normal.status_code}")
+    except Exception as e:
+        print(f"  Erreur requête normale : {e}")
+        return []
+
+    # Tester chaque payload
+    for payload in payloads_detection:
+        try:
+            import time
+            debut = time.time()
+
+            r = requests.get(
+                url,
+                params={parametre: valeur_normale + payload},
+                timeout=10
+            )
+
+            duree = time.time() - debut
+            taille = len(r.text)
+            difference = abs(taille - taille_normale)
+
+            # Indicateurs de vulnérabilité :
+            # 1. Erreur SQL dans la réponse
+            # 2. Taille de réponse très différente
+            # 3. Délai important (time-based)
+
+            indicateurs = []
+
+            erreurs_sql = [
+                "sql syntax", "mysql_fetch",
+                "ora-", "sqlite_", "pg_query",
+                "syntax error", "unclosed quotation"
+            ]
+
+            for err in erreurs_sql:
+                if err in r.text.lower():
+                    indicateurs.append(f"Erreur SQL : {err}")
+
+            if difference > 500:
+                indicateurs.append(
+                    f"Réponse différente : {difference} bytes"
+                )
+
+            if duree > 2.5 and "SLEEP" in payload:
+                indicateurs.append(
+                    f"Délai détecté : {duree:.1f}s"
+                )
+
+            if indicateurs:
+                print(f"\n  ⚠️  POTENTIELLEMENT VULNÉRABLE")
+                print(f"  Payload : {payload}")
+                for ind in indicateurs:
+                    print(f"  → {ind}")
+                resultats.append({
+                    "payload": payload,
+                    "indicateurs": indicateurs
+                })
+
+        except requests.exceptions.Timeout:
+            if "SLEEP" in payload:
+                print(f"\n  ⚠️  Timeout sur SLEEP → Vulnérable time-based")
+
+    if not resultats:
+        print(f"\n  ✅ Aucun indicateur SQLi détecté")
+
+    return resultats
+```
+
+---
+
+## PARTIE 6 — Phase 4 : Post-Exploitation
+
+### Qu'est-ce que la post-exploitation ?
+
+Une fois qu'on a accès à un système, un attaquant cherche à :
+
+```
+1. PERSISTANCE
+   → Maintenir l'accès même après reboot
+   → Créer un backdoor, modifier les crontabs
+
+2. ÉLÉVATION DE PRIVILÈGES
+   → Passer de user normal à root/admin
+   → Exploiter les SUID, sudo mal configuré
+
+3. MOUVEMENT LATÉRAL
+   → Se déplacer vers d'autres machines du réseau
+   → Utiliser les credentials trouvés sur la première machine
+
+4. EXFILTRATION
+   → Copier les données sensibles
+   → Sans déclencher les alertes
+
+5. EFFACEMENT DES TRACES
+   → Supprimer les logs
+   → Masquer la présence
+```
+
+### Ce que vérifie un pentesteur en post-exploitation
+
+```bash
+# Élévation de privilèges possible ?
+sudo -l                          # Que puis-je faire avec sudo ?
+find / -perm -4000 2>/dev/null   # Fichiers SUID exploitables ?
+cat /etc/crontab                 # Tâches planifiées mal configurées ?
+
+# Credentials en clair ?
+cat /etc/passwd
+find / -name "*.conf" 2>/dev/null | xargs grep -l "password"
+find / -name ".env" 2>/dev/null
+history                          # Commandes avec mots de passe ?
+
+# Réseau interne — autres cibles ?
+ip route                         # Autres réseaux accessibles ?
+arp -a                           # Machines dans le réseau local ?
+ss -tulnp                        # Services locaux non exposés ?
+
+# Persistance — est-ce que je suis déjà backdooré ?
+cat /etc/crontab
+ls -la /etc/cron.d/
+cat ~/.bashrc                    # Aliases malveillants ?
+grep -r "bash -i" /etc/         # Reverse shells persistants ?
+```
+
+---
+
+## PARTIE 7 — Phase 5 : Le Rapport de Pentest
+
+C'est la livraison finale. Un pentest sans rapport n'a aucune valeur professionnelle.
+
+### Structure du rapport
+
+```
+1. PAGE DE GARDE
+   Client, testeur, date, niveau de confidentialité
+
+2. RÉSUMÉ EXÉCUTIF (pour les dirigeants)
+   Pas technique — compréhensible par n'importe qui
+   "Votre système présente 3 vulnérabilités critiques
+    permettant à un attaquant d'accéder à toutes vos données"
+
+3. PÉRIMÈTRE ET MÉTHODOLOGIE
+   Quels systèmes ont été testés
+   Quelles techniques ont été utilisées
+   Durée du test
+
+4. RÉSULTATS — TABLEAU DES VULNÉRABILITÉS
+   Pour chaque vulnérabilité :
+
+   ┌─────────────────────────────────────────────┐
+   │ Titre : SQL Injection sur /login            │
+   │ Sévérité : CRITIQUE                         │
+   │ CVSS Score : 9.8/10                         │
+   │ Description : Le formulaire de connexion... │
+   │ Preuve : Screenshot + payload utilisé       │
+   │ Impact : Accès à toute la base de données   │
+   │ Recommandation : Utiliser des requêtes      │
+   │                  paramétrées                │
+   └─────────────────────────────────────────────┘
+
+5. DÉTAIL TECHNIQUE DE CHAQUE VULNÉRABILITÉ
+   Étapes de reproduction
+   Screenshots
+   Payloads utilisés
+
+6. RECOMMANDATIONS PRIORITAIRES
+   Classées par urgence
+   Avec délai de correction suggéré
+
+7. CONCLUSION
+   Niveau global de sécurité
+   Prochaines étapes recommandées
+```
+
+### Échelle de sévérité CVSS
+
+```
+CRITIQUE  9.0 - 10.0  → Corriger immédiatement
+ÉLEVÉ     7.0 - 8.9   → Corriger dans les 7 jours
+MOYEN     4.0 - 6.9   → Corriger dans le mois
+FAIBLE    0.1 - 3.9   → Corriger dans les 3 mois
+INFO      0.0         → Bonne pratique, pas urgent
+```
+
+### Générateur de rapport en Python
+
+```python
+import json
+import datetime
+
+def generer_rapport_pentest(infos_mission, vulnerabilites):
+    """
+    Génère un rapport de pentest structuré en JSON
+    À convertir ensuite en PDF ou Word
+    """
+
+    rapport = {
+        "rapport_pentest": {
+            "metadonnees": {
+                "titre": f"Rapport de Test d'Intrusion — {infos_mission['client']}",
+                "date": datetime.datetime.now().isoformat(),
+                "testeur": infos_mission.get("testeur", "Confidentiel"),
+                "classification": "CONFIDENTIEL",
+                "version": "1.0"
+            },
+
+            "resume_executif": {
+                "nb_critique": sum(
+                    1 for v in vulnerabilites
+                    if v["severite"] == "CRITIQUE"
+                ),
+                "nb_eleve": sum(
+                    1 for v in vulnerabilites
+                    if v["severite"] == "ÉLEVÉ"
+                ),
+                "nb_moyen": sum(
+                    1 for v in vulnerabilites
+                    if v["severite"] == "MOYEN"
+                ),
+                "niveau_global": calculer_niveau_global(vulnerabilites)
+            },
+
+            "vulnerabilites": vulnerabilites,
+
+            "recommandations": [
+                {
+                    "priorite": i + 1,
+                    "titre": v["titre"],
+                    "severite": v["severite"],
+                    "action": v["recommandation"]
+                }
+                for i, v in enumerate(
+                    sorted(vulnerabilites,
+                           key=lambda x: ["CRITIQUE","ÉLEVÉ","MOYEN","FAIBLE"]
+                           .index(x["severite"]))
+                )
+            ]
+        }
+    }
+
+    # Sauvegarder
+    nom = f"rapport_pentest_{infos_mission['client'].replace(' ','_')}.json"
+    with open(nom, "w", encoding="utf-8") as f:
+        json.dump(rapport, f, indent=4, ensure_ascii=False)
+
+    print(f"[+] Rapport généré : {nom}")
+    return rapport
+
+def calculer_niveau_global(vulnerabilites):
+    """Calcule le niveau de risque global"""
+    if any(v["severite"] == "CRITIQUE" for v in vulnerabilites):
+        return "CRITIQUE — Action immédiate requise"
+    elif any(v["severite"] == "ÉLEVÉ" for v in vulnerabilites):
+        return "ÉLEVÉ — Correction urgente nécessaire"
+    elif any(v["severite"] == "MOYEN" for v in vulnerabilites):
+        return "MOYEN — Amélioration recommandée"
+    return "FAIBLE — Bonne posture de sécurité"
+
+# Exemple d'utilisation
+mission = {
+    "client": "DGRH Congo",
+    "testeur": "Mikabou Elioth — BLACK HAWK LAB",
+    "perimetre": "portail.dgrh.cg"
+}
+
+vulns = [
+    {
+        "titre": "SQL Injection sur formulaire login",
+        "severite": "CRITIQUE",
+        "cvss": 9.8,
+        "description": "Le paramètre email est vulnérable à l'injection SQL",
+        "preuve": "payload: admin@dgrh.cg'--",
+        "impact": "Accès complet à la base de données",
+        "recommandation": "Implémenter des requêtes paramétrées"
+    },
+    {
+        "titre": "Absence de rate limiting sur /login",
+        "severite": "ÉLEVÉ",
+        "cvss": 7.5,
+        "description": "Aucune limite sur les tentatives de connexion",
+        "preuve": "1000 tentatives en 10 secondes sans blocage",
+        "impact": "Bruteforce des comptes utilisateurs",
+        "recommandation": "Bloquer après 5 tentatives échouées"
+    }
+]
+
+generer_rapport_pentest(mission, vulns)
+```
+
+---
+
+## PARTIE 8 — Environnements de Practice Légaux
+
+Tu ne peux jamais pratiquer sur des systèmes réels sans autorisation. Voici où pratiquer légalement :
+
+```
+PLATEFORMES EN LIGNE (accessibles depuis Termux/navigateur)
+
+TryHackMe (tryhackme.com)
+→ Niveau débutant à intermédiaire
+→ Guidé, parfait pour apprendre
+→ Plan gratuit suffisant pour commencer
+
+HackTheBox (hackthebox.com)
+→ Niveau intermédiaire à avancé
+→ Moins guidé, plus réaliste
+→ Plan gratuit disponible
+
+PortSwigger Web Security Academy (portswigger.net/web-security)
+→ Spécialisé web security
+→ Entièrement gratuit
+→ Labs SQLi, XSS, CSRF, IDOR — tout ce qu'on a vu
+
+PentesterLab (pentesterlab.com)
+→ Badges par vulnérabilité
+→ Partiellement gratuit
+
+VulnHub (vulnhub.com)
+→ Machines virtuelles à télécharger
+→ Entièrement gratuit
+→ Nécessite VirtualBox ou VMware
+```
+
+---
+
+## ✅ EXERCICES — Leçon 7
+
+---
+
+**Exercice 1 — Méthodologie**
+
+Tu reçois un mandat écrit pour tester `portail.dgrh.cg`. C'est un Black Box pentest. Décris dans l'ordre exact les 5 phases avec ce que tu ferais concrètement à chaque étape.
+
+---
+
+**Exercice 2 — Analyse de vulnérabilité**
+
+Tu scannes une cible et tu trouves ces ports ouverts :
+```
+22/tcp  → SSH
+80/tcp  → HTTP
+443/tcp → HTTPS
+3389/tcp → RDP
+6379/tcp → Redis
+27017/tcp → MongoDB
+```
+
+Pour chaque port :
+1. Quel est le risque spécifique ?
+2. Quelle serait ta première action d'investigation ?
+
+---
+
+**Exercice 3 — Lire un résultat de scan**
+
+Un scan de répertoires sur une cible retourne :
+```
+[200] /admin
+[200] /backup
+[403] /config
+[200] /.env
+[301] /old → /old/
+[200] /phpmyadmin
+```
+
+Classe ces résultats par ordre de dangerosité et explique pourquoi.
+
+---
+
+**Exercice 4 — Rédiger une vulnérabilité**
+
+Utilise le format du rapport pour documenter cette vulnérabilité :
+
+> Tu as trouvé que le paramètre `id` dans `https://cible.com/user?id=42` est vulnérable à l'IDOR. En changeant l'ID tu accèdes aux profils de tous les utilisateurs y compris les administrateurs.
+
+Remplis tous les champs : titre, sévérité, CVSS, description, preuve, impact, recommandation.
+
+---
+
+**Exercice 5 — Réflexion éthique**
+
+Tu fais un pentest sur une entreprise. Tu trouves une vulnérabilité critique qui te donne accès à des données personnelles de milliers de clients. Tu n'as pas encore fini le test.
+
+Que fais-tu immédiatement ? Dans quel ordre ? Pourquoi ?
+
+---
+
+## 📌 À retenir absolument
+
+```
+5 phases       → Recon → Scan → Exploit → Post-exploit → Rapport
+Black/Grey/White box → Niveau d'information de départ
+CVSS           → Échelle de sévérité 0-10
+Mandat écrit   → Toujours avant de commencer
+Rate limiting  → ThreadPoolExecutor pour la vitesse
+Post-exploit   → Persistance, privesc, latéral, exfil
+Rapport        → Résumé exécutif + détail technique + recommandations
+Practice légal → TryHackMe, HackTheBox, PortSwigger
+```
+
+---
+
+**Leçon 8 dans 2 jours : Forensic.**
+
+Investigation de scènes de crime numériques. Analyse de disques, mémoire RAM, logs, artefacts Windows/Linux. Reconstruction de la timeline d'une attaque. Tu as déjà vécu ça sur le terrain — maintenant tu vas avoir le cadre méthodologique complet. 🔒

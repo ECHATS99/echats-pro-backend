@@ -1,0 +1,204 @@
+{
+  "format": "ECHATS_QUIZ_IMPORT_V1",
+  "lesson_slug": "securite-web",
+  "title": "Évaluation — Web Security",
+  "passing_score": 75,
+  "questions": [
+    {
+      "question": "Quelle est la cause principale d’une SQL injection?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Données concaténées à une requête au lieu de paramètres",
+          "correct": true
+        },
+        {
+          "answer": "Un certificat expiré",
+          "correct": false
+        },
+        {
+          "answer": "Un port fermé",
+          "correct": false
+        },
+        {
+          "answer": "Un hash salé",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quelle défense réduit directement le risque de SQLi?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Requêtes paramétrées",
+          "correct": true
+        },
+        {
+          "answer": "Désactiver les logs",
+          "correct": false
+        },
+        {
+          "answer": "Faire confiance au client",
+          "correct": false
+        },
+        {
+          "answer": "Encoder en base64",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quel XSS est stocké en base puis servi aux visiteurs?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Stored XSS",
+          "correct": true
+        },
+        {
+          "answer": "Reflected XSS",
+          "correct": false
+        },
+        {
+          "answer": "Network XSS",
+          "correct": false
+        },
+        {
+          "answer": "DNS XSS",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quel contrôle répond principalement à l’IDOR?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Autorisation objet par objet côté serveur",
+          "correct": true
+        },
+        {
+          "answer": "Changer la couleur du bouton",
+          "correct": false
+        },
+        {
+          "answer": "Masquer l’ID dans l’URL",
+          "correct": false
+        },
+        {
+          "answer": "Validation client seule",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "CSRF exploite-t-il généralement une session authentifiée du navigateur?",
+      "type": "true_false",
+      "answers": [
+        {
+          "answer": "Vrai",
+          "correct": true
+        },
+        {
+          "answer": "Faux",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Pourquoi une CSP ne remplace-t-elle pas l’encodage contextuel?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Elle est une défense en profondeur, pas une correction de la cause",
+          "correct": true
+        },
+        {
+          "answer": "Elle chiffre SQL",
+          "correct": false
+        },
+        {
+          "answer": "Elle vérifie les rôles",
+          "correct": false
+        },
+        {
+          "answer": "Elle remplace les cookies",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quelle différence est essentielle entre authentification et autorisation?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Qui es-tu versus ce que tu as le droit de faire",
+          "correct": true
+        },
+        {
+          "answer": "HTTP versus DNS",
+          "correct": false
+        },
+        {
+          "answer": "Chiffrement versus compression",
+          "correct": false
+        },
+        {
+          "answer": "Frontend versus CSS",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Les réponses d’API doivent-elles éviter de révéler les secrets de correction?",
+      "type": "true_false",
+      "answers": [
+        {
+          "answer": "Oui",
+          "correct": true
+        },
+        {
+          "answer": "Non",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quel rapport est adapté à un test web responsable?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Périmètre, preuve minimale, impact, remédiation et test de régression",
+          "correct": true
+        },
+        {
+          "answer": "Données exfiltrées complètes",
+          "correct": false
+        },
+        {
+          "answer": "Secrets de production",
+          "correct": false
+        },
+        {
+          "answer": "Une charge sans contexte",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Les tests actifs doivent-ils rester dans un laboratoire autorisé?",
+      "type": "true_false",
+      "answers": [
+        {
+          "answer": "Vrai",
+          "correct": true
+        },
+        {
+          "answer": "Faux",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

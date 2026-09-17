@@ -1,0 +1,757 @@
+C'est l'énergie qu'il faut. Carnet de notes + disponibilité totale = combinaison imbattable.
+
+On attaque.
+
+---
+
+# 🕵️ LEÇON 5 — OSINT Avancé
+### *Investigation Numérique · Renseignement Open Source · Niveau Professionnel*
+
+---
+
+## POURQUOI CETTE LEÇON EST DIFFÉRENTE
+
+Les leçons précédentes t'ont donné les fondations. Cette leçon c'est **ton domaine naturel** — mais on va aller bien au-delà de ce que tu faisais avant. La différence entre un amateur OSINT et un professionnel c'est la **méthodologie**. L'amateur cherche. Le professionnel **structure, documente, corrèle et prouve**.
+
+---
+
+## PARTIE 1 — Le Cycle du Renseignement
+
+Tout professionnel du renseignement travaille selon un cycle. Sans ça tu es un curieux, pas un analyste.
+
+```
+1. PLANIFICATION
+   Définir l'objectif précis
+   Quelles questions dois-je répondre ?
+   Quelles sources sont pertinentes ?
+
+2. COLLECTE
+   Rassembler les données brutes
+   Sources ouvertes uniquement
+   Documenter chaque source
+
+3. TRAITEMENT
+   Nettoyer et organiser les données
+   Éliminer les faux positifs
+   Structurer l'information
+
+4. ANALYSE
+   Corréler les données entre elles
+   Identifier les patterns
+   Formuler des hypothèses
+
+5. DIFFUSION
+   Produire un rapport clair
+   Destiné à un public précis
+   Avec sources vérifiables
+
+6. FEEDBACK
+   Évaluer la qualité du renseignement
+   Identifier les lacunes
+   Affiner pour la prochaine mission
+```
+
+**Avant chaque mission OSINT tu dois te poser 3 questions :**
+```
+QUI   → Quelle est ma cible exacte ?
+QUOI  → Quelle information précise je cherche ?
+POUR  → Quel est l'objectif légal et éthique ?
+```
+
+Sans réponses claires à ces 3 questions — tu ne commences pas.
+
+---
+
+## PARTIE 2 — Les Sources OSINT
+
+### Niveau 1 — Surface Web
+
+Ce que tout le monde connaît mais peu exploitent vraiment :
+
+```
+Moteurs de recherche    → Google, Bing, DuckDuckGo, Yandex
+Réseaux sociaux         → Facebook, LinkedIn, Twitter/X, Instagram, TikTok
+Registres publics       → WHOIS, registres de commerce, cadastre
+Bases de données        → RIPE, ARIN, AFRINIC (attribution IPs)
+Archives                → Wayback Machine, Archive.today
+```
+
+### Niveau 2 — Techniques avancées
+
+**Google Dorks — chercher ce que Google cache**
+
+Un Google Dork c'est une requête avancée qui exploite les opérateurs de recherche Google pour trouver des informations précises que les recherches normales ne révèlent pas.
+
+```
+Opérateurs fondamentaux :
+
+site:domaine.com          → Chercher sur un site précis
+filetype:pdf              → Chercher un type de fichier
+inurl:mot                 → Mot dans l'URL
+intitle:mot               → Mot dans le titre de la page
+intext:mot                → Mot dans le contenu
+"phrase exacte"           → Recherche exacte
+-mot                      → Exclure un mot
+OR                        → L'un ou l'autre
+```
+
+**Exemples concrets utilisés en investigation :**
+
+```
+# Trouver des documents PDF d'une organisation
+site:dgrh.cg filetype:pdf
+
+# Trouver des pages de login exposées
+site:entreprise.com inurl:admin OR inurl:login
+
+# Chercher une adresse email dans des documents publics
+"@dgrh.cg" filetype:pdf OR filetype:doc
+
+# Trouver des fichiers de configuration exposés
+filetype:env OR filetype:config "password"
+
+# Chercher un numéro de téléphone dans des pages web
+"+242" site:facebook.com
+
+# Trouver des pages d'erreur qui révèlent la technologie
+site:cible.com "SQL syntax" OR "PHP error"
+
+# Documents contenant des infos sur une personne
+"Jean Claude Mbemba" site:linkedin.com OR site:facebook.com
+```
+
+---
+
+## PARTIE 3 — Investigation sur une Personne
+
+### La méthode des 5 cercles
+
+```
+CERCLE 1 — Identité de base
+Nom complet, pseudos connus, date de naissance
+Photos, physique, voix
+
+CERCLE 2 — Présence numérique
+Comptes réseaux sociaux, emails, numéros de téléphone
+Sites web personnels, forums, commentaires
+
+CERCLE 3 — Réseau social
+Famille, amis, collègues, associés
+Qui suit qui, qui interagit avec qui
+
+CERCLE 4 — Activités et habitudes
+Où travaille-t-il, horaires, déplacements
+Centres d'intérêt, opinions, croyances
+
+CERCLE 5 — Infrastructure numérique
+IPs utilisées, appareils, comptes liés
+Services utilisés, achats en ligne
+```
+
+### Techniques de recherche d'identité
+
+**Recherche par email :**
+
+```
+1. Vérifier si l'email existe réellement
+   → hunter.io, verify-email.org
+
+2. Chercher l'email dans des breaches
+   → haveibeenpwned.com
+   → dehashed.com (payant mais puissant)
+
+3. Chercher l'email sur les réseaux sociaux
+   → Essayer la récupération de compte Facebook/Google
+     avec cet email (sans finaliser) — révèle si le compte existe
+
+4. Chercher l'email dans Google
+   → "email@domaine.com" (avec guillemets)
+
+5. Analyser le domaine de l'email
+   → WHOIS du domaine
+   → Enregistrements DNS MX
+```
+
+**Recherche par numéro de téléphone :**
+
+```
+Sources à croiser dans l'ordre :
+1. TrueCaller          → identification de base
+2. GetContact          → tags communautaires
+3. NumLookup           → informations opérateur
+4. Google              → "+242XXXXXXXX" (avec guillemets)
+5. Facebook            → récupération de compte par numéro
+6. WhatsApp            → photo de profil (si pas privée)
+7. Telegram            → @username lié parfois visible
+8. Bases de fuite      → si numéro dans des données compromises
+```
+
+**Recherche par pseudo/username :**
+
+```python
+# Sherlock — outil de référence
+# Cherche un username sur 300+ plateformes simultanément
+
+# Installation (quand tu auras ton téléphone)
+# pip install sherlock-project
+
+# Usage
+# sherlock username_cible
+
+# Plateformes clés à vérifier manuellement :
+# GitHub, GitLab    → code, projets, emails dans les commits
+# Reddit            → historique de posts, intérêts
+# Twitter/X         → réseau, opinions
+# Steam, Discord    → gaming, communautés
+# HackerNews        → profil tech
+# Pastebin          → données collées parfois sensibles
+```
+
+---
+
+## PARTIE 4 — Investigation sur une Infrastructure
+
+### Analyser un domaine complètement
+
+```
+Étape 1 — WHOIS
+→ Qui a enregistré le domaine ?
+→ Quand ? Expire quand ?
+→ Registrar utilisé
+→ Serveurs de noms
+
+Étape 2 — DNS
+→ Enregistrement A → IP du serveur
+→ Enregistrement MX → Service email
+→ Enregistrement TXT → SPF, DKIM, vérifications
+→ Sous-domaines → surface d'attaque élargie
+
+Étape 3 — IP et hébergement
+→ Géolocalisation de l'IP
+→ Organisation/ASN
+→ Autres domaines sur la même IP (reverse IP)
+→ Historique d'hébergement
+
+Étape 4 — Technologies
+→ Wappalyzer → stack technique
+→ Headers HTTP → serveur, framework
+→ Certificat SSL → informations sur l'organisation
+→ Shodan → services exposés
+
+Étape 5 — Archives
+→ Wayback Machine → anciennes versions du site
+→ Google Cache → version récente en cache
+→ Archive.today → snapshot manuel
+```
+
+### Énumération de sous-domaines
+
+Les sous-domaines révèlent souvent des services internes exposés par erreur.
+
+```
+mail.entreprise.com      → Serveur email
+admin.entreprise.com     → Interface d'administration
+dev.entreprise.com       → Environnement de développement
+api.entreprise.com       → API souvent moins sécurisée
+staging.entreprise.com   → Tests, parfois avec vraies données
+vpn.entreprise.com       → Point d'entrée réseau
+ftp.entreprise.com       → Transfert de fichiers
+```
+
+**Comment les trouver :**
+
+```python
+import dns.resolver
+import requests
+
+def enumerer_sous_domaines(domaine, wordlist=None):
+    """
+    Énumère les sous-domaines d'un domaine
+    par force brute sur une liste de mots courants
+    """
+    if wordlist is None:
+        # Liste minimale des sous-domaines les plus courants
+        wordlist = [
+            "www", "mail", "ftp", "admin", "api", "dev",
+            "staging", "test", "vpn", "remote", "portal",
+            "webmail", "smtp", "pop", "imap", "ns1", "ns2",
+            "blog", "shop", "secure", "login", "cpanel",
+            "dashboard", "intranet", "extranet", "cdn"
+        ]
+
+    print(f"\n[*] Énumération sous-domaines : {domaine}")
+    trouves = []
+
+    for mot in wordlist:
+        sous_domaine = f"{mot}.{domaine}"
+        try:
+            # Tenter la résolution DNS
+            # Si ça réussit, le sous-domaine existe
+            reponses = dns.resolver.resolve(sous_domaine, "A")
+            for r in reponses:
+                print(f"  [TROUVÉ] {sous_domaine} → {r}")
+                trouves.append({
+                    "sous_domaine": sous_domaine,
+                    "ip": str(r)
+                })
+        except (dns.resolver.NXDOMAIN,
+                dns.resolver.NoAnswer,
+                dns.resolver.Timeout):
+            # Le sous-domaine n'existe pas — normal
+            pass
+        except Exception as e:
+            pass
+
+    print(f"\n  {len(trouves)} sous-domaine(s) trouvé(s)")
+    return trouves
+```
+
+---
+
+## PARTIE 5 — Géolocalisation d'Images (GEOINT)
+
+C'est une des techniques les plus puissantes et les plus sous-estimées.
+
+### Méthode d'analyse d'une image
+
+```
+ÉTAPE 1 — Métadonnées EXIF
+Les appareils photo embarquent des données invisibles :
+- GPS (latitude/longitude exactes)
+- Date et heure exactes
+- Modèle d'appareil/téléphone
+- Logiciel de retouche utilisé
+
+→ Outils : ExifTool, Jeffrey's Exif Viewer
+
+ÉTAPE 2 — Éléments visuels
+Si pas de GPS, analyser l'image :
+- Panneaux de signalisation (sens de circulation)
+- Langue des enseignes
+- Architecture typique
+- Végétation
+- Véhicules (modèles, plaques)
+- Uniformes, tenues vestimentaires
+- Ciel et météo (orientation soleil)
+
+ÉTAPE 3 — Recherche inversée
+- Google Images
+- TinEye
+- Yandex Images (très puissant pour les visages)
+- Bing Visual Search
+
+ÉTAPE 4 — Verification avec Google Maps/Street View
+Une fois la zone identifiée, vérifier
+et trouver l'angle exact de la prise de vue
+```
+
+### Extraction EXIF en Python
+
+```python
+from PIL import Image
+from PIL.ExifTags import TAGS, GPSTAGS
+# pip install Pillow
+
+def extraire_exif(chemin_image):
+    """
+    Extrait toutes les métadonnées EXIF d'une image
+    Peut révéler la localisation GPS si présente
+    """
+    try:
+        image = Image.open(chemin_image)
+
+        # _getexif() retourne les données brutes
+        exif_brut = image._getexif()
+
+        if not exif_brut:
+            print("Aucune donnée EXIF trouvée")
+            print("Possibles raisons : image retouchée, réseau social")
+            print("→ Les réseaux sociaux suppriment l'EXIF automatiquement")
+            return {}
+
+        exif = {}
+        for tag_id, valeur in exif_brut.items():
+            # Convertir l'ID numérique en nom lisible
+            tag = TAGS.get(tag_id, tag_id)
+            exif[tag] = valeur
+
+        # Afficher les infos importantes
+        infos_importantes = [
+            "Make", "Model", "DateTime",
+            "GPSInfo", "Software", "Artist"
+        ]
+
+        print("\n=== MÉTADONNÉES EXIF ===")
+        for info in infos_importantes:
+            if info in exif:
+                print(f"  {info}: {exif[info]}")
+
+        # Extraire le GPS si présent
+        if "GPSInfo" in exif:
+            gps = extraire_gps(exif["GPSInfo"])
+            if gps:
+                lat, lon = gps
+                print(f"\n  🎯 LOCALISATION GPS TROUVÉE :")
+                print(f"  Latitude  : {lat}")
+                print(f"  Longitude : {lon}")
+                print(f"  Google Maps : https://maps.google.com/?q={lat},{lon}")
+
+        return exif
+
+    except Exception as e:
+        print(f"Erreur : {e}")
+        return {}
+
+def extraire_gps(gps_info):
+    """
+    Convertit les données GPS EXIF brutes
+    en latitude/longitude décimales
+    """
+    def convertir_coord(coord, ref):
+        # GPS EXIF stocke en degrés/minutes/secondes
+        # On convertit en décimal
+        degres = coord[0]
+        minutes = coord[1]
+        secondes = coord[2]
+
+        decimal = float(degres) + float(minutes)/60 + float(secondes)/3600
+
+        # Sud et Ouest sont négatifs
+        if ref in ["S", "W"]:
+            decimal = -decimal
+
+        return decimal
+
+    try:
+        gps_tags = {}
+        for tag_id, valeur in gps_info.items():
+            tag = GPSTAGS.get(tag_id, tag_id)
+            gps_tags[tag] = valeur
+
+        if "GPSLatitude" in gps_tags and "GPSLongitude" in gps_tags:
+            lat = convertir_coord(
+                gps_tags["GPSLatitude"],
+                gps_tags["GPSLatitudeRef"]
+            )
+            lon = convertir_coord(
+                gps_tags["GPSLongitude"],
+                gps_tags["GPSLongitudeRef"]
+            )
+            return lat, lon
+    except:
+        pass
+
+    return None
+```
+
+---
+
+## PARTIE 6 — Investigation sur les Réseaux Sociaux
+
+### Facebook
+
+```
+Techniques avancées :
+
+1. Recherche par numéro de téléphone
+   → facebook.com/search/top?q=+242XXXXXXXX
+
+2. ID numérique d'un profil
+   → Clic droit sur photo de profil → Ouvrir dans un nouvel onglet
+   → L'URL contient l'ID numérique
+
+3. Graph Search (limité mais utile)
+   → facebook.com/search/people/?q=nom+prenom
+
+4. Photos géolocalisées
+   → Regarder les check-ins publics
+   → Analyser arrière-plans des photos
+
+5. Amis communs comme pivot
+   → Un profil privé révèle parfois ses connexions
+```
+
+### LinkedIn
+
+```
+Source extrêmement riche en OSINT :
+
+1. Employés d'une organisation
+   → site:linkedin.com "DGRH" "Congo"
+   → Révèle la structure interne
+
+2. Technologies utilisées par une entreprise
+   → Les offres d'emploi révèlent la stack technique
+   → "Nous cherchons un développeur Python/Django sur AWS"
+   → → L'entreprise utilise Python, Django, AWS
+
+3. Emails professionnels
+   → Format souvent : prenom.nom@entreprise.com
+   → prenom@entreprise.com
+   → Vérifier avec hunter.io
+
+4. Changements de poste = informations sur l'organisation
+   → Quelqu'un part = tension interne possible
+   → Beaucoup de départs = problème
+```
+
+---
+
+## PARTIE 7 — Les Données de Fuites (Breach Data)
+
+### Comprendre les fuites de données
+
+Quand une entreprise est piratée et que sa base de données est volée, ces données se retrouvent souvent publiées sur le dark web puis sur des sites publics. Ces données contiennent fréquemment emails, mots de passe hashés, numéros de téléphone, adresses.
+
+**Usage légal et éthique :** vérifier si TES propres données ont été compromises, ou dans le cadre d'une investigation autorisée.
+
+### Sources légales de vérification
+
+```
+haveibeenpwned.com
+→ Vérifie si un email est dans des fuites connues
+→ Gratuit, légal, créé par Troy Hunt (expert sécurité reconnu)
+→ Base : 13+ milliards de comptes compromis
+
+dehashed.com
+→ Recherche par email, IP, username, nom, téléphone
+→ Partiellement payant
+
+intelx.io
+→ Intelligence sur des emails, domaines, IPs
+→ Utilisé par les professionnels
+
+Leak-Lookup
+→ Base de données de fuites
+```
+
+### Ce qu'une fuite révèle sur une cible
+
+```
+Email compromis dans breach → 
+→ Mot de passe hashé (parfois crackable)
+→ Autres comptes liés (même mot de passe réutilisé ?)
+→ Ancienne adresse IP de connexion
+→ Date de la compromission
+→ Services utilisés par la cible
+```
+
+---
+
+## PARTIE 8 — Construction d'un Dossier de Renseignement
+
+### Structure d'un rapport OSINT professionnel
+
+```
+1. PAGE DE GARDE
+   Titre de la mission
+   Date
+   Niveau de classification
+   Auteur (ou "Confidentiel")
+
+2. RÉSUMÉ EXÉCUTIF (1 page max)
+   Qui est la cible
+   Ce qu'on a trouvé
+   Niveau de confiance des informations
+   Recommandations
+
+3. MÉTHODOLOGIE
+   Sources utilisées
+   Outils utilisés
+   Période d'investigation
+   Limites de l'investigation
+
+4. RÉSULTATS PAR CATÉGORIE
+   Identité et profil
+   Présence numérique
+   Infrastructure
+   Réseau social
+   Activités
+
+5. GRAPHE DE LIENS
+   Schéma visuel des connexions
+   Entre personnes, comptes, IPs, domaines
+
+6. TIMELINE
+   Chronologie des événements découverts
+
+7. INDICATEURS (IOC si applicable)
+   IPs, emails, domaines, hashes
+
+8. SOURCES ET PREUVES
+   Captures d'écran horodatées
+   URLs archivées
+   Hashes des fichiers de preuve
+```
+
+### Capturer et préserver les preuves
+
+```python
+import requests
+import hashlib
+import datetime
+import os
+
+def archiver_preuve(url, dossier_preuves="preuves"):
+    """
+    Archive une page web comme preuve
+    Horodatage + hash pour intégrité légale
+    """
+    # Créer le dossier si nécessaire
+    os.makedirs(dossier_preuves, exist_ok=True)
+
+    timestamp = datetime.datetime.now()
+    horodatage = timestamp.strftime("%Y%m%d_%H%M%S")
+
+    try:
+        # Télécharger le contenu
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+        }
+        r = requests.get(url, headers=headers, timeout=10)
+        contenu = r.text.encode("utf-8")
+
+        # Calculer le hash SHA256 pour prouver l'intégrité
+        hash_preuve = hashlib.sha256(contenu).hexdigest()
+
+        # Sauvegarder le contenu
+        nom_fichier = f"{dossier_preuves}/preuve_{horodatage}.html"
+        with open(nom_fichier, "wb") as f:
+            f.write(contenu)
+
+        # Créer la fiche de preuve
+        fiche = {
+            "url_source": url,
+            "date_capture": timestamp.isoformat(),
+            "fichier": nom_fichier,
+            "sha256": hash_preuve,
+            "status_http": r.status_code,
+            "taille_bytes": len(contenu)
+        }
+
+        # Sauvegarder la fiche
+        fiche_nom = f"{dossier_preuves}/fiche_{horodatage}.json"
+        import json
+        with open(fiche_nom, "w") as f:
+            json.dump(fiche, f, indent=4)
+
+        print(f"[+] Preuve archivée : {nom_fichier}")
+        print(f"    SHA256 : {hash_preuve}")
+        print(f"    Date   : {timestamp.strftime('%d/%m/%Y %H:%M:%S')}")
+
+        return fiche
+
+    except Exception as e:
+        print(f"[-] Erreur archivage : {e}")
+        return None
+```
+
+---
+
+## PARTIE 9 — OPSEC — Protéger ta propre Identité
+
+Un investigateur OSINT qui ne protège pas son identité devient lui-même une cible.
+
+```
+RÈGLES FONDAMENTALES :
+
+1. Ne jamais investiguer depuis ta vraie IP
+   → VPN + navigateur dédié
+   → Idéalement : machine virtuelle séparée
+
+2. Créer des identités de travail (sock puppets)
+   → Compte email jetable pour les recherches
+   → Ne jamais utiliser tes vrais comptes
+
+3. Navigateur dédié OSINT
+   → Firefox avec extensions :
+     - uBlock Origin
+     - Privacy Badger
+     - User-Agent Switcher
+
+4. Ne jamais visiter la cible directement
+   → Utiliser les caches Google
+   → Wayback Machine
+   → Archive.today
+
+5. Documenter sans contacter
+   → Observer sans interagir
+   → L'interaction alerte la cible
+
+6. Règle des 3 sources
+   → Une information confirmée par une seule source
+     n'est pas une information fiable
+   → Minimum 3 sources indépendantes pour conclure
+```
+
+---
+
+## ✅ EXERCICES — Leçon 5
+
+---
+
+**Exercice 1 — Méthodologie**
+
+Pour chaque scénario, applique les 3 questions (Qui/Quoi/Pour) et dis si tu commences l'investigation ou pas et pourquoi :
+
+```
+a) Un particulier te demande de trouver l'adresse de son ex-femme
+b) Une entreprise veut vérifier l'identité d'un candidat avant embauche
+c) La police te mandate officiellement pour identifier un auteur de menaces
+d) Tu veux vérifier si ton propre email est dans des fuites
+```
+
+---
+
+**Exercice 2 — Google Dorks**
+
+Construis les requêtes Google Dorks pour :
+1. Trouver tous les PDF publiés sur le site du gouvernement congolais
+2. Trouver des pages d'administration exposées sur un domaine
+3. Chercher si une adresse email apparaît dans des documents publics
+4. Trouver des fichiers .env exposés sur un domaine
+
+---
+
+**Exercice 3 — Analyser une infrastructure**
+
+Pour le domaine `echats-808c4.web.app` — sans outils, juste avec ce que tu sais :
+1. À quelle organisation appartient ce domaine ?
+2. Quel service d'hébergement utilise-t-il ?
+3. Comment vérifierais-tu le certificat SSL ?
+4. Où chercherais-tu les sous-domaines potentiels ?
+
+---
+
+**Exercice 4 — Cas réel reconstruit**
+
+Reprends ton investigation DGRH. Maintenant que tu connais la méthodologie professionnelle, décris comment tu aurais structuré ton rapport en utilisant les 8 sections vues dans cette leçon.
+
+Tu n'as pas à tout remplir — dis ce que tu aurais mis dans chaque section avec les vraies informations que tu avais.
+
+---
+
+**Exercice 5 — OPSEC**
+
+Tu dois investiguer une organisation potentiellement dangereuse. Liste les 5 mesures OPSEC que tu prends avant de commencer, dans l'ordre.
+
+---
+
+## 📌 À retenir absolument
+
+```
+Cycle renseignement → Planification avant tout
+3 questions         → Qui / Quoi / Pour (légal ?)
+Google Dorks        → site: filetype: inurl: intitle:
+5 cercles           → Identité → Numérique → Réseau → Activités → Infrastructure
+EXIF                → Métadonnées cachées dans les images
+Règle des 3 sources → Une source seule ne prouve rien
+OPSEC               → VPN + identité dédiée + jamais ta vraie IP
+Rapport             → 8 sections + captures horodatées + hashes
+```
+
+---
+
+**Leçon 6 dans 2 jours : Web Security.**
+
+SQL Injection, XSS, CSRF, IDOR, authentification cassée — comment les attaquants exploitent les applications web et comment les défendre. 🔒

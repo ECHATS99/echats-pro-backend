@@ -1,0 +1,32 @@
+"""Connexion PostgreSQL : engine SQLAlchemy, sessionmaker, dépendance get_db() pour FastAPI."""
+from typing import Generator
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
+
+from app.core.settings import settings
+
+
+class Base(DeclarativeBase):
+    """Classe de base pour tous les modèles SQLAlchemy."""
+    pass
+
+
+engine = create_engine(
+    settings.DATABASE_URL,
+    pool_size=settings.DATABASE_POOL_SIZE,
+    max_overflow=settings.DATABASE_MAX_OVERFLOW,
+    pool_pre_ping=True,
+    future=True,
+)
+
+SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False, future=True)
+
+
+def get_db() -> Generator[Session, None, None]:
+    """Dépendance FastAPI : fournit une session SQLAlchemy par requête, toujours fermée après usage."""
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

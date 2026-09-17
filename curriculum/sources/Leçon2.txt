@@ -1,0 +1,487 @@
+Bonne initiative. Voilà la Leçon 2 complète — tu la lis seulement quand la Leçon 1 est maîtrisée.
+
+---
+
+# 🐧 LEÇON 2 — Linux : L'OS du Hacker
+### *Système de fichiers · Permissions · Processus · Réseau · Bash*
+
+---
+
+## POURQUOI LINUX EN PRIORITÉ
+
+100% des serveurs web tournent sous Linux. Kali Linux, Parrot OS, les CTF, les labs TryHackMe, les environnements de pentest — tout est Linux. Un expert cybersécurité qui ne maîtrise pas Linux est comme un pilote qui ne sait pas lire les instruments. Tu peux voler par beau temps, mais au moindre problème tu es mort.
+
+---
+
+## PARTIE 1 — L'Arborescence Linux
+
+Sous Linux il n'y a pas de `C:\` comme Windows. Tout part d'une seule racine : **/**
+
+```
+/
+├── bin/       → Commandes essentielles (ls, cat, cp...)
+├── etc/       → Fichiers de configuration système
+├── home/      → Dossiers des utilisateurs (/home/echats)
+├── root/      → Dossier de l'administrateur root
+├── var/       → Logs, données variables (/var/log)
+├── tmp/       → Fichiers temporaires (effacés au reboot)
+├── usr/       → Programmes installés
+├── proc/      → Informations sur les processus en cours
+├── dev/       → Périphériques (disques, USB...)
+├── mnt/       → Points de montage
+└── sbin/      → Commandes système (pour root)
+```
+
+**En cybersécurité tu fouilleras souvent :**
+- `/etc/passwd` → liste des utilisateurs
+- `/etc/shadow` → mots de passe hashés
+- `/var/log/` → journaux système — traces d'intrusion
+- `/tmp/` → les malwares adorent écrire ici
+- `/proc/` → voir les processus en mémoire
+
+---
+
+## PARTIE 2 — Navigation et Commandes de Base
+
+### Se déplacer
+```bash
+pwd          # Où suis-je ? (Print Working Directory)
+ls           # Lister les fichiers
+ls -la       # Lister TOUT avec détails (fichiers cachés inclus)
+cd /etc      # Aller dans /etc
+cd ..        # Remonter d'un niveau
+cd ~         # Aller dans mon home
+cd -         # Retourner au dossier précédent
+```
+
+### Lire et manipuler
+```bash
+cat fichier.txt          # Afficher contenu
+less fichier.txt         # Afficher page par page (q pour quitter)
+head -n 20 fichier.txt   # 20 premières lignes
+tail -n 20 fichier.txt   # 20 dernières lignes
+tail -f /var/log/syslog  # Suivre un fichier en temps réel
+grep "mot" fichier.txt   # Chercher un mot dans un fichier
+grep -r "mot" /etc/      # Chercher récursivement dans un dossier
+```
+
+### Créer et supprimer
+```bash
+mkdir dossier            # Créer un dossier
+mkdir -p a/b/c           # Créer arborescence complète
+touch fichier.txt        # Créer fichier vide
+cp source dest           # Copier
+mv source dest           # Déplacer ou renommer
+rm fichier.txt           # Supprimer fichier
+rm -rf dossier/          # Supprimer dossier entier (DANGEREUX)
+```
+
+### Chercher
+```bash
+find / -name "passwd"           # Chercher fichier par nom
+find / -type f -name "*.log"    # Tous les fichiers .log
+find / -perm -4000              # Fichiers SUID (important en pentest)
+which nmap                      # Où est installé un programme
+locate fichier                  # Cherche rapidement (base indexée)
+```
+
+---
+
+## PARTIE 3 — Les Permissions Linux
+
+C'est là que beaucoup échouent. Comprends ça parfaitement.
+
+Quand tu fais `ls -la` tu vois :
+
+```
+-rwxr-xr-- 1 echats hackers 4096 Mai 22 fichier.txt
+```
+
+Décortiquons :
+
+```
+-  rwx  r-x  r--
+│   │    │    │
+│   │    │    └── Autres (others) : lecture seule
+│   │    └─────── Groupe (hackers) : lecture + exécution
+│   └──────────── Propriétaire (echats) : tout
+└──────────────── Type : - fichier, d dossier, l lien
+```
+
+**Les permissions :**
+- `r` = read = lire = **4**
+- `w` = write = écrire = **2**
+- `x` = execute = exécuter = **1**
+
+**En notation numérique :**
+```
+rwx = 4+2+1 = 7
+r-x = 4+0+1 = 5
+r-- = 4+0+0 = 4
+rw- = 4+2+0 = 6
+--- = 0+0+0 = 0
+```
+
+Donc `chmod 755 fichier` = `rwxr-xr-x`
+Et `chmod 777 fichier` = `rwxrwxrwx` = tout le monde peut tout faire = **dangereux**
+
+### Modifier les permissions
+```bash
+chmod 755 fichier.sh     # rwxr-xr-x
+chmod +x fichier.sh      # Ajouter exécution
+chmod -w fichier.txt     # Retirer écriture
+chown echats fichier     # Changer propriétaire
+chown echats:hackers fichier  # Changer propriétaire et groupe
+```
+
+### SUID — Le Bit Dangereux
+```bash
+chmod 4755 fichier       # Active le SUID
+```
+
+Un fichier avec le **SUID** s'exécute avec les permissions de son propriétaire, pas de celui qui le lance. Si root possède un fichier SUID et que tu le lances en tant qu'utilisateur normal — tu l'exécutes en tant que **root**.
+
+C'est une des techniques de **privilege escalation** les plus communes en pentest :
+```bash
+find / -perm -4000 -type f 2>/dev/null   # Trouver tous les fichiers SUID
+```
+
+---
+
+## PARTIE 4 — Utilisateurs et Groupes
+
+```bash
+whoami                  # Qui suis-je ?
+id                      # Mon UID, GID et groupes
+id echats               # Infos sur l'utilisateur echats
+cat /etc/passwd         # Liste tous les utilisateurs
+cat /etc/shadow         # Mots de passe hashés (root seulement)
+sudo -l                 # Que puis-je faire avec sudo ?
+su - root               # Devenir root (si tu as le mot de passe)
+sudo su                 # Devenir root via sudo
+```
+
+### Structure de /etc/passwd
+```
+echats:x:1001:1001::/home/echats:/bin/bash
+  │    │   │    │         │           └── Shell par défaut
+  │    │   │    │         └── Home directory
+  │    │   │    └── GID (Group ID)
+  │    │   └── UID (User ID)
+  │    └── x = mot de passe dans /etc/shadow
+  └── Nom d'utilisateur
+```
+
+**En pentest :** tu cherches les UID 0 autres que root — ça indique un backdoor.
+```bash
+grep ":0:" /etc/passwd   # Qui a UID 0 ?
+```
+
+---
+
+## PARTIE 5 — Processus
+
+```bash
+ps aux                  # Tous les processus en cours
+ps aux | grep apache    # Chercher un processus spécifique
+top                     # Moniteur en temps réel
+htop                    # Version améliorée (si installé)
+kill 1234               # Tuer processus par PID
+kill -9 1234            # Forcer la mort du processus
+killall firefox         # Tuer par nom
+pgrep ssh               # PID du processus SSH
+```
+
+### Processus en arrière-plan
+```bash
+commande &              # Lancer en arrière-plan
+jobs                    # Voir les tâches en arrière-plan
+fg 1                    # Ramener la tâche 1 au premier plan
+nohup commande &        # Lancer sans être tué si tu déconnectes
+```
+
+**En forensic :** les malwares cachent leurs processus ou imitent des noms légitimes. Un processus `svchost.exe` sous Linux = suspect. Un `bash` lancé par `apache` = très suspect.
+
+---
+
+## PARTIE 6 — Réseau sous Linux
+
+```bash
+ip addr                 # Voir les interfaces réseau et IP
+ip route                # Table de routage
+ip neigh                # Table ARP
+ss -tulnp               # Ports ouverts et processus associés
+netstat -tulnp          # Même chose (ancienne commande)
+ping 8.8.8.8            # Tester connectivité
+traceroute 8.8.8.8      # Chemin des paquets
+curl ifconfig.me        # Mon IP publique
+wget https://site.com   # Télécharger un fichier
+nslookup google.com     # Résolution DNS
+dig google.com          # Résolution DNS avancée
+dig google.com MX       # Enregistrements MX
+```
+
+### Comprendre `ss -tulnp`
+```
+t = TCP
+u = UDP
+l = Listening (en écoute)
+n = Numérique (pas de résolution de nom)
+p = Process (quel programme)
+```
+
+Résultat typique :
+```
+Netid  State   Local Address:Port   Process
+tcp    LISTEN  0.0.0.0:22          sshd
+tcp    LISTEN  0.0.0.0:80          apache2
+tcp    LISTEN  127.0.0.1:3306      mysqld
+```
+
+**En audit sécurité :** tout port en écoute est une surface d'attaque. MySQL sur 127.0.0.1 = accessible localement seulement = bien. SSH sur 0.0.0.0 = accessible partout = à sécuriser.
+
+---
+
+## PARTIE 7 — Pipes et Redirections
+
+C'est la puissance de Linux. Enchaîner des commandes.
+
+### Redirections
+```bash
+commande > fichier      # Écrire sortie dans fichier (écrase)
+commande >> fichier     # Ajouter au fichier
+commande 2> erreurs     # Rediriger les erreurs
+commande 2>/dev/null    # Ignorer les erreurs
+```
+
+### Pipes
+```bash
+cat /etc/passwd | grep bash        # Utilisateurs avec bash
+ps aux | grep -v grep | grep ssh   # Processus SSH
+cat fichier | sort | uniq          # Trier et dédupliquer
+cat fichier | wc -l                # Compter les lignes
+ls -la | awk '{print $9}'          # Afficher seulement la 9ème colonne
+```
+
+### Exemples réels en cybersécurité
+```bash
+# Trouver tous les fichiers de log modifiés dans les dernières 24h
+find /var/log -mtime -1 -type f
+
+# Extraire toutes les IPs d'un fichier log
+grep -oE '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' access.log | sort | uniq -c | sort -rn
+
+# Voir les 10 IPs qui tentent le plus de connexions
+grep "Failed password" /var/log/auth.log | awk '{print $11}' | sort | uniq -c | sort -rn | head -10
+
+# Chercher des mots de passe dans des fichiers de config
+grep -r "password" /etc/ 2>/dev/null | grep -v "#"
+```
+
+---
+
+## PARTIE 8 — Bash Scripting de Base
+
+Un expert cybersécurité écrit ses propres outils. Commence ici.
+
+### Structure d'un script
+```bash
+#!/bin/bash
+# Ceci est un commentaire
+
+echo "Début du script"
+
+# Variable
+NOM="ECHATS"
+echo "Bonjour $NOM"
+
+# Lire une entrée
+read -p "Entrez une IP : " IP
+echo "IP saisie : $IP"
+```
+
+### Conditions
+```bash
+if [ "$IP" == "127.0.0.1" ]; then
+    echo "C'est le loopback"
+elif [ "$IP" == "" ]; then
+    echo "IP vide"
+else
+    echo "IP : $IP"
+fi
+```
+
+### Boucles
+```bash
+# Boucle for
+for i in 1 2 3 4 5; do
+    echo "Numéro $i"
+done
+
+# Scanner une plage d'IPs
+for i in $(seq 1 254); do
+    ping -c 1 -W 1 192.168.1.$i | grep "64 bytes" && echo "192.168.1.$i est UP"
+done
+
+# Lire un fichier ligne par ligne
+while read ligne; do
+    echo "Ligne : $ligne"
+done < fichier.txt
+```
+
+### Ton premier vrai outil — Scanner de ports basique
+```bash
+#!/bin/bash
+# Scanner de ports basique
+# Usage: ./scan.sh 192.168.1.1
+
+CIBLE=$1
+PORTS=(21 22 23 25 53 80 110 143 443 445 3306 3389 8080)
+
+echo "Scan de $CIBLE"
+echo "========================"
+
+for PORT in "${PORTS[@]}"; do
+    timeout 1 bash -c "echo >/dev/tcp/$CIBLE/$PORT" 2>/dev/null
+    if [ $? -eq 0 ]; then
+        echo "[OUVERT] Port $PORT"
+    fi
+done
+
+echo "Scan terminé."
+```
+
+Sauvegarde dans `scan.sh`, fais `chmod +x scan.sh` et teste avec `./scan.sh 192.168.1.1`.
+
+---
+
+## PARTIE 9 — Les Commandes de Survie
+
+Celles-là tu dois les avoir dans les doigts :
+
+```bash
+# Historique des commandes
+history
+history | grep ssh
+
+# Variables d'environnement
+env
+echo $PATH
+export MAVAR="valeur"
+
+# Compression
+tar -czf archive.tar.gz dossier/    # Compresser
+tar -xzf archive.tar.gz             # Décompresser
+zip -r archive.zip dossier/
+unzip archive.zip
+
+# Informations système
+uname -a           # Infos kernel
+lsb_release -a     # Version Linux
+df -h              # Espace disque
+free -h            # Mémoire RAM
+uptime             # Depuis combien de temps le système tourne
+
+# Raccourcis clavier Termux/Terminal
+Ctrl+C             # Stopper une commande
+Ctrl+Z             # Suspendre
+Ctrl+L             # Effacer l'écran (= clear)
+Ctrl+R             # Rechercher dans l'historique
+Tab                # Autocomplétion — utilise-le TOUJOURS
+```
+
+---
+
+## ✅ EXERCICES — Leçon 2
+
+---
+
+**Exercice 1 — Permissions**
+
+Convertis ces permissions en notation numérique :
+```
+a) rwxrwxrwx
+b) rwxr-xr-x
+c) rw-r--r--
+d) rwx------
+e) r-xr-xr-x
+```
+
+---
+
+**Exercice 2 — Analyse de /etc/passwd**
+
+Voici une ligne extraite d'un serveur compromis :
+```
+backdoor:x:0:0::/root:/bin/bash
+```
+Qu'est-ce que ça indique ? Pourquoi c'est critique ?
+
+---
+
+**Exercice 3 — Commandes réseau**
+
+Dans Termux, exécute et analyse :
+```bash
+ip addr
+ss -tulnp
+curl ifconfig.me
+dig google.com
+dig google.com MX
+```
+Pour chaque commande, note et explique ce que tu vois.
+
+---
+
+**Exercice 4 — Pipes**
+
+Écris la commande qui :
+1. Affiche le contenu de `/etc/passwd`
+2. Garde seulement les lignes contenant "bash"
+3. Affiche seulement le nom d'utilisateur (1ère colonne, séparateur ":")
+4. Trie alphabétiquement
+
+Une seule ligne de commande. Indice : utilise `|`, `grep`, `awk`, `sort`.
+
+---
+
+**Exercice 5 — Script**
+
+Écris un script `info.sh` qui affiche :
+- Ton nom d'utilisateur
+- Ton IP locale
+- Les ports TCP en écoute
+- L'espace disque disponible
+- La date et heure actuelles
+
+Le tout formaté proprement avec des titres.
+
+---
+
+**Exercice 6 — Scénario forensic**
+
+Tu arrives sur un serveur Linux compromis. Tu as un accès bash. Donne-moi dans l'ordre les 5 premières commandes que tu tapes pour comprendre ce qui s'est passé. Justifie chaque choix.
+
+---
+
+## 📌 À retenir absolument
+
+```
+/ = racine de tout
+/etc = configuration
+/var/log = logs = traces
+/tmp = danger zone pour les malwares
+ls -la = tout voir
+chmod 755 = rwxr-xr-x
+SUID = exécution avec droits du propriétaire
+ss -tulnp = ports ouverts
+grep + pipe = pouvoir illimité
+Tab = ton meilleur ami
+```
+
+---
+
+**Leçon 3 dans 2 jours : Python pour la cybersécurité.**
+Scripts d'automatisation, manipulation réseau, parsing de données, création d'outils OSINT.
+
+Reviens avec les exercices des deux leçons complétés. 🔒

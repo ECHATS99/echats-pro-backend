@@ -1,0 +1,963 @@
+Feedback reçu et juste. Je refais la leçon avec des explications pédagogiques complètes sur chaque élément.
+
+---
+
+# 🐍 LEÇON 3 — Python pour la Cybersécurité
+### *Version complète et expliquée*
+
+---
+
+## AVANT DE COMMENCER — Comprendre la logique Python
+
+Python s'exécute **ligne par ligne, de haut en bas**. Chaque ligne fait une action précise. Avant de coder quoi que ce soit, tu dois comprendre les briques de base et **pourquoi** elles existent.
+
+---
+
+## PARTIE 1 — Les Fondations
+
+### `print()` — Afficher quelque chose
+
+```python
+print("Bonjour")
+```
+
+`print()` sert à **afficher du texte dans le terminal**. C'est ta fenêtre sur ce qui se passe dans ton programme. Sans `print()`, ton code tourne en silence et tu ne vois rien.
+
+**Quand l'utiliser :**
+- Pour voir le résultat d'une opération
+- Pour déboguer — vérifier qu'une variable contient bien ce que tu crois
+- Pour afficher les résultats d'une analyse à l'utilisateur
+
+```python
+# Déboguer — tu veux savoir ce que contient une variable
+ip = "192.168.1.1"
+print(ip)           # Affiche : 192.168.1.1
+print(type(ip))     # Affiche : <class 'str'>
+# type() te dit quel type de données c'est
+# str = texte, int = nombre entier, bool = vrai/faux
+```
+
+---
+
+### Variables — Stocker une information
+
+```python
+ip = "192.168.1.100"
+port = 443
+actif = True
+```
+
+Une variable c'est une **boîte avec un nom**. Tu mets une valeur dedans pour la réutiliser plus tard. Sans variables, tu devrais réécrire les mêmes valeurs partout dans ton code.
+
+**Les types fondamentaux :**
+
+```python
+# String (str) = texte — toujours entre guillemets
+nom = "ECHATS"
+message = "Port ouvert"
+
+# Integer (int) = nombre entier — sans guillemets
+port = 443
+nombre_cibles = 254
+
+# Float = nombre décimal
+score = 9.5
+
+# Boolean (bool) = vrai ou faux — commence par majuscule
+port_ouvert = True
+est_prive = False
+
+# Pourquoi la distinction est importante :
+print(443 + 1)      # 444 — addition mathématique
+print("443" + "1")  # 4431 — concaténation de texte !
+# Python ne peut pas deviner ce que tu veux
+# Tu dois lui donner le bon type
+```
+
+---
+
+### f-strings — Formater du texte proprement
+
+```python
+ip = "192.168.1.1"
+port = 443
+service = "HTTPS"
+
+# Méthode ancienne — difficile à lire
+message = "Port " + str(port) + " sur " + ip + " : " + service
+
+# f-string — moderne et lisible
+message = f"Port {port} sur {ip} : {service}"
+print(message)
+# Affiche : Port 443 sur 192.168.1.1 : HTTPS
+```
+
+Le `f` devant les guillemets dit à Python : *"tout ce qui est entre `{}` c'est une variable, remplace-la par sa valeur"*.
+
+**Quand l'utiliser :** dès que tu mélanges du texte fixe et des variables. C'est la méthode standard en Python moderne.
+
+---
+
+### `input()` — Demander une valeur à l'utilisateur
+
+```python
+cible = input("Entrez l'IP à analyser : ")
+print(f"Tu as saisi : {cible}")
+```
+
+`input()` **arrête le programme et attend que l'utilisateur tape quelque chose**. Ce qu'il tape devient une variable.
+
+**Important :** `input()` retourne toujours du texte (str). Si tu attends un nombre :
+
+```python
+port = int(input("Entrez un port : "))
+# int() convertit le texte en nombre entier
+```
+
+---
+
+## PARTIE 2 — Conditions et Boucles
+
+### `if / elif / else` — Prendre des décisions
+
+```python
+port = 3389
+
+if port == 22:
+    print("SSH — Vérifier l'authentification")
+elif port == 3389:
+    print("RDP — Cible prioritaire ransomware")
+elif port == 445:
+    print("SMB — Vérifier EternalBlue")
+else:
+    print(f"Port {port} — Service non répertorié")
+```
+
+`if` signifie *"si cette condition est vraie, exécute ce bloc"*.
+`elif` signifie *"sinon, si cette autre condition est vraie"*.
+`else` signifie *"dans tous les autres cas"*.
+
+**L'indentation est obligatoire en Python.** Les 4 espaces devant `print` ne sont pas optionnels — ils disent à Python que cette ligne appartient au bloc `if`.
+
+**Les opérateurs de comparaison :**
+```python
+port == 443      # égal à
+port != 443      # différent de
+port > 1024      # supérieur à
+port < 1024      # inférieur à
+port >= 443      # supérieur ou égal
+port <= 443      # inférieur ou égal
+
+# Appartenance
+port in [80, 443, 8080]     # True si port est dans la liste
+"192.168" in ip             # True si le texte contient "192.168"
+```
+
+---
+
+### `for` — Répéter une action sur une liste
+
+```python
+ports = [21, 22, 80, 443, 3389]
+
+for port in ports:
+    print(f"Analyse du port {port}")
+```
+
+`for` dit : *"pour chaque élément dans cette liste, fais quelque chose"*. La variable `port` prend successivement la valeur de chaque élément.
+
+**`range()` — Générer une séquence de nombres :**
+
+```python
+# range(debut, fin) — fin non incluse
+for i in range(1, 255):
+    print(f"192.168.1.{i}")
+# Affiche 192.168.1.1 jusqu'à 192.168.1.254
+
+# range(debut, fin, pas)
+for i in range(0, 1000, 100):
+    print(i)   # 0, 100, 200, 300...
+```
+
+---
+
+### `while` — Répéter tant qu'une condition est vraie
+
+```python
+tentatives = 0
+maximum = 3
+
+while tentatives < maximum:
+    mot_de_passe = input("Mot de passe : ")
+    if mot_de_passe == "secret":
+        print("Accès autorisé")
+        break   # Sortir immédiatement de la boucle
+    tentatives += 1
+    print(f"Incorrect. {maximum - tentatives} essai(s) restant(s)")
+
+if tentatives == maximum:
+    print("Compte bloqué")
+```
+
+`break` sort de la boucle immédiatement.
+`continue` passe directement à l'itération suivante sans exécuter le reste du bloc.
+
+---
+
+## PARTIE 3 — Listes et Dictionnaires
+
+### Listes — Collection ordonnée
+
+```python
+# Créer une liste
+ports_critiques = [23, 445, 3389]
+
+# Ajouter un élément
+ports_critiques.append(21)
+# ports_critiques = [23, 445, 3389, 21]
+
+# Supprimer un élément
+ports_critiques.remove(21)
+
+# Accéder par index — commence à 0
+print(ports_critiques[0])    # 23 — premier élément
+print(ports_critiques[-1])   # 3389 — dernier élément
+
+# Longueur
+print(len(ports_critiques))  # 3
+
+# Vérifier la présence
+print(445 in ports_critiques)   # True
+print(80 in ports_critiques)    # False
+
+# Parcourir
+for port in ports_critiques:
+    print(port)
+```
+
+**Quand utiliser une liste :** quand tu as plusieurs éléments du même type et que l'ordre compte — une liste de ports à scanner, une liste d'IPs cibles, une liste de logs.
+
+---
+
+### Dictionnaires — Association clé → valeur
+
+```python
+# Créer un dictionnaire
+services = {
+    22: "SSH",
+    80: "HTTP",
+    443: "HTTPS",
+    445: "SMB",
+    3389: "RDP"
+}
+# La clé (avant :) permet de retrouver la valeur (après :)
+
+# Accéder à une valeur
+print(services[22])        # SSH
+print(services[80])        # HTTP
+
+# Accès sécurisé — évite l'erreur si la clé n'existe pas
+print(services.get(9999, "Service inconnu"))
+# Retourne "Service inconnu" si 9999 n'est pas dans le dict
+# Sans .get() : KeyError et le programme plante
+
+# Ajouter ou modifier
+services[8080] = "HTTP-Alternatif"
+
+# Vérifier si une clé existe
+print(22 in services)      # True
+
+# Parcourir clés et valeurs ensemble
+for port, service in services.items():
+    print(f"Port {port} → {service}")
+```
+
+**Quand utiliser un dictionnaire :** quand tu veux associer des informations — port → service, IP → pays, email → identité. C'est la structure de données la plus utile en OSINT.
+
+---
+
+## PARTIE 4 — Fonctions
+
+### Pourquoi les fonctions existent
+
+Sans fonction, si tu veux analyser 50 IPs tu dois réécrire le même code 50 fois. Une fonction c'est un **bloc de code réutilisable avec un nom**.
+
+```python
+# Définir une fonction
+def analyser_port(port):
+    # Cette fonction reçoit un numéro de port
+    # et retourne une évaluation du risque
+
+    if port in [23, 445, 3389]:
+        risque = "CRITIQUE"
+    elif port in [21, 25, 110]:
+        risque = "ÉLEVÉ"
+    elif port in [80, 8080]:
+        risque = "MOYEN"
+    else:
+        risque = "FAIBLE"
+
+    return f"[{risque}] Port {port}"
+    # return envoie le résultat à celui qui a appelé la fonction
+
+# Utiliser la fonction
+resultat = analyser_port(3389)
+print(resultat)    # [CRITIQUE] Port 3389
+
+# La réutiliser autant de fois que tu veux
+for port in [22, 80, 445, 443]:
+    print(analyser_port(port))
+```
+
+**`def`** déclare une fonction. Le nom que tu choisis est libre.
+**Les paramètres** entre parenthèses sont les données que la fonction reçoit.
+**`return`** retourne le résultat. Sans `return`, la fonction retourne `None`.
+
+### Paramètres par défaut
+
+```python
+def scanner_port(ip, port, timeout=1):
+    # timeout a une valeur par défaut de 1 seconde
+    # Si tu ne le précises pas, il vaut 1
+    # Si tu le précises, il prend ta valeur
+    pass
+
+scanner_port("192.168.1.1", 80)        # timeout = 1 (défaut)
+scanner_port("192.168.1.1", 80, 0.5)   # timeout = 0.5
+```
+
+---
+
+## PARTIE 5 — Gestion d'erreurs
+
+### `try / except` — Le bouclier de ton programme
+
+```python
+import socket
+
+# Sans try/except — si ça échoue, le programme plante complètement
+ip = socket.gethostbyname("site-qui-nexiste-pas.xyz")
+# → socket.gaierror: [Errno -2] Name or service not known
+# → Programme arrêté
+
+# Avec try/except — le programme continue
+try:
+    ip = socket.gethostbyname("site-qui-nexiste-pas.xyz")
+    print(f"IP trouvée : {ip}")
+except socket.gaierror:
+    print("Résolution DNS impossible — domaine inexistant")
+except Exception as e:
+    # Exception attrape n'importe quelle erreur
+    # e contient le message d'erreur
+    print(f"Erreur inattendue : {e}")
+```
+
+**Quand utiliser `try/except` :** dès que tu fais quelque chose qui dépend de l'extérieur — réseau, fichiers, API. Ces opérations peuvent toujours échouer pour des raisons hors de ton contrôle (site hors ligne, fichier inexistant, timeout réseau).
+
+---
+
+## PARTIE 6 — Modules
+
+### `import` — Utiliser des bibliothèques
+
+Python seul est limité. Les modules ajoutent des fonctionnalités.
+
+```python
+import socket
+# socket = module de communication réseau
+# Après import, tu accèdes à ses fonctions avec socket.fonction()
+
+import datetime
+# datetime = module de gestion des dates et heures
+
+import json
+# json = lire et écrire du JSON
+
+import re
+# re = expressions régulières (chercher des patterns dans du texte)
+
+import os
+# os = interagir avec le système d'exploitation
+```
+
+**Modules intégrés** — déjà dans Python, pas besoin d'installer :
+`socket`, `datetime`, `json`, `re`, `os`, `sys`, `hashlib`, `base64`
+
+**Modules externes** — à installer avec pip :
+```bash
+pip install requests    # Requêtes HTTP
+pip install dnspython   # Manipulation DNS
+```
+
+---
+
+## PARTIE 7 — Les Modules Essentiels en Détail
+
+### `socket` — Communication réseau bas niveau
+
+```python
+import socket
+
+# gethostbyname() — résoudre un nom de domaine en IP
+# Prend un nom de domaine, retourne une IP sous forme de texte
+ip = socket.gethostbyname("google.com")
+print(ip)   # 142.250.74.174
+
+# gethostbyaddr() — reverse DNS (IP → nom)
+# Prend une IP, retourne un tuple (nom, alias, [ip])
+try:
+    info = socket.gethostbyaddr("8.8.8.8")
+    print(info[0])   # dns.google
+except socket.herror:
+    print("Pas de reverse DNS")
+
+# socket() — créer une connexion réseau
+# AF_INET = IPv4, SOCK_STREAM = TCP
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# settimeout() — définir un délai maximum d'attente en secondes
+# Sans timeout, le programme peut attendre indéfiniment
+sock.settimeout(1)
+
+# connect_ex() — tenter une connexion sur un port
+# Retourne 0 si ouvert, autre chose si fermé/filtré
+# connect_ex ne lève pas d'exception — il retourne un code
+resultat = sock.connect_ex(("192.168.1.1", 80))
+if resultat == 0:
+    print("Port 80 ouvert")
+else:
+    print("Port 80 fermé ou filtré")
+
+# close() — toujours fermer le socket après utilisation
+sock.close()
+```
+
+---
+
+### `requests` — Requêtes HTTP
+
+```python
+import requests
+
+# get() — envoyer une requête HTTP GET
+# C'est comme ouvrir une URL dans un navigateur, mais en code
+# timeout= évite d'attendre indéfiniment
+reponse = requests.get("https://api.ipify.org?format=json", timeout=5)
+
+# .status_code — le code de réponse HTTP
+# 200 = succès, 404 = non trouvé, 403 = interdit, 500 = erreur serveur
+print(reponse.status_code)   # 200
+
+# .json() — lire la réponse comme un dictionnaire Python
+# Fonctionne seulement si le serveur retourne du JSON
+data = reponse.json()
+print(data)           # {'ip': '197.xxx.xxx.xxx'}
+print(data["ip"])     # 197.xxx.xxx.xxx
+
+# .text — lire la réponse comme du texte brut
+print(reponse.text)   # '{"ip":"197.xxx.xxx.xxx"}'
+
+# .headers — les en-têtes HTTP de la réponse
+# Révèle des informations sur le serveur
+print(reponse.headers)
+print(reponse.headers.get("Server"))         # nginx ou Apache
+print(reponse.headers.get("X-Powered-By"))   # PHP/7.4, etc.
+```
+
+---
+
+### `re` — Expressions régulières (chercher des patterns)
+
+```python
+import re
+
+# findall() — trouver toutes les occurrences d'un pattern
+# Retourne une liste de tout ce qui correspond
+
+texte = "Connexion de 192.168.1.50 vers 8.8.8.8, email: admin@site.com"
+
+# Pattern pour trouver des IPs
+# \b = limite de mot
+# [0-9]{1,3} = entre 1 et 3 chiffres
+# \. = le point littéral (le . seul = n'importe quel caractère)
+pattern_ip = r'\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b'
+ips = re.findall(pattern_ip, texte)
+print(ips)   # ['192.168.1.50', '8.8.8.8']
+
+# Pattern pour emails
+pattern_email = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b'
+emails = re.findall(pattern_email, texte)
+print(emails)   # ['admin@site.com']
+
+# search() — trouver la première occurrence
+# Retourne un objet Match ou None
+match = re.search(r'\d+\.\d+\.\d+\.\d+', texte)
+if match:
+    print(f"Première IP : {match.group()}")   # 192.168.1.50
+
+# Le r devant la string = raw string
+# Évite que Python interprète les \ comme des séquences spéciales
+```
+
+---
+
+### `hashlib` — Hachage cryptographique
+
+```python
+import hashlib
+
+# sha256() — créer un hash SHA-256
+# Un hash transforme n'importe quelle donnée en empreinte fixe de 64 caractères
+# Irréversible — impossible de retrouver l'original depuis le hash
+# Déterministe — même entrée = toujours même hash
+
+# .encode() convertit le texte en bytes — hashlib travaille avec des bytes
+hash_obj = hashlib.sha256("mot_de_passe".encode())
+
+# .hexdigest() retourne le hash sous forme de texte hexadécimal
+print(hash_obj.hexdigest())
+# 6b3a55e0261b0304143f805a24924d0c1c44524821305f31d9277843b8a10f4e
+
+# md5() — même principe mais hash de 32 caractères
+# MD5 est obsolète pour la sécurité mais utilisé pour vérifier l'intégrité
+print(hashlib.md5("mot_de_passe".encode()).hexdigest())
+# 319f4d26e3c536b5dd871bb2c52e3178
+
+# Pourquoi hacher en forensic :
+# Tu arrives sur une scène — tu haches tous les fichiers AVANT de les analyser
+# Si quelqu'un accuse que tu as modifié quelque chose
+# Tu peux prouver que le hash n'a pas changé
+```
+
+---
+
+## PARTIE 8 — Lire et Écrire des Fichiers
+
+```python
+# Écrire dans un fichier
+# "w" = write (écrase si existe), "a" = append (ajoute à la fin)
+# with garantit que le fichier est fermé même si une erreur survient
+with open("rapport.txt", "w", encoding="utf-8") as fichier:
+    fichier.write("Rapport OSINT\n")
+    fichier.write("Date : 2026-05-28\n")
+    fichier.write("Cible : 192.168.1.1\n")
+# Ici le fichier est automatiquement fermé
+
+# Lire un fichier entier
+with open("rapport.txt", "r", encoding="utf-8") as fichier:
+    contenu = fichier.read()
+    print(contenu)
+
+# Lire ligne par ligne — utile pour les gros fichiers
+with open("ips.txt", "r") as fichier:
+    for ligne in fichier:
+        ip = ligne.strip()   # strip() enlève espaces et \n
+        if ip:               # Ignorer les lignes vides
+            print(f"Analyse de {ip}")
+
+# Sauvegarder en JSON
+import json
+
+donnees = {
+    "cible": "192.168.1.1",
+    "ports_ouverts": [22, 80, 443],
+    "pays": "Congo"
+}
+
+with open("resultat.json", "w", encoding="utf-8") as f:
+    json.dump(donnees, f, indent=4, ensure_ascii=False)
+    # indent=4 = formatage lisible avec indentation
+    # ensure_ascii=False = garder les accents français
+
+# Lire un JSON
+with open("resultat.json", "r") as f:
+    data = json.load(f)
+    print(data["cible"])   # 192.168.1.1
+```
+
+---
+
+## PARTIE 9 — Outil OSINT Complet et Commenté
+
+```python
+#!/usr/bin/env python3
+"""
+ECHATS OSINT TOOL v1.0
+Auteur : Mikabou Elioth — BLACK HAWK LAB
+Usage éthique et légal uniquement
+"""
+
+# On importe tous les modules dont on a besoin au début
+import socket       # Pour la résolution DNS et les connexions réseau
+import requests     # Pour les requêtes HTTP vers les APIs
+import datetime     # Pour horodater le rapport
+import json         # Pour sauvegarder les résultats
+import re           # Pour extraire des patterns (IPs, emails)
+
+
+def afficher_banniere():
+    # Cette fonction affiche juste le logo au démarrage
+    # Elle ne prend rien en entrée et ne retourne rien
+    print("=" * 45)
+    print("   ECHATS OSINT TOOL v1.0")
+    print("   BLACK HAWK | LAB")
+    print("   Usage éthique uniquement")
+    print("=" * 45)
+
+
+def lookup_ip(ip):
+    """
+    Géolocalise une IP avec l'API ip-api.com
+    Paramètre : ip (string) — l'adresse IP à analyser
+    Retourne : un dictionnaire avec les infos, ou {} si erreur
+    """
+    print(f"\n[*] Géolocalisation de {ip}...")
+
+    try:
+        # On appelle l'API gratuite ip-api.com
+        # Elle retourne un JSON avec les infos de géolocalisation
+        url = f"http://ip-api.com/json/{ip}"
+        reponse = requests.get(url, timeout=5)
+        # timeout=5 : on attend max 5 secondes
+
+        # .json() transforme la réponse en dictionnaire Python
+        data = reponse.json()
+
+        # L'API retourne "success" si l'IP est valide et publique
+        if data["status"] == "success":
+            resultat = {
+                "ip": ip,
+                "pays": data.get("country", "Inconnu"),
+                "code_pays": data.get("countryCode", "??"),
+                "ville": data.get("city", "Inconnue"),
+                "isp": data.get("isp", "Inconnu"),
+                "organisation": data.get("org", "Inconnue"),
+                "coordonnees": f"{data.get('lat')},{data.get('lon')}"
+            }
+
+            # Afficher les résultats
+            print(f"  Pays         : {resultat['pays']}")
+            print(f"  Ville        : {resultat['ville']}")
+            print(f"  FAI          : {resultat['isp']}")
+            print(f"  Organisation : {resultat['organisation']}")
+
+            return resultat
+        else:
+            # L'API retourne "fail" pour les IPs privées ou invalides
+            print(f"  IP privée ou invalide")
+            return {}
+
+    except requests.exceptions.Timeout:
+        # Le serveur n'a pas répondu dans les 5 secondes
+        print("  [-] Timeout — API non disponible")
+        return {}
+    except Exception as e:
+        # Toute autre erreur imprévue
+        print(f"  [-] Erreur : {e}")
+        return {}
+
+
+def scanner_ports(ip, ports=None):
+    """
+    Scanne une liste de ports sur une IP
+    Paramètre ip : l'adresse IP cible
+    Paramètre ports : liste de ports à scanner (défaut = ports courants)
+    Retourne : liste des ports ouverts avec leurs services
+    """
+
+    # Si l'utilisateur ne donne pas de liste de ports
+    # on utilise les ports les plus courants
+    if ports is None:
+        ports = [21, 22, 23, 25, 53, 80, 443, 445, 3306, 3389, 8080]
+
+    # Dictionnaire pour associer numéro de port → nom du service
+    noms_services = {
+        21: "FTP",
+        22: "SSH",
+        23: "Telnet — DANGER (non chiffré)",
+        25: "SMTP",
+        53: "DNS",
+        80: "HTTP",
+        443: "HTTPS",
+        445: "SMB — Vérifier EternalBlue",
+        3306: "MySQL",
+        3389: "RDP — Cible ransomware",
+        8080: "HTTP Alternatif"
+    }
+
+    print(f"\n[*] Scan de {len(ports)} ports sur {ip}...")
+    ports_ouverts = []
+
+    for port in ports:
+        try:
+            # Créer un socket TCP (AF_INET=IPv4, SOCK_STREAM=TCP)
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+            # Timeout de 0.5 seconde par port
+            # Plus rapide qu'1 seconde, assez pour un réseau local
+            sock.settimeout(0.5)
+
+            # connect_ex retourne 0 si le port est ouvert
+            # contrairement à connect() qui lèverait une exception
+            code_retour = sock.connect_ex((ip, port))
+
+            if code_retour == 0:
+                # Port ouvert !
+                service = noms_services.get(port, "Service inconnu")
+                print(f"  [OUVERT] {port}/tcp → {service}")
+
+                # On ajoute ce port à notre liste de résultats
+                ports_ouverts.append({
+                    "port": port,
+                    "service": service
+                })
+
+            # Toujours fermer le socket après utilisation
+            sock.close()
+
+        except socket.error as e:
+            # Erreur réseau sur ce port spécifique — on continue
+            pass
+
+    print(f"\n  Résultat : {len(ports_ouverts)}/{len(ports)} ports ouverts")
+    return ports_ouverts
+
+
+def extraire_ioc(texte):
+    """
+    Extrait les Indicateurs de Compromission (IOC) d'un texte
+    IOC = IPs, emails, domaines, hashes — indices d'une attaque
+    Paramètre : texte brut (logs, rapport, email suspect)
+    Retourne : dictionnaire avec les IOC trouvés
+    """
+    print("\n[*] Extraction des IOC...")
+
+    # Regex pour les IPs IPv4
+    # [0-9]{1,3} = 1 à 3 chiffres
+    # \. = point littéral (pas n'importe quel caractère)
+    # {3} = répété 3 fois (pour les 3 premiers octets)
+    # \b = limite de mot (évite de matcher 1234.5678.9.0)
+    ips = re.findall(
+        r'\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b',
+        texte
+    )
+
+    # Regex pour les emails
+    # [A-Za-z0-9._%+-]+ = partie locale (avant @)
+    # @ = le @
+    # [A-Za-z0-9.-]+ = domaine
+    # \.[A-Za-z]{2,} = extension (.com, .cg, .org...)
+    emails = re.findall(
+        r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b',
+        texte
+    )
+
+    # Regex pour hashes MD5 (exactement 32 caractères hexadécimaux)
+    md5 = re.findall(r'\b[a-fA-F0-9]{32}\b', texte)
+
+    # Regex pour hashes SHA256 (exactement 64 caractères hexadécimaux)
+    sha256 = re.findall(r'\b[a-fA-F0-9]{64}\b', texte)
+
+    # set() supprime les doublons, list() remet en liste
+    resultat = {
+        "ips": list(set(ips)),
+        "emails": list(set(emails)),
+        "md5": list(set(md5)),
+        "sha256": list(set(sha256))
+    }
+
+    # Afficher ce qu'on a trouvé
+    print(f"  IPs trouvées   : {resultat['ips']}")
+    print(f"  Emails trouvés : {resultat['emails']}")
+    if resultat["md5"]:
+        print(f"  Hashes MD5     : {resultat['md5']}")
+    if resultat["sha256"]:
+        print(f"  Hashes SHA256  : {resultat['sha256']}")
+
+    return resultat
+
+
+def sauvegarder_rapport(donnees):
+    """
+    Sauvegarde les résultats dans un fichier JSON horodaté
+    Paramètre : dictionnaire avec toutes les données de l'analyse
+    Retourne : le nom du fichier créé
+    """
+    # Créer un nom de fichier unique avec la date et l'heure
+    # strftime formate la date : %Y=année, %m=mois, %d=jour, %H=heure, %M=minute
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    nom_fichier = f"rapport_osint_{timestamp}.json"
+
+    # Écrire le JSON dans le fichier
+    # indent=4 = indentation pour la lisibilité
+    # ensure_ascii=False = garder les caractères spéciaux
+    with open(nom_fichier, "w", encoding="utf-8") as f:
+        json.dump(donnees, f, indent=4, ensure_ascii=False)
+
+    print(f"\n[+] Rapport sauvegardé : {nom_fichier}")
+    return nom_fichier
+
+
+def menu_principal():
+    """
+    Fonction principale — affiche le menu et orchestre les autres fonctions
+    C'est le point d'entrée de l'outil
+    """
+    afficher_banniere()
+
+    print("\nQue voulez-vous faire ?")
+    print("  1. Géolocaliser une IP")
+    print("  2. Scanner les ports d'une IP")
+    print("  3. Extraire les IOC d'un texte")
+    print("  4. Analyse complète (IP + ports)")
+    print("  0. Quitter")
+
+    # Récupérer le choix de l'utilisateur
+    # .strip() enlève les espaces accidentels
+    choix = input("\nVotre choix : ").strip()
+
+    # Initialiser le rapport qui contiendra tous les résultats
+    rapport = {
+        "date": datetime.datetime.now().isoformat(),
+        "outil": "ECHATS OSINT Tool v1.0",
+        "resultats": {}
+    }
+
+    if choix == "0":
+        print("Au revoir.")
+        return
+
+    elif choix in ["1", "2", "4"]:
+        # Pour ces options on a besoin d'une IP ou d'un domaine
+        cible = input("IP ou domaine cible : ").strip()
+        rapport["cible"] = cible
+
+        if choix == "1":
+            rapport["resultats"]["geoloc"] = lookup_ip(cible)
+
+        elif choix == "2":
+            rapport["resultats"]["ports"] = scanner_ports(cible)
+
+        elif choix == "4":
+            # Analyse complète = géoloc + scan ports
+            rapport["resultats"]["geoloc"] = lookup_ip(cible)
+            rapport["resultats"]["ports"] = scanner_ports(cible)
+
+    elif choix == "3":
+        print("Collez votre texte ci-dessous.")
+        print("Terminez avec une ligne contenant uniquement 'FIN'")
+
+        lignes = []
+        while True:
+            ligne = input()
+            if ligne == "FIN":
+                break
+            lignes.append(ligne)
+
+        texte = "\n".join(lignes)
+        rapport["resultats"]["ioc"] = extraire_ioc(texte)
+
+    else:
+        print("Choix invalide.")
+        return
+
+    # Sauvegarder le rapport dans tous les cas
+    sauvegarder_rapport(rapport)
+    print("\n[+] Analyse terminée.")
+
+
+# Ce bloc s'exécute seulement si tu lances ce fichier directement
+# Pas si tu l'importes dans un autre script
+if __name__ == "__main__":
+    menu_principal()
+```
+
+---
+
+## ✅ EXERCICES — Leçon 3
+
+---
+
+**Exercice 1 — Compréhension**
+
+Sans chercher, réponds :
+1. Quelle est la différence entre `connect()` et `connect_ex()` en socket ?
+2. Pourquoi met-on `timeout=5` dans `requests.get()` ?
+3. Qu'est-ce que `data.get("pays", "Inconnu")` fait différemment de `data["pays"]` ?
+4. Pourquoi `if __name__ == "__main__"` est important ?
+5. Que retourne `re.findall()` si aucun pattern n'est trouvé ?
+
+---
+
+**Exercice 2 — Lire du code**
+
+Explique ligne par ligne ce que fait ce code :
+
+```python
+with open("ips.txt", "r") as f:
+    cibles = [ligne.strip() for ligne in f if ligne.strip()]
+
+for ip in cibles:
+    try:
+        nom = socket.gethostbyaddr(ip)[0]
+        print(f"{ip} → {nom}")
+    except socket.herror:
+        print(f"{ip} → Pas de reverse DNS")
+```
+
+---
+
+**Exercice 3 — Corriger les bugs**
+
+Ce code contient 4 erreurs. Trouve et corrige-les :
+
+```python
+import socket
+
+def scan(ip, port)
+    sock = socket.socket()
+    sock.settimeout(1)
+    result = sock.connect_ex(ip, port)
+    if result = 0:
+        print(f"Port {port} ouvert)
+    sock.close
+```
+
+---
+
+**Exercice 4 — Écrire**
+
+En reprenant ton cas DGRH : tu avais un email suspect. Écris une fonction `analyser_email(email)` qui :
+- Vérifie le format avec une regex
+- Extrait le domaine (partie après @)
+- Résout l'IP du domaine avec `socket.gethostbyname()`
+- Retourne un dictionnaire `{email, domaine, ip, valide}`
+
+---
+
+**Exercice 5 — Réflexion**
+
+Pourquoi ne faut-il jamais faire confiance à ce que retourne `ip-api.com` comme seule source dans une vraie investigation ? Cite 3 raisons.
+
+---
+
+## 📌 À retenir absolument
+
+```
+print()          → voir ce qui se passe
+try/except       → protéger contre les erreurs réseau
+socket.connect_ex() → 0 = port ouvert
+requests.get()   → toujours timeout + try/except
+.get(clé, défaut) → accès sécurisé au dictionnaire
+re.findall()     → extraire des patterns (IPs, emails)
+json.dump()      → sauvegarder les résultats
+with open()      → toujours fermer les fichiers proprement
+if __name__      → point d'entrée du script
+```
+
+---
+
+**Leçon 4 dans 2 jours : Cryptographie.**
+Hachage en profondeur, chiffrement symétrique, asymétrique, SSL/TLS, attaques sur les mots de passe, et comment les experts cassent ce qui semble incassable.
+
+Envoie tes réponses. 🔒

@@ -1,0 +1,204 @@
+{
+  "format": "ECHATS_QUIZ_IMPORT_V1",
+  "lesson_slug": "cryptographie",
+  "title": "Évaluation — Cryptographie",
+  "passing_score": 75,
+  "questions": [
+    {
+      "question": "Quel objectif signifie que seules les personnes autorisées lisent le message?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Confidentialité",
+          "correct": true
+        },
+        {
+          "answer": "Intégrité",
+          "correct": false
+        },
+        {
+          "answer": "Disponibilité",
+          "correct": false
+        },
+        {
+          "answer": "Journalisation",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quel mécanisme produit une empreinte de longueur fixe?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Hachage",
+          "correct": true
+        },
+        {
+          "answer": "Encodage base64",
+          "correct": false
+        },
+        {
+          "answer": "Compression",
+          "correct": false
+        },
+        {
+          "answer": "Routage",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Le hachage est-il conçu pour être inversé afin de retrouver l’entrée?",
+      "type": "true_false",
+      "answers": [
+        {
+          "answer": "Oui",
+          "correct": false
+        },
+        {
+          "answer": "Non",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "question": "Pourquoi utiliser un sel unique avec un dérivé de mot de passe?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Pour différencier des mots de passe identiques et gêner les tables pré-calculées",
+          "correct": true
+        },
+        {
+          "answer": "Pour rendre le réseau plus rapide",
+          "correct": false
+        },
+        {
+          "answer": "Pour remplacer l’authentification",
+          "correct": false
+        },
+        {
+          "answer": "Pour compresser la base",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quel mode AES fournit chiffrement et authentification intégrée?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "ECB",
+          "correct": false
+        },
+        {
+          "answer": "GCM",
+          "correct": true
+        },
+        {
+          "answer": "TXT",
+          "correct": false
+        },
+        {
+          "answer": "RAW",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quel élément doit rester secret dans une paire asymétrique?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Clé publique",
+          "correct": false
+        },
+        {
+          "answer": "Clé privée",
+          "correct": true
+        },
+        {
+          "answer": "Nom de domaine",
+          "correct": false
+        },
+        {
+          "answer": "Certificat public",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quel est le rôle d’un certificat TLS?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Lier une identité de domaine à une clé publique via une autorité de confiance",
+          "correct": true
+        },
+        {
+          "answer": "Remplacer tous les mots de passe",
+          "correct": false
+        },
+        {
+          "answer": "Compresser HTTP",
+          "correct": false
+        },
+        {
+          "answer": "Ouvrir les ports",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Pourquoi ECB est-il déconseillé?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Il peut révéler des motifs de blocs identiques",
+          "correct": true
+        },
+        {
+          "answer": "Il est toujours lent",
+          "correct": false
+        },
+        {
+          "answer": "Il exige une clé publique",
+          "correct": false
+        },
+        {
+          "answer": "Il ne fonctionne qu’en IPv6",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Un nonce ne doit-il pas être réutilisé avec la même clé dans un mode authentifié?",
+      "type": "true_false",
+      "answers": [
+        {
+          "answer": "Vrai",
+          "correct": true
+        },
+        {
+          "answer": "Faux",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "SHA-256 est-il à lui seul une solution adaptée au stockage des mots de passe?",
+      "type": "true_false",
+      "answers": [
+        {
+          "answer": "Oui",
+          "correct": false
+        },
+        {
+          "answer": "Non, il faut un dérivé lent et salé adapté",
+          "correct": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,838 @@
+# 🔐 LEÇON 4 — Cryptographie
+### *Hachage · Chiffrement · SSL/TLS · Attaques sur mots de passe*
+
+---
+
+## POURQUOI LA CRYPTOGRAPHIE EST FONDAMENTALE
+
+Tout ce que tu fais en cybersécurité touche à la cryptographie. Les mots de passe stockés, les communications HTTPS, les VPN, les signatures numériques, les certificats — tout repose dessus. Un expert qui ne comprend pas la crypto ne peut pas :
+- Analyser un mot de passe volé
+- Comprendre pourquoi HTTPS est sécurisé
+- Identifier une implémentation faible
+- Comprendre comment les attaquants cassent les défenses
+
+---
+
+## PARTIE 1 — Les Fondations
+
+### Qu'est-ce que la cryptographie ?
+
+La cryptographie c'est la science de **protéger l'information** en la transformant de façon à ce que seules les personnes autorisées puissent la lire.
+
+Trois objectifs fondamentaux — retiens-les :
+
+```
+CONFIDENTIALITÉ  → Seul le destinataire peut lire
+INTÉGRITÉ        → Le message n'a pas été modifié
+AUTHENTICITÉ     → L'expéditeur est bien celui qu'il prétend être
+```
+
+Chaque algorithme cryptographique sert un ou plusieurs de ces objectifs.
+
+---
+
+## PARTIE 2 — Le Hachage
+
+### Qu'est-ce qu'un hash ?
+
+Un hash c'est une **empreinte digitale numérique**. Tu donnes n'importe quelle donnée — un mot, un fichier de 10 Go, un document — et la fonction de hachage produit une chaîne de caractères de longueur fixe.
+
+**Propriétés fondamentales :**
+
+```
+1. DÉTERMINISTE    → Même entrée = toujours même hash
+2. IRRÉVERSIBLE    → Impossible de retrouver l'original depuis le hash
+3. EFFET AVALANCHE → Un seul caractère changé = hash complètement différent
+4. COLLISION       → Deux entrées différentes ne doivent pas donner le même hash
+```
+
+### Les algorithmes de hachage
+
+```
+MD5     → 32 caractères hex — OBSOLÈTE, cassé, à ne jamais utiliser pour sécurité
+SHA-1   → 40 caractères hex — OBSOLÈTE, cassé depuis 2017
+SHA-256 → 64 caractères hex — Standard actuel, sûr
+SHA-512 → 128 caractères hex — Plus lent, plus sûr
+bcrypt  → Hash variable — Conçu spécifiquement pour les mots de passe
+```
+
+### Démonstration de l'effet avalanche
+
+```
+"echats"   → SHA256 → a3f2b1c4d5e6...
+"Echats"   → SHA256 → 9f7e2a1b3c4d...
+```
+
+Un seul caractère différent (e → E) et le hash est totalement différent.
+
+### Applications concrètes en cybersécurité
+
+**1. Vérification d'intégrité forensic**
+
+```
+Scénario : Tu arrives sur une scène de crime numérique.
+Avant de toucher quoi que ce soit, tu haches tout.
+
+hash_avant  = SHA256(fichier_suspect.exe)
+# → 4a5f9b2c...
+
+# Tu analyses le fichier
+# Quelqu'un t'accuse d'avoir modifié les preuves
+
+hash_apres = SHA256(fichier_suspect.exe)
+# → 4a5f9b2c... (identique = pas modifié)
+```
+
+**2. Identification de malwares**
+
+Les antivirus maintiennent des bases de hashes de malwares connus. Quand ton antivirus scanne un fichier, il calcule son hash et compare avec la base. C'est pour ça qu'un malware légèrement modifié passe parfois l'antivirus — son hash change.
+
+**3. Vérification de mots de passe**
+
+Les sites ne stockent jamais ton mot de passe en clair. Ils stockent son hash.
+
+```
+Inscription :
+  Tu entres     : "monmotdepasse"
+  Système calcule : SHA256("monmotdepasse") → a1b2c3d4...
+  Stocké en base : a1b2c3d4...
+
+Connexion :
+  Tu entres     : "monmotdepasse"
+  Système calcule : SHA256("monmotdepasse") → a1b2c3d4...
+  Comparaison   : a1b2c3d4... == a1b2c3d4... → OK
+```
+
+Même la base de données ne connaît pas ton vrai mot de passe.
+
+### Le Sel (Salt) — Protection contre les attaques
+
+Problème : si deux utilisateurs ont le même mot de passe, ils ont le même hash. Un attaquant qui vole la base peut identifier les mots de passe courants.
+
+Solution : ajouter un sel aléatoire unique avant de hacher.
+
+```
+Sans sel :
+  "password123" → a1b2c3d4... (identique pour tous)
+
+Avec sel :
+  "password123" + sel_aleatoire_user1 → x9y8z7w6...
+  "password123" + sel_aleatoire_user2 → p3q4r5s6...
+```
+
+Maintenant deux utilisateurs avec le même mot de passe ont des hashes différents.
+
+---
+
+## PARTIE 3 — Chiffrement Symétrique
+
+### Principe
+
+Le chiffrement symétrique utilise **la même clé pour chiffrer et déchiffrer**.
+
+```
+Émetteur                          Destinataire
+   |                                   |
+message + CLÉ → [CHIFFREMENT] → message_chiffré
+                                       |
+                              message_chiffré + CLÉ → [DÉCHIFFREMENT] → message
+```
+
+**Analogie :** Un coffre-fort avec une seule clé. Celui qui ferme et celui qui ouvre utilisent la même clé.
+
+**Avantage :** Très rapide — idéal pour chiffrer de grandes quantités de données.
+
+**Inconvénient :** Comment partager la clé de façon sécurisée ?
+
+### AES — Advanced Encryption Standard
+
+C'est l'algorithme symétrique standard mondial. Utilisé par les gouvernements, les banques, WhatsApp, Signal.
+
+```
+AES-128 → Clé de 128 bits — Sûr
+AES-192 → Clé de 192 bits — Très sûr
+AES-256 → Clé de 256 bits — Ultra sûr (niveau militaire)
+```
+
+**Les modes de chiffrement AES — important :**
+
+```
+ECB (Electronic Codebook)
+→ Même bloc de texte = même bloc chiffré
+→ DANGEREUX — révèle des patterns
+→ Ne jamais utiliser
+
+CBC (Cipher Block Chaining)
+→ Chaque bloc dépend du précédent
+→ Nécessite un IV (vecteur d'initialisation)
+→ Sûr si bien implémenté
+
+GCM (Galois/Counter Mode)
+→ Chiffrement + authentification intégrée
+→ Standard actuel recommandé
+→ Utilisé dans TLS 1.3
+```
+
+### Implémentation Python
+
+```python
+from Crypto.Cipher import AES
+from Crypto.Random import get_random_bytes
+import base64
+# pip install pycryptodome
+
+def chiffrer_aes(message, cle):
+    """
+    Chiffre un message avec AES-256-GCM
+    cle doit être exactement 32 bytes (256 bits)
+    """
+    # get_random_bytes génère un nonce aléatoire
+    # Le nonce (Number Used Once) garantit que le même message
+    # chiffré deux fois donne deux résultats différents
+    nonce = get_random_bytes(16)
+
+    # Créer l'objet de chiffrement AES en mode GCM
+    cipher = AES.new(cle, AES.MODE_GCM, nonce=nonce)
+
+    # encrypt_and_digest chiffre ET génère un tag d'authentification
+    # Le tag vérifie que le message n'a pas été modifié
+    message_chiffre, tag = cipher.encrypt_and_digest(
+        message.encode("utf-8")
+    )
+
+    # On retourne nonce + tag + message chiffré
+    # Le destinataire aura besoin des trois pour déchiffrer
+    resultat = nonce + tag + message_chiffre
+    return base64.b64encode(resultat).decode()
+
+def dechiffrer_aes(message_encode, cle):
+    """
+    Déchiffre un message AES-256-GCM
+    """
+    # Décoder le base64
+    donnees = base64.b64decode(message_encode)
+
+    # Extraire les composants dans l'ordre
+    nonce = donnees[:16]
+    tag = donnees[16:32]
+    message_chiffre = donnees[32:]
+
+    # Recréer l'objet de déchiffrement avec le même nonce
+    cipher = AES.new(cle, AES.MODE_GCM, nonce=nonce)
+
+    try:
+        # decrypt_and_verify déchiffre ET vérifie l'intégrité
+        message = cipher.decrypt_and_verify(message_chiffre, tag)
+        return message.decode("utf-8")
+    except ValueError:
+        # Le tag ne correspond pas = message modifié ou mauvaise clé
+        return "ERREUR : Message corrompu ou clé incorrecte"
+
+# Utilisation
+cle = get_random_bytes(32)   # 32 bytes = 256 bits
+message = "Rapport confidentiel DGRH"
+
+chiffre = chiffrer_aes(message, cle)
+print(f"Chiffré : {chiffre}")
+
+dechiffre = dechiffrer_aes(chiffre, cle)
+print(f"Déchiffré : {dechiffre}")
+```
+
+---
+
+## PARTIE 4 — Chiffrement Asymétrique
+
+### Le problème du chiffrement symétrique
+
+Comment partager la clé secrète de façon sécurisée ? Si tu l'envoies sur Internet, elle peut être interceptée.
+
+### La solution — Paire de clés publique/privée
+
+```
+Chaque personne possède DEUX clés liées mathématiquement :
+
+CLÉ PUBLIQUE  → Tu peux la donner à tout le monde
+CLÉ PRIVÉE    → Tu ne la donnes à personne, jamais
+```
+
+**Règles fondamentales :**
+```
+Ce qui est chiffré avec la clé PUBLIQUE
+→ ne peut être déchiffré qu'avec la clé PRIVÉE
+
+Ce qui est signé avec la clé PRIVÉE
+→ peut être vérifié avec la clé PUBLIQUE
+```
+
+### Comment ça fonctionne en pratique
+
+**Scénario : Tu veux envoyer un message secret à quelqu'un**
+
+```
+1. Tu demandes sa clé PUBLIQUE (tout le monde peut la voir)
+2. Tu chiffres le message avec SA clé publique
+3. Tu envoies le message chiffré
+4. Seul lui peut déchiffrer avec SA clé privée
+```
+
+Même si quelqu'un intercepte le message chiffré, sans la clé privée il ne peut rien faire.
+
+**Scénario : Tu veux prouver que c'est toi qui as écrit quelque chose**
+
+```
+1. Tu signes le document avec TA clé privée
+2. N'importe qui peut vérifier la signature avec TA clé publique
+3. Si la vérification réussit → le document vient de toi et n'a pas été modifié
+```
+
+### RSA — L'algorithme le plus connu
+
+```
+RSA-1024 → OBSOLÈTE, cassable
+RSA-2048 → Minimum actuel acceptable
+RSA-4096 → Recommandé pour les données sensibles
+```
+
+La sécurité de RSA repose sur la difficulté de factoriser de très grands nombres. 2048 × 3 = 6144 (facile). Mais trouver les facteurs premiers d'un nombre de 617 chiffres — même les ordinateurs les plus puissants du monde n'y arrivent pas en un temps raisonnable.
+
+### Implémentation Python
+
+```python
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_OAEP
+from Crypto.Signature import pkcs1_15
+from Crypto.Hash import SHA256
+import base64
+# pip install pycryptodome
+
+def generer_paire_cles(taille=2048):
+    """
+    Génère une paire de clés RSA
+    taille = 2048 minimum en production
+    """
+    cle = RSA.generate(taille)
+
+    # Exporter la clé privée en format PEM
+    # PEM = format texte standard pour les clés et certificats
+    cle_privee = cle.export_key()
+
+    # Exporter la clé publique
+    cle_publique = cle.publickey().export_key()
+
+    return cle_privee, cle_publique
+
+def chiffrer_rsa(message, cle_publique_pem):
+    """
+    Chiffre avec la clé publique du destinataire
+    """
+    cle = RSA.import_key(cle_publique_pem)
+
+    # PKCS1_OAEP = mode de chiffrement RSA sécurisé
+    cipher = PKCS1_OAEP.new(cle)
+
+    message_chiffre = cipher.encrypt(message.encode())
+    return base64.b64encode(message_chiffre).decode()
+
+def dechiffrer_rsa(message_chiffre_b64, cle_privee_pem):
+    """
+    Déchiffre avec ta propre clé privée
+    """
+    cle = RSA.import_key(cle_privee_pem)
+    cipher = PKCS1_OAEP.new(cle)
+
+    message_chiffre = base64.b64decode(message_chiffre_b64)
+    return cipher.decrypt(message_chiffre).decode()
+
+def signer(message, cle_privee_pem):
+    """
+    Signe un message avec ta clé privée
+    Prouve que c'est toi qui l'as écrit
+    """
+    cle = RSA.import_key(cle_privee_pem)
+
+    # Hacher le message avant de signer
+    # On signe le hash, pas le message entier (plus efficace)
+    hash_msg = SHA256.new(message.encode())
+
+    signature = pkcs1_15.new(cle).sign(hash_msg)
+    return base64.b64encode(signature).decode()
+
+def verifier_signature(message, signature_b64, cle_publique_pem):
+    """
+    Vérifie qu'un message a bien été signé par le propriétaire
+    de cette clé privée
+    """
+    cle = RSA.import_key(cle_publique_pem)
+    hash_msg = SHA256.new(message.encode())
+    signature = base64.b64decode(signature_b64)
+
+    try:
+        pkcs1_15.new(cle).verify(hash_msg, signature)
+        return True   # Signature valide
+    except (ValueError, TypeError):
+        return False  # Signature invalide ou message modifié
+
+# Démonstration complète
+print("=== Génération des clés ===")
+privee, publique = generer_paire_cles()
+print("Clés générées.")
+
+print("\n=== Chiffrement RSA ===")
+message = "Identité confirmée : Jean-Claude MBEMBA"
+chiffre = chiffrer_rsa(message, publique)
+print(f"Chiffré : {chiffre[:50]}...")
+
+dechiffre = dechiffrer_rsa(chiffre, privee)
+print(f"Déchiffré : {dechiffre}")
+
+print("\n=== Signature numérique ===")
+rapport = "Rapport OSINT — Cible : 192.168.1.50 — Date : 2026-05-28"
+signature = signer(rapport, privee)
+print(f"Signature : {signature[:50]}...")
+
+valide = verifier_signature(rapport, signature, publique)
+print(f"Signature valide : {valide}")
+
+rapport_modifie = rapport + " [FALSIFIÉ]"
+valide2 = verifier_signature(rapport_modifie, signature, publique)
+print(f"Rapport modifié valide : {valide2}")
+```
+
+---
+
+## PARTIE 5 — SSL/TLS
+
+### Qu'est-ce que HTTPS ?
+
+HTTPS = HTTP + TLS. TLS (Transport Layer Security) est le protocole qui chiffre les communications web. Quand tu vois le cadenas dans ton navigateur, TLS est en action.
+
+### Comment TLS établit une connexion sécurisée
+
+C'est une combinaison intelligente de chiffrement asymétrique et symétrique :
+
+```
+ÉTAPE 1 — ClientHello
+Le navigateur dit au serveur :
+"Bonjour, je supporte ces algorithmes : AES-256-GCM, ChaCha20..."
+"Voici un nombre aléatoire client"
+
+ÉTAPE 2 — ServerHello + Certificat
+Le serveur répond :
+"On utilise AES-256-GCM"
+"Voici mon certificat (qui contient ma clé publique)"
+"Voici un nombre aléatoire serveur"
+
+ÉTAPE 3 — Vérification du certificat
+Le navigateur vérifie que le certificat est :
+- Signé par une autorité de certification (CA) de confiance
+- Valide (pas expiré)
+- Pour le bon domaine
+
+ÉTAPE 4 — Échange de clé
+Le navigateur génère un secret de session
+Le chiffre avec la clé publique du serveur
+L'envoie au serveur
+Seul le serveur peut le déchiffrer avec sa clé privée
+
+ÉTAPE 5 — Clé de session symétrique
+Les deux parties calculent la même clé symétrique
+à partir des données échangées
+Toute la communication sera chiffrée avec AES
+(le chiffrement symétrique est beaucoup plus rapide)
+```
+
+**Pourquoi ce mélange ?**
+- Asymétrique pour l'échange de clé initial (sécurisé mais lent)
+- Symétrique pour la communication (rapide)
+
+### Inspecter un certificat TLS en Python
+
+```python
+import ssl
+import socket
+import datetime
+
+def analyser_certificat(domaine, port=443):
+    """
+    Récupère et analyse le certificat SSL/TLS d'un domaine
+    Utile pour vérifier les configurations de sécurité
+    """
+    print(f"\n[*] Analyse du certificat : {domaine}")
+
+    context = ssl.create_default_context()
+
+    try:
+        with socket.create_connection((domaine, port), timeout=5) as sock:
+            with context.wrap_socket(sock, server_hostname=domaine) as ssock:
+
+                # Récupérer le certificat
+                cert = ssock.getpeercert()
+
+                # Extraire les informations
+                sujet = dict(x[0] for x in cert["subject"])
+                emetteur = dict(x[0] for x in cert["issuer"])
+
+                # Dates de validité
+                date_debut = datetime.datetime.strptime(
+                    cert["notBefore"], "%b %d %H:%M:%S %Y %Z"
+                )
+                date_fin = datetime.datetime.strptime(
+                    cert["notAfter"], "%b %d %H:%M:%S %Y %Z"
+                )
+
+                maintenant = datetime.datetime.now()
+                jours_restants = (date_fin - maintenant).days
+
+                print(f"  Domaine     : {sujet.get('commonName', 'N/A')}")
+                print(f"  Émetteur    : {emetteur.get('organizationName', 'N/A')}")
+                print(f"  Valide du   : {date_debut.strftime('%d/%m/%Y')}")
+                print(f"  Valide au   : {date_fin.strftime('%d/%m/%Y')}")
+                print(f"  Jours rest. : {jours_restants}")
+                print(f"  Version TLS : {ssock.version()}")
+
+                if jours_restants < 30:
+                    print(f"  ⚠️  ALERTE : Certificat expire dans {jours_restants} jours")
+                elif jours_restants < 0:
+                    print(f"  🚨 CRITIQUE : Certificat EXPIRÉ")
+
+                return cert
+
+    except ssl.SSLCertVerificationError:
+        print("  🚨 Certificat invalide ou auto-signé")
+    except Exception as e:
+        print(f"  [-] Erreur : {e}")
+
+analyser_certificat("google.com")
+analyser_certificat("echats-808c4.web.app")
+```
+
+---
+
+## PARTIE 6 — Attaques sur les Mots de Passe
+
+### Pourquoi les mots de passe sont vulnérables
+
+Les humains choisissent des mots de passe prévisibles. Les études montrent que les 10 mots de passe les plus courants représentent souvent 10-20% d'une base de données volée.
+
+### Types d'attaques
+
+**1. Attaque par dictionnaire**
+
+```python
+import hashlib
+
+def attaque_dictionnaire(hash_cible, fichier_mots, algorithme="sha256"):
+    """
+    Tente de retrouver un mot de passe depuis son hash
+    en testant chaque mot d'une liste
+    """
+    print(f"[*] Attaque par dictionnaire sur : {hash_cible[:16]}...")
+
+    try:
+        with open(fichier_mots, "r", encoding="utf-8",
+                  errors="ignore") as f:
+            for numero, ligne in enumerate(f, 1):
+                mot = ligne.strip()
+                if not mot:
+                    continue
+
+                # Hacher le mot candidat
+                if algorithme == "md5":
+                    h = hashlib.md5(mot.encode()).hexdigest()
+                else:
+                    h = hashlib.sha256(mot.encode()).hexdigest()
+
+                # Comparer avec le hash cible
+                if h == hash_cible:
+                    print(f"[+] MOT DE PASSE TROUVÉ : '{mot}'")
+                    print(f"    Essais : {numero}")
+                    return mot
+
+                # Progression toutes les 10000 tentatives
+                if numero % 10000 == 0:
+                    print(f"    {numero} mots testés...")
+
+    except FileNotFoundError:
+        print(f"[-] Fichier non trouvé : {fichier_mots}")
+
+    print("[-] Mot de passe non trouvé dans le dictionnaire")
+    return None
+
+# Test avec un hash connu
+hash_test = hashlib.sha256("password123".encode()).hexdigest()
+print(f"Hash à cracker : {hash_test}")
+# En pratique tu fournirais un vrai fichier de mots de passe
+# comme rockyou.txt (14 millions de mots de passe réels)
+```
+
+**2. Attaque par force brute — comprendre la logique**
+
+```python
+import itertools
+import hashlib
+import string
+
+def force_brute(hash_cible, longueur_max=4, charset=None):
+    """
+    Teste toutes les combinaisons possibles
+    TRÈS LENT au-delà de 6 caractères
+    Sert à comprendre pourquoi les mots de passe courts sont dangereux
+    """
+    if charset is None:
+        charset = string.ascii_lowercase + string.digits
+
+    print(f"[*] Force brute (max {longueur_max} chars)")
+    print(f"    Alphabet : {len(charset)} caractères")
+
+    # Calculer le nombre total de possibilités
+    total = sum(len(charset)**i for i in range(1, longueur_max+1))
+    print(f"    Combinaisons possibles : {total:,}")
+
+    essais = 0
+    for longueur in range(1, longueur_max + 1):
+        # itertools.product génère toutes les combinaisons
+        for combo in itertools.product(charset, repeat=longueur):
+            mot = "".join(combo)
+            essais += 1
+            h = hashlib.sha256(mot.encode()).hexdigest()
+
+            if h == hash_cible:
+                print(f"[+] TROUVÉ : '{mot}' en {essais} essais")
+                return mot
+
+    print(f"[-] Non trouvé en {essais} essais")
+    return None
+
+# Comprendre la croissance exponentielle
+for longueur in range(1, 9):
+    combinaisons = 62 ** longueur  # 62 = a-z + A-Z + 0-9
+    print(f"{longueur} caractères → {combinaisons:>20,} combinaisons")
+```
+
+**Résultat de ce calcul :**
+```
+1 caractères →                   62 combinaisons
+2 caractères →                3,844 combinaisons
+4 caractères →           14,776,336 combinaisons
+6 caractères →       56,800,235,584 combinaisons
+8 caractères →  218,340,105,584,896 combinaisons
+```
+
+Un GPU moderne teste 10 milliards de hashes MD5 par seconde. Un mot de passe de 6 caractères — cassé en quelques secondes. 8 caractères — quelques heures. 12 caractères mixtes — des années.
+
+**3. Rainbow Tables — la mémoire contre le temps**
+
+Principe : précalculer des millions de hashes et les stocker dans une table.
+
+```
+Table précalculée :
+password  → 5f4dcc3b5aa765d61d83...
+123456    → 8d969eef6ecad3c29a3a...
+azerty    → a7bcd1d5e8f6gh2i3j4k...
+```
+
+Au lieu de calculer le hash à chaque tentative, tu cherches directement dans la table. Beaucoup plus rapide.
+
+**Contre-mesure : le sel (salt)**
+
+Si chaque hash est salé avec une valeur unique, les rainbow tables deviennent inutiles — il faudrait une table différente pour chaque sel.
+
+---
+
+## PARTIE 7 — Encoder vs Chiffrer vs Hacher
+
+Confusion très commune. Retiens ça définitivement :
+
+```
+ENCODAGE (Base64, URL encoding)
+→ Transforme le format, PAS pour la sécurité
+→ Facilement réversible sans clé
+→ But : compatibilité, transmission
+
+HACHAGE (SHA256, MD5, bcrypt)
+→ Sens unique — irréversible
+→ Pas de clé
+→ But : vérification d'intégrité, stockage de mots de passe
+
+CHIFFREMENT (AES, RSA)
+→ Réversible avec la bonne clé
+→ Nécessite une clé
+→ But : confidentialité
+```
+
+**En pratique :**
+
+```python
+import base64
+import hashlib
+
+message = "ECHATS"
+
+# Encodage Base64 — réversible, pas sécurisé
+encode = base64.b64encode(message.encode()).decode()
+print(f"Base64 : {encode}")          # RUNIQVRT
+decode = base64.b64decode(encode).decode()
+print(f"Décodé : {decode}")          # ECHATS
+
+# Hachage — irréversible
+hash_msg = hashlib.sha256(message.encode()).hexdigest()
+print(f"SHA256 : {hash_msg}")        # a3f2b1c...
+
+# Tentative de "déhachage" — impossible
+# Il n'existe pas de sha256.reverse()
+```
+
+---
+
+## PARTIE 8 — Application Pratique : Analyser une Base de Données Volée
+
+```python
+import hashlib
+import json
+from collections import Counter
+
+def analyser_base_volee(donnees):
+    """
+    Analyse une base de données compromise
+    Identifie les algorithmes, évalue la sécurité
+    """
+    print("\n=== ANALYSE DE BASE COMPROMISE ===\n")
+
+    total = len(donnees)
+    print(f"Entrées totales : {total}")
+
+    # Détecter les algorithmes par longueur du hash
+    longueurs = Counter()
+    for entree in donnees:
+        h = entree.get("hash", "")
+        longueurs[len(h)] += 1
+
+    algos_detectes = {
+        32: "MD5 — CRITIQUE, facilement cassable",
+        40: "SHA-1 — ÉLEVÉ, obsolète",
+        60: "bcrypt — FAIBLE, résistant",
+        64: "SHA-256 — MOYEN sans sel",
+        128: "SHA-512 — FAIBLE sans sel"
+    }
+
+    print("\nAlgorithmes détectés :")
+    for longueur, count in longueurs.items():
+        algo = algos_detectes.get(longueur, f"Inconnu ({longueur} chars)")
+        print(f"  {algo} : {count} entrées ({count/total*100:.1f}%)")
+
+    # Détecter les hashes dupliqués
+    # Des hashes identiques = même mot de passe = pas de sel
+    hashes = [e.get("hash") for e in donnees]
+    duplicats = {h: c for h, c in Counter(hashes).items() if c > 1}
+
+    if duplicats:
+        print(f"\n⚠️  {len(duplicats)} hashes dupliqués détectés")
+        print("    Absence probable de sel (salt)")
+        print("    Vulnérable aux rainbow tables")
+    else:
+        print("\n✅ Aucun hash dupliqué — sel probablement utilisé")
+
+    return {
+        "total": total,
+        "algorithmes": dict(longueurs),
+        "duplicats": len(duplicats)
+    }
+
+# Simulation
+base_simulee = [
+    {"user": "alice", "hash": "5f4dcc3b5aa765d61d8327deb882cf99"},  # MD5
+    {"user": "bob",   "hash": "5f4dcc3b5aa765d61d8327deb882cf99"},  # MD5
+    {"user": "carol", "hash": "ef92b778bafe771207e04c832f92f1b8"},  # MD5
+]
+
+analyser_base_volee(base_simulee)
+```
+
+---
+
+## ✅ EXERCICES — Leçon 4
+
+---
+
+**Exercice 1 — Compréhension pure**
+
+Sans chercher :
+1. Quelle est la différence fondamentale entre hachage et chiffrement ?
+2. Pourquoi MD5 ne doit jamais être utilisé pour les mots de passe ?
+3. Qu'est-ce que le sel (salt) et pourquoi est-il indispensable ?
+4. Dans TLS, pourquoi utilise-t-on d'abord le chiffrement asymétrique puis symétrique ?
+5. Tu trouves un hash de 32 caractères hexadécimaux dans une base. Quel algorithme et quel est le risque ?
+
+---
+
+**Exercice 2 — Analyse de scénario**
+
+Un site web stocke les mots de passe comme ça :
+
+```python
+import hashlib
+mdp_stocke = hashlib.md5(mot_de_passe.encode()).hexdigest()
+```
+
+Identifie **4 problèmes** dans cette implémentation et propose la version correcte.
+
+---
+
+**Exercice 3 — Identifier les erreurs**
+
+Classe chaque élément dans la bonne catégorie (Encodage / Hachage / Chiffrement) :
+
+```
+a) Base64
+b) SHA-256
+c) AES-256
+d) URL encoding (%20 pour l'espace)
+e) RSA
+f) MD5
+g) bcrypt
+h) ROT13
+```
+
+---
+
+**Exercice 4 — Cas réel DGRH**
+
+Dans l'affaire DGRH, l'attaquant a utilisé un email pour se dissimuler. En cryptographie, quelle technique aurait pu prouver que l'email ne venait pas d'une adresse légitime ? Explique le mécanisme en 5-6 lignes.
+
+---
+
+**Exercice 5 — Code**
+
+Écris une fonction `verifier_integrite(fichier_original, fichier_recu)` qui :
+- Calcule le SHA-256 des deux fichiers
+- Compare les hashes
+- Retourne True si identiques, False sinon
+- Affiche un message clair dans les deux cas
+
+---
+
+## 📌 À retenir absolument
+
+```
+HASH     = irréversible, longueur fixe, pas de clé
+CHIFFRER = réversible avec clé
+ENCODER  = réversible sans clé, pas sécurisé
+
+MD5/SHA1 = OBSOLÈTES pour sécurité
+SHA-256  = standard actuel
+bcrypt   = pour les mots de passe
+AES-256-GCM = chiffrement symétrique standard
+RSA-2048 = chiffrement asymétrique minimum
+
+SEL = aléatoire unique par utilisateur, empêche rainbow tables
+TLS = asymétrique pour l'échange + symétrique pour la vitesse
+```
+
+---
+
+**Leçon 5 dans 2 jours : OSINT Avancé.**
+
+Tu vas apprendre les techniques que les professionnels utilisent vraiment — pas les tutoriels YouTube. Recherche d'identité, analyse de réseaux sociaux, géolocalisation d'images, investigation sur des infrastructures, et construction d'un dossier de renseignement complet.
+
+C'est ta spécialité — on va aller très loin. 🔒

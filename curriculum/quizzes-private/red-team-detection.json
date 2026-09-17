@@ -1,0 +1,204 @@
+{
+  "format": "ECHATS_QUIZ_IMPORT_V1",
+  "lesson_slug": "red-team-detection",
+  "title": "Évaluation — Red Team",
+  "passing_score": 75,
+  "questions": [
+    {
+      "question": "Quel est l’objectif principal du Red Team?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Tester détection et réponse face à un adversaire simulé",
+          "correct": true
+        },
+        {
+          "answer": "Trouver uniquement le plus de CVE",
+          "correct": false
+        },
+        {
+          "answer": "Détruire les données",
+          "correct": false
+        },
+        {
+          "answer": "Remplacer le Blue Team",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Que catalogue MITRE ATT&CK?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Tactiques et techniques adversariales documentées",
+          "correct": true
+        },
+        {
+          "answer": "Des mots de passe",
+          "correct": false
+        },
+        {
+          "answer": "Des certificats TLS",
+          "correct": false
+        },
+        {
+          "answer": "Des adresses privées uniquement",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quel document définit le périmètre et les limites d’un engagement?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Rules of Engagement",
+          "correct": true
+        },
+        {
+          "answer": "Un fichier temporaire",
+          "correct": false
+        },
+        {
+          "answer": "Une capture d’écran",
+          "correct": false
+        },
+        {
+          "answer": "Un ticket sans approbation",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Que surveille une détection de beacon?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Des régularités ou signaux de communication périodique",
+          "correct": true
+        },
+        {
+          "answer": "Uniquement la couleur d’un site",
+          "correct": false
+        },
+        {
+          "answer": "Les permissions d’un fichier local seulement",
+          "correct": false
+        },
+        {
+          "answer": "Le score d’un quiz",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Purple Team implique-t-il une collaboration Red/Blue?",
+      "type": "true_false",
+      "answers": [
+        {
+          "answer": "Vrai",
+          "correct": true
+        },
+        {
+          "answer": "Faux",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Pourquoi documenter les faux positifs?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Pour améliorer la précision et éviter la fatigue d’alerte",
+          "correct": true
+        },
+        {
+          "answer": "Pour supprimer toute télémétrie",
+          "correct": false
+        },
+        {
+          "answer": "Pour justifier une intrusion",
+          "correct": false
+        },
+        {
+          "answer": "Pour cacher un incident",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quel indicateur mesure le délai entre événement et alerte?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Temps de détection",
+          "correct": true
+        },
+        {
+          "answer": "Taille du binaire",
+          "correct": false
+        },
+        {
+          "answer": "CIDR",
+          "correct": false
+        },
+        {
+          "answer": "Nonce",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Le niveau conceptuel C2 doit-il être accompagné de contrôles et d’un cadre autorisé?",
+      "type": "true_false",
+      "answers": [
+        {
+          "answer": "Oui",
+          "correct": true
+        },
+        {
+          "answer": "Non",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quel résultat est prioritaire après un exercice Red Team?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Des améliorations défensives mesurables",
+          "correct": true
+        },
+        {
+          "answer": "Une publication de secrets",
+          "correct": false
+        },
+        {
+          "answer": "Une destruction de preuves",
+          "correct": false
+        },
+        {
+          "answer": "Une nouvelle attaque réelle",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Un scénario Red Team peut-il démarrer sans contact d’urgence ni procédure d’arrêt?",
+      "type": "true_false",
+      "answers": [
+        {
+          "answer": "Oui",
+          "correct": false
+        },
+        {
+          "answer": "Non",
+          "correct": true
+        }
+      ]
+    }
+  ]
+}

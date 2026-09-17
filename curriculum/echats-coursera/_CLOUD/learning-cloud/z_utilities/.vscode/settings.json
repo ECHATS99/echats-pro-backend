@@ -1,0 +1,16 @@
+{
+    "cSpell.words": [
+        "bioinformatics",
+        "langit",
+        "screencasts"
+    ],
+    "extensions.ignoreRecommendations": true,
+    "files.autoSave": "afterDelay",
+    "typescript.tsc.autoDetect": "off",
+    "npm.autoDetect": "off",
+    "debug.allowBreakpointsEverywhere": true,
+    "html.autoClosingTags": false,
+    "files.watcherExclude": {
+        "**/target": true
+    }
+}

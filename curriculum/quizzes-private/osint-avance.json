@@ -1,0 +1,204 @@
+{
+  "format": "ECHATS_QUIZ_IMPORT_V1",
+  "lesson_slug": "osint-avance",
+  "title": "Évaluation — OSINT Avancé",
+  "passing_score": 75,
+  "questions": [
+    {
+      "question": "Quelle est la première étape du cycle du renseignement?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Planification",
+          "correct": true
+        },
+        {
+          "answer": "Diffusion",
+          "correct": false
+        },
+        {
+          "answer": "Exploitation",
+          "correct": false
+        },
+        {
+          "answer": "Effacement",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Que doit préciser une exigence de renseignement?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "La question recherchée et son objectif légal",
+          "correct": true
+        },
+        {
+          "answer": "Un accès administrateur",
+          "correct": false
+        },
+        {
+          "answer": "Une conclusion déjà choisie",
+          "correct": false
+        },
+        {
+          "answer": "Une donnée personnelle inutile",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Pourquoi recouper plusieurs sources?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Pour réduire les faux positifs et les biais",
+          "correct": true
+        },
+        {
+          "answer": "Pour publier plus de données",
+          "correct": false
+        },
+        {
+          "answer": "Pour éviter toute documentation",
+          "correct": false
+        },
+        {
+          "answer": "Pour contourner une autorisation",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Un résultat de moteur de recherche est-il automatiquement une preuve?",
+      "type": "true_false",
+      "answers": [
+        {
+          "answer": "Oui",
+          "correct": false
+        },
+        {
+          "answer": "Non, il doit être vérifié et contextualisé",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "question": "Que doit contenir une fiche de collecte?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Source, date, extrait, fiabilité et limites",
+          "correct": true
+        },
+        {
+          "answer": "Uniquement un nom",
+          "correct": false
+        },
+        {
+          "answer": "Un mot de passe",
+          "correct": false
+        },
+        {
+          "answer": "Une conclusion sans lien",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quel principe protège les personnes dans une enquête OSINT?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Minimisation et respect du cadre légal",
+          "correct": true
+        },
+        {
+          "answer": "Collecter tout ce qui est possible",
+          "correct": false
+        },
+        {
+          "answer": "Publier les profils",
+          "correct": false
+        },
+        {
+          "answer": "Contourner les contrôles",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quelle différence sépare un fait d’une hypothèse?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Le fait est soutenu par une observation; l’hypothèse doit encore être testée",
+          "correct": true
+        },
+        {
+          "answer": "Aucune",
+          "correct": false
+        },
+        {
+          "answer": "L’hypothèse est toujours certaine",
+          "correct": false
+        },
+        {
+          "answer": "Le fait est toujours secret",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quel élément rend un rapport OSINT reproductible?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Les sources, dates, méthodes et critères d’interprétation",
+          "correct": true
+        },
+        {
+          "answer": "Une capture sans contexte",
+          "correct": false
+        },
+        {
+          "answer": "Une affirmation anonyme",
+          "correct": false
+        },
+        {
+          "answer": "Une recherche non datée",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Une enquête de formation doit-elle cibler une personne privée réelle?",
+      "type": "true_false",
+      "answers": [
+        {
+          "answer": "Oui",
+          "correct": false
+        },
+        {
+          "answer": "Non, elle doit utiliser des cas fictifs ou explicitement autorisés",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "question": "L’OPSEC concerne-t-elle aussi l’identité et les données de l’analyste?",
+      "type": "true_false",
+      "answers": [
+        {
+          "answer": "Vrai",
+          "correct": true
+        },
+        {
+          "answer": "Faux",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

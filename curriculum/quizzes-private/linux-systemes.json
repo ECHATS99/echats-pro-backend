@@ -1,0 +1,220 @@
+{
+  "format": "ECHATS_QUIZ_IMPORT_V1",
+  "lesson_slug": "linux-systemes",
+  "title": "Évaluation — Linux : L’OS du Hacker",
+  "passing_score": 75,
+  "questions": [
+    {
+      "question": "Quel répertoire contient généralement les journaux variables?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "/etc",
+          "correct": false
+        },
+        {
+          "answer": "/var",
+          "correct": true
+        },
+        {
+          "answer": "/home",
+          "correct": false
+        },
+        {
+          "answer": "/dev",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Que signifie rwx pour un propriétaire?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Lecture seule",
+          "correct": false
+        },
+        {
+          "answer": "Lecture, écriture et exécution",
+          "correct": true
+        },
+        {
+          "answer": "Écriture seulement",
+          "correct": false
+        },
+        {
+          "answer": "Aucun droit",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quelle valeur octale correspond à rwxr-xr-x?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "644",
+          "correct": false
+        },
+        {
+          "answer": "700",
+          "correct": false
+        },
+        {
+          "answer": "755",
+          "correct": true
+        },
+        {
+          "answer": "777",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Pourquoi le mode 777 est-il généralement déconseillé?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Il chiffre les fichiers",
+          "correct": false
+        },
+        {
+          "answer": "Il accorde trop de droits à tous les utilisateurs",
+          "correct": true
+        },
+        {
+          "answer": "Il interdit root",
+          "correct": false
+        },
+        {
+          "answer": "Il désactive les logs",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Que représente un fichier SUID appartenant à root?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Il s’exécute avec les droits du lanceur seulement",
+          "correct": false
+        },
+        {
+          "answer": "Il peut s’exécuter avec les droits de son propriétaire",
+          "correct": true
+        },
+        {
+          "answer": "Il est toujours un malware",
+          "correct": false
+        },
+        {
+          "answer": "Il ne peut pas être exécuté",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quelle commande affiche l’identité et les groupes effectifs?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "id",
+          "correct": true
+        },
+        {
+          "answer": "pwd",
+          "correct": false
+        },
+        {
+          "answer": "touch",
+          "correct": false
+        },
+        {
+          "answer": "tar",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Que montre principalement ss -tulnp?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Les sockets en écoute et processus associés",
+          "correct": true
+        },
+        {
+          "answer": "Les fichiers supprimés",
+          "correct": false
+        },
+        {
+          "answer": "Les hash de mots de passe",
+          "correct": false
+        },
+        {
+          "answer": "Les paquets installés",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quel est le rôle d’un pipe |?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Relier la sortie d’une commande à l’entrée d’une autre",
+          "correct": true
+        },
+        {
+          "answer": "Supprimer un fichier",
+          "correct": false
+        },
+        {
+          "answer": "Changer le propriétaire",
+          "correct": false
+        },
+        {
+          "answer": "Créer un utilisateur",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quel principe est recommandé avant une commande potentiellement destructive?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "La lancer en production pour voir",
+          "correct": false
+        },
+        {
+          "answer": "Vérifier le périmètre et utiliser un laboratoire ou une sauvegarde",
+          "correct": true
+        },
+        {
+          "answer": "La masquer dans l’historique",
+          "correct": false
+        },
+        {
+          "answer": "Désactiver les logs",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Les permissions et les processus doivent-ils être analysés avec leur contexte et leurs limites?",
+      "type": "true_false",
+      "answers": [
+        {
+          "answer": "Vrai",
+          "correct": true
+        },
+        {
+          "answer": "Faux",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

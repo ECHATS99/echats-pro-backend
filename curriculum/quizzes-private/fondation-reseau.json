@@ -1,0 +1,220 @@
+{
+  "format": "ECHATS_QUIZ_IMPORT_V1",
+  "lesson_slug": "fondation-reseau",
+  "title": "Évaluation — Le Réseau : Fondation de tout",
+  "passing_score": 75,
+  "questions": [
+    {
+      "question": "Quelle couche OSI est principalement associée à l’adressage IP et au routage?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Couche 1",
+          "correct": false
+        },
+        {
+          "answer": "Couche 2",
+          "correct": false
+        },
+        {
+          "answer": "Couche 3",
+          "correct": true
+        },
+        {
+          "answer": "Couche 7",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quelles sont les étapes du three-way handshake TCP?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "SYN, SYN-ACK, ACK",
+          "correct": true
+        },
+        {
+          "answer": "ACK, FIN, RST",
+          "correct": false
+        },
+        {
+          "answer": "DNS, ARP, ICMP",
+          "correct": false
+        },
+        {
+          "answer": "GET, POST, 200",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quel énoncé décrit UDP?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Il garantit chaque livraison",
+          "correct": false
+        },
+        {
+          "answer": "Il évite l’établissement de connexion et privilégie la faible latence",
+          "correct": true
+        },
+        {
+          "answer": "Il chiffre toujours les données",
+          "correct": false
+        },
+        {
+          "answer": "Il remplace toujours TCP",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Laquelle est une adresse IPv4 privée?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "8.8.8.8",
+          "correct": false
+        },
+        {
+          "answer": "172.20.4.10",
+          "correct": true
+        },
+        {
+          "answer": "1.1.1.1",
+          "correct": false
+        },
+        {
+          "answer": "203.0.113.10",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Que signifie principalement /24 dans 192.168.1.0/24?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "24 ports",
+          "correct": false
+        },
+        {
+          "answer": "24 bits de partie réseau",
+          "correct": true
+        },
+        {
+          "answer": "24 machines exactement",
+          "correct": false
+        },
+        {
+          "answer": "24 octets",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quel est le rôle principal du DNS?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Associer des noms à des informations réseau",
+          "correct": true
+        },
+        {
+          "answer": "Chiffrer les fichiers",
+          "correct": false
+        },
+        {
+          "answer": "Remplacer un pare-feu",
+          "correct": false
+        },
+        {
+          "answer": "Attribuer des mots de passe",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quel risque est associé à une usurpation ARP?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Détournement du trafic local",
+          "correct": true
+        },
+        {
+          "answer": "Plus de bande passante",
+          "correct": false
+        },
+        {
+          "answer": "Création d’un domaine public",
+          "correct": false
+        },
+        {
+          "answer": "Conversion de TCP en UDP",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Un port ouvert prouve-t-il une vulnérabilité?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Oui, toujours",
+          "correct": false
+        },
+        {
+          "answer": "Non, il indique surtout une surface exposée",
+          "correct": true
+        },
+        {
+          "answer": "Oui, si le port est connu",
+          "correct": false
+        },
+        {
+          "answer": "Non, les ports ne concernent pas les services",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quelle commande observe les sockets locaux en écoute?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "ss -tuln",
+          "correct": true
+        },
+        {
+          "answer": "chmod 777",
+          "correct": false
+        },
+        {
+          "answer": "passwd --delete",
+          "correct": false
+        },
+        {
+          "answer": "ip neigh --flush",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Une analyse professionnelle doit-elle distinguer observation et hypothèse?",
+      "type": "true_false",
+      "answers": [
+        {
+          "answer": "Vrai",
+          "correct": true
+        },
+        {
+          "answer": "Faux",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

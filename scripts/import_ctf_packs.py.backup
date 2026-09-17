@@ -1,0 +1,276 @@
+"""Import des "challenge packs" JSON (ex: sentinelforgectf/challenge-packs/*/challenges.json)
+vers CTFEvent / CTFCategory / CTFChallenge.
+
+Contexte
+--------
+Sur les 4 dépôts CTF clonés (404CTF-2023, My-CTF-Web-Challenges, beast, sentinelforgectf),
+un seul fournit un contenu réellement importable automatiquement et sans risque : les
+"challenge packs" JSON de sentinelforgectf (`challenge-packs/<pack>/challenges.json`).
+
+Pourquoi UNIQUEMENT celui-ci pour l'instant :
+- Chaque challenge y est déjà structuré exactement comme ton modèle `CTFChallenge`
+  (title, description, category, difficulty, points, flag, metadata.terminal).
+  Le champ `metadata.terminal` (liste de {command, output}) correspond 1:1 à la
+  colonne JSONB `terminal_commands` : ce sont des challenges "terminal simulé",
+  sans VM ni conteneur à héberger — exactement ce que tu voulais.
+- Les 3 autres dépôts ne sont PAS importables tels quels :
+  * `beast` est le code source d'une plateforme CTF concurrente (Go), pas des
+    challenges — rien à importer.
+  * `My-CTF-Web-Challenges` n'a aucune métadonnée par challenge (pas de titre/flag
+    structuré) et nécessite quasi systématiquement un service Docker live.
+  * `404CTF-2023` a de vraies leçons de valeur, mais son flag est presque toujours
+    distant (`nc challenges.404ctf.org ...`, infrastructure de compétition qui
+    n'existe plus) — le flag n'est donc statiquement récupérable dans le dépôt que
+    pour de rares challenges, et le README contient souvent une section
+    "## Writeup" qui SPOILE la solution : à traiter au cas par cas, pas en masse.
+
+Ce script est volontairement limité au format `challenges.json` ; il est réutilisable
+pour n'importe quel futur pack respectant ce même format (un dossier par pack, un
+fichier `challenges.json` dedans).
+
+Sécurité :
+- `--dry-run` par défaut, `--apply` explicite, transaction unique avec rollback.
+- Idempotent : un challenge déjà importé (même event + même titre) est réutilisé.
+- Le flag en clair du JSON source N'EST JAMAIS stocké : il est haché
+  (SHA-256 + sel, `app.security.hash.hash_flag`) avant écriture, comme le reste
+  de ton système CTF existant.
+- Import en `published=False` par défaut (relecture avant mise en ligne).
+
+Usage :
+    python -m scripts.import_ctf_packs --dry-run
+    python -m scripts.import_ctf_packs --apply
+    python -m scripts.import_ctf_packs --apply --publish
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+DEFAULT_ROOT = REPO_ROOT / "curriculum" / "echats-ctf" / "sentinelforgectf" / "challenge-packs"
+
+VALID_DIFFICULTIES = {"easy", "medium", "hard", "beginner", "intermediate", "advanced", "expert"}
+DIFFICULTY_NORMALIZE = {
+    "easy": "easy", "beginner": "easy",
+    "medium": "medium", "intermediate": "medium",
+    "hard": "hard", "advanced": "hard",
+    "expert": "expert",
+}
+
+
+class ImportInputError(RuntimeError):
+    pass
+
+
+@dataclass
+class ChallengePlan:
+    event_name: str
+    event_description: str
+    category_name: str
+    title: str
+    description: str
+    difficulty: str
+    points: int
+    flag: str
+    terminal_commands: list[dict[str, str]]
+
+
+@dataclass
+class ImportPlan:
+    challenges: list[ChallengePlan] = field(default_factory=list)
+    skipped: list[str] = field(default_factory=list)
+
+
+def load_pack(pack_dir: Path) -> tuple[str, str]:
+    """Retourne (nom affiché de l'event, description) à partir de package-info.json si présent."""
+    info_path = pack_dir / "package-info.json"
+    if info_path.exists():
+        try:
+            info = json.loads(info_path.read_text(encoding="utf-8"))
+            name = info.get("name") or pack_dir.name
+            desc = info.get("description") or ""
+            return f"SentinelForge — {name}", desc
+        except (json.JSONDecodeError, OSError):
+            pass
+    return f"SentinelForge — {pack_dir.name}", ""
+
+
+def build_plan(root: Path) -> ImportPlan:
+    if not root.is_dir():
+        raise ImportInputError(f"Dossier introuvable: {root}")
+    plan = ImportPlan()
+
+    pack_files = sorted(root.glob("*/challenges.json"))
+    if not pack_files:
+        raise ImportInputError(f"Aucun challenges.json trouvé sous {root}")
+
+    for pack_file in pack_files:
+        pack_dir = pack_file.parent
+        event_name, event_description = load_pack(pack_dir)
+        try:
+            raw = json.loads(pack_file.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            plan.skipped.append(f"{pack_file}: JSON invalide ({exc})")
+            continue
+        if not isinstance(raw, list):
+            plan.skipped.append(f"{pack_file}: attendu une liste de challenges")
+            continue
+
+        for i, entry in enumerate(raw):
+            label = f"{pack_file}#{i}"
+            title = entry.get("title")
+            flag = entry.get("flag")
+            if not title or not flag:
+                plan.skipped.append(f"{label}: title ou flag manquant")
+                continue
+            if entry.get("is_active") is False:
+                plan.skipped.append(f"{label}: is_active=false")
+                continue
+
+            difficulty = DIFFICULTY_NORMALIZE.get(str(entry.get("difficulty", "easy")).lower(), "easy")
+            points = entry.get("points")
+            points = int(points) if isinstance(points, (int, float)) else 50
+            category_name = str(entry.get("category") or "Divers").strip()
+            terminal = entry.get("metadata", {}).get("terminal", [])
+            if not isinstance(terminal, list):
+                terminal = []
+            terminal_commands = [
+                {"command": str(t.get("command", "")), "output": str(t.get("output", ""))}
+                for t in terminal if isinstance(t, dict)
+            ]
+
+            plan.challenges.append(ChallengePlan(
+                event_name=event_name,
+                event_description=event_description,
+                category_name=category_name,
+                title=str(title)[:200],
+                description=str(entry.get("description", "")),
+                difficulty=difficulty,
+                points=points,
+                flag=str(flag),
+                terminal_commands=terminal_commands,
+            ))
+    return plan
+
+
+def dry_run_payload(plan: ImportPlan) -> dict[str, Any]:
+    by_event: dict[str, dict[str, Any]] = {}
+    for c in plan.challenges:
+        ev = by_event.setdefault(c.event_name, {"categories": {}, "total_points": 0})
+        ev["categories"][c.category_name] = ev["categories"].get(c.category_name, 0) + 1
+        ev["total_points"] += c.points
+    return {
+        "mode": "dry-run",
+        "writes_performed": False,
+        "totals": {"events": len(by_event), "challenges": len(plan.challenges), "skipped": len(plan.skipped)},
+        "events": by_event,
+        "skipped": plan.skipped,
+    }
+
+
+def apply_plan(plan: ImportPlan, publish: bool) -> dict[str, Any]:
+    from sqlalchemy import select
+
+    from app.core.database import SessionLocal
+    from app.models.ctf import CTFCategory, CTFChallenge, CTFEvent
+    from app.security.hash import generate_salt, hash_flag
+
+    db = SessionLocal()
+    created = {"events": 0, "categories": 0, "challenges": 0}
+    reused = {"events": 0, "categories": 0, "challenges": 0}
+    try:
+        with db.begin():
+            event_cache: dict[str, CTFEvent] = {}
+            category_cache: dict[str, CTFCategory] = {}
+
+            for c in plan.challenges:
+                event = event_cache.get(c.event_name)
+                if event is None:
+                    event = db.execute(select(CTFEvent).where(CTFEvent.title == c.event_name)).scalar_one_or_none()
+                    if event is None:
+                        event = CTFEvent(title=c.event_name, status="active" if publish else "upcoming")
+                        db.add(event)
+                        db.flush()
+                        created["events"] += 1
+                    else:
+                        reused["events"] += 1
+                    event_cache[c.event_name] = event
+
+                category = category_cache.get(c.category_name)
+                if category is None:
+                    category = db.execute(select(CTFCategory).where(CTFCategory.name == c.category_name)).scalar_one_or_none()
+                    if category is None:
+                        category = CTFCategory(name=c.category_name)
+                        db.add(category)
+                        db.flush()
+                        created["categories"] += 1
+                    else:
+                        reused["categories"] += 1
+                    category_cache[c.category_name] = category
+
+                existing = db.execute(
+                    select(CTFChallenge).where(
+                        CTFChallenge.event_id == event.id,
+                        CTFChallenge.title == c.title,
+                    )
+                ).scalar_one_or_none()
+                if existing is None:
+                    salt = generate_salt()
+                    db.add(CTFChallenge(
+                        event_id=event.id,
+                        category_id=category.id,
+                        title=c.title,
+                        description=c.description,
+                        difficulty=c.difficulty,
+                        points=c.points,
+                        published=publish,
+                        flag_hash=hash_flag(c.flag, salt),
+                        flag_salt=salt,
+                        terminal_commands=c.terminal_commands,
+                    ))
+                    created["challenges"] += 1
+                else:
+                    reused["challenges"] += 1
+        return {"mode": "apply", "writes_performed": True, "created": created, "reused": reused}
+    except Exception:
+        db.rollback()
+        raise
+    finally:
+        db.close()
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--dry-run", action="store_true", help="Aperçu sans écrire (par défaut).")
+    mode.add_argument("--apply", action="store_true", help="Écrit réellement en base.")
+    parser.add_argument("--root", default=str(DEFAULT_ROOT), help="Dossier contenant des <pack>/challenges.json.")
+    parser.add_argument("--publish", action="store_true", help="Marque les challenges créés comme publiés.")
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
+    mode = "apply" if args.apply else "dry-run"
+    try:
+        plan = build_plan(Path(args.root))
+        result = apply_plan(plan, publish=args.publish) if args.apply else dry_run_payload(plan)
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return 0
+    except ImportInputError as exc:
+        print(json.dumps({"mode": mode, "writes_performed": False, "status": "blocked", "error": str(exc)}, ensure_ascii=False, indent=2), file=sys.stderr)
+        return 2
+    except Exception as exc:
+        print(json.dumps({"mode": mode, "writes_performed": False, "status": "failed", "error_type": type(exc).__name__, "error": str(exc)}, ensure_ascii=False, indent=2), file=sys.stderr)
+        return 3
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

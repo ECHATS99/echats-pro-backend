@@ -1,0 +1,212 @@
+{
+  "format": "ECHATS_QUIZ_IMPORT_V1",
+  "lesson_slug": "python-cybersecurite",
+  "title": "Évaluation — Python pour la Cybersécurité",
+  "passing_score": 75,
+  "questions": [
+    {
+      "question": "Quel type Python représente du texte?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "str",
+          "correct": true
+        },
+        {
+          "answer": "int",
+          "correct": false
+        },
+        {
+          "answer": "bool",
+          "correct": false
+        },
+        {
+          "answer": "bytesize",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Que retourne généralement une fonction sans return explicite?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "None",
+          "correct": true
+        },
+        {
+          "answer": "Toujours 0",
+          "correct": false
+        },
+        {
+          "answer": "Une exception",
+          "correct": false
+        },
+        {
+          "answer": "Un dictionnaire",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Pourquoi utiliser try/except autour d’une opération réseau?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Le réseau ne peut jamais échouer",
+          "correct": false
+        },
+        {
+          "answer": "Pour traiter proprement des erreurs attendues",
+          "correct": true
+        },
+        {
+          "answer": "Pour cacher toutes les erreurs",
+          "correct": false
+        },
+        {
+          "answer": "Pour donner les droits root",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quel module intégré est adapté au traitement de JSON?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "json",
+          "correct": true
+        },
+        {
+          "answer": "socketonly",
+          "correct": false
+        },
+        {
+          "answer": "randomnet",
+          "correct": false
+        },
+        {
+          "answer": "pip",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quelle structure associe des clés et des valeurs?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Liste",
+          "correct": false
+        },
+        {
+          "answer": "Dictionnaire",
+          "correct": true
+        },
+        {
+          "answer": "Tuple vide",
+          "correct": false
+        },
+        {
+          "answer": "Boucle",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Pourquoi valider une entrée avant de l’utiliser?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Pour éviter erreurs, ambiguïtés et abus",
+          "correct": true
+        },
+        {
+          "answer": "Pour ralentir volontairement le programme",
+          "correct": false
+        },
+        {
+          "answer": "Pour supprimer les tests",
+          "correct": false
+        },
+        {
+          "answer": "Parce que Python l’exige toujours",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quel résultat est préférable pour un outil d’analyse?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Une sortie non documentée",
+          "correct": false
+        },
+        {
+          "answer": "Un rapport reproductible avec erreurs et limites explicites",
+          "correct": true
+        },
+        {
+          "answer": "Un mot de passe affiché",
+          "correct": false
+        },
+        {
+          "answer": "Une exception silencieuse",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quel principe limite le risque d’une commande shell construite depuis une entrée?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Exécuter toute entrée sans contrôle",
+          "correct": false
+        },
+        {
+          "answer": "Valider strictement et éviter l’exécution shell lorsque possible",
+          "correct": true
+        },
+        {
+          "answer": "Encoder en base64 seulement",
+          "correct": false
+        },
+        {
+          "answer": "Supprimer les logs",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Les tests doivent-ils inclure des entrées vides ou malformées?",
+      "type": "true_false",
+      "answers": [
+        {
+          "answer": "Oui",
+          "correct": true
+        },
+        {
+          "answer": "Non",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Une expression régulière constitue-t-elle toujours une validation complète d’une adresse IP?",
+      "type": "true_false",
+      "answers": [
+        {
+          "answer": "Oui",
+          "correct": false
+        },
+        {
+          "answer": "Non",
+          "correct": true
+        }
+      ]
+    }
+  ]
+}

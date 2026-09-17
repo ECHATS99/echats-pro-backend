@@ -1,0 +1,118 @@
+# render.yaml — Blueprint de déploiement en un clic pour ECHATS PRO (Partie 15 du SRS).
+# Documentation : https://render.com/docs/blueprint-spec
+#
+# Ce fichier décrit :
+#   - le backend FastAPI (Web Service)
+#   - Judge0 en Web Service séparé, isolé du backend principal (Partie 15 du SRS)
+#   - PostgreSQL managé
+#   - Redis (Key Value) managé
+#
+# Les secrets (Stripe, Cloudinary, Firebase, etc.) ne sont JAMAIS écrits en dur ici :
+# ils sont déclarés avec `sync: false` et doivent être saisis manuellement dans le
+# dashboard Render après le premier déploiement (Partie 7.13 du SRS).
+
+databases:
+  - name: echats-pro-postgres
+    plan: starter
+    databaseName: echats_pro
+    user: echats_pro
+    ipAllowList: []
+
+services:
+  # ---------------------------------------------------------------- Redis (cache/sessions)
+  - type: redis
+    name: echats-pro-redis
+    plan: starter
+    ipAllowList: []
+    maxmemoryPolicy: allkeys-lru
+
+  # ------------------------------------------------------------------------- Backend FastAPI
+  - type: web
+    name: echats-pro-backend
+    runtime: python
+    plan: starter
+    region: frankfurt
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 2"
+    healthCheckPath: /api/v1/health
+    autoDeploy: true
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: echats-pro-postgres
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: echats-pro-redis
+          property: connectionString
+      - key: CORS_ALLOWED_ORIGINS
+        value: '["https://echats-808c4.web.app"]'
+      - key: ENABLE_TEMPORARY_CORS
+        value: "false"
+      - key: CORS_TEMPORARY_ORIGINS
+        value: "[]"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: CERTIFICATE_SIGNING_SECRET
+        generateValue: true
+      - key: CHAMBER_CLOSE_ENCRYPTION_KEY
+        sync: false
+      - key: FIREBASE_CREDENTIALS_JSON
+        sync: false
+      - key: ECHATS_AI_BACKEND_URL
+        sync: false
+      - key: ECHATS_AI_API_KEY
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: PAYPAL_CLIENT_ID
+        sync: false
+      - key: PAYPAL_CLIENT_SECRET
+        sync: false
+      - key: MOBILE_MONEY_API_KEY
+        sync: false
+      - key: PARABEN_REVENUE_ACCOUNT
+        sync: false
+      - key: SENDGRID_API_KEY
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: JUDGE0_API_URL
+        sync: false
+      - key: GITHUB_TOKEN
+        sync: false
+
+  # --------------------------------------------------- Judge0 (isolé, exécution sandboxée)
+  # Utilise l'image officielle judge0/judge0 (voir https://github.com/judge0/judge0).
+  # JUDGE0_API_URL (ci-dessus) doit être renseigné manuellement avec l'URL publique de ce
+  # service une fois déployé, car Judge0 nécessite en réalité plusieurs conteneurs
+  # (serveur + workers + PostgreSQL + Redis dédiés) qu'un simple `image:` ne couvre pas
+  # entièrement — voir le docker-compose officiel de Judge0 pour un déploiement complet.
+  - type: web
+    name: echats-pro-judge0
+    runtime: image
+    plan: starter
+    region: frankfurt
+    image:
+      url: docker.io/judge0/judge0:1.13.1
+    envVars:
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: echats-pro-redis
+          property: connectionString

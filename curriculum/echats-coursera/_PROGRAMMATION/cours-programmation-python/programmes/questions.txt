@@ -1,0 +1,5 @@
+Python est un langage de ?|Général|programmation,cuisine,danse|programmation
+Combien font 2 + 2 ?|Math|3,4,5|4
+La capitale de la France est ?|Géographie|Londres,Paris,Rome,Berlin|Paris
+Quelle couleur obtient-on en mélangeant bleu et jaune ?|Arts|Vert,Rouge,Bleu,Jaune|Vert
+Quelle est la plus grande planète du système solaire ?|Astronomie|Mars,Terre,Jupiter,Saturne|Jupiter

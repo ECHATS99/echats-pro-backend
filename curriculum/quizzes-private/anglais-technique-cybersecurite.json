@@ -1,0 +1,204 @@
+{
+  "format": "ECHATS_QUIZ_IMPORT_V1",
+  "lesson_slug": "anglais-technique-cybersecurite",
+  "title": "Évaluation — Anglais Technique en Cybersécurité",
+  "passing_score": 75,
+  "questions": [
+    {
+      "question": "Que signifie CVE?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Common Vulnerabilities and Exposures",
+          "correct": true
+        },
+        {
+          "answer": "Cyber Verification Engine",
+          "correct": false
+        },
+        {
+          "answer": "Common Virtual Encryption",
+          "correct": false
+        },
+        {
+          "answer": "Critical Version Endpoint",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Dans un rapport de vulnérabilité, où décrit-on la conséquence pour l’organisation?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Impact",
+          "correct": true
+        },
+        {
+          "answer": "Subject",
+          "correct": false
+        },
+        {
+          "answer": "Greeting",
+          "correct": false
+        },
+        {
+          "answer": "Appendix only",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Que signifie “remediation”?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Mesures de correction",
+          "correct": true
+        },
+        {
+          "answer": "Collecte de logs",
+          "correct": false
+        },
+        {
+          "answer": "Chiffrement asymétrique",
+          "correct": false
+        },
+        {
+          "answer": "Adresse réseau",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Pourquoi lire le mot “EXCEPT” avec attention dans un examen?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Il inverse la recherche demandée",
+          "correct": true
+        },
+        {
+          "answer": "Il indique toujours une vulnérabilité",
+          "correct": false
+        },
+        {
+          "answer": "Il signifie chiffrement",
+          "correct": false
+        },
+        {
+          "answer": "Il supprime les choix",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Un résumé technique doit-il distinguer faits et interprétations?",
+      "type": "true_false",
+      "answers": [
+        {
+          "answer": "Vrai",
+          "correct": true
+        },
+        {
+          "answer": "Faux",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quel élément rend une divulgation responsable?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Canal vérifié, preuve minimale et délai de correction coordonné",
+          "correct": true
+        },
+        {
+          "answer": "Publication immédiate de secrets",
+          "correct": false
+        },
+        {
+          "answer": "Absence de détails reproductibles",
+          "correct": false
+        },
+        {
+          "answer": "Menace publique",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Que signifie “lateral movement”?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Mouvement latéral dans l’environnement",
+          "correct": true
+        },
+        {
+          "answer": "Chiffrement du disque",
+          "correct": false
+        },
+        {
+          "answer": "Sauvegarde distante",
+          "correct": false
+        },
+        {
+          "answer": "Validation d’email",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quel format aide à présenter un finding en anglais?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Title, Severity, Description, Evidence, Impact, Remediation",
+          "correct": true
+        },
+        {
+          "answer": "Password, Token, Secret",
+          "correct": false
+        },
+        {
+          "answer": "Only screenshots",
+          "correct": false
+        },
+        {
+          "answer": "Random notes",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Faut-il traduire automatiquement un acronyme sans vérifier son contexte?",
+      "type": "true_false",
+      "answers": [
+        {
+          "answer": "Oui",
+          "correct": false
+        },
+        {
+          "answer": "Non",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "question": "La communication technique doit-elle être exacte et adaptée au public?",
+      "type": "true_false",
+      "answers": [
+        {
+          "answer": "Vrai",
+          "correct": true
+        },
+        {
+          "answer": "Faux",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

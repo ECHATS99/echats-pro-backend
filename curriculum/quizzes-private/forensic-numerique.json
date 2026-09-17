@@ -1,0 +1,212 @@
+{
+  "format": "ECHATS_QUIZ_IMPORT_V1",
+  "lesson_slug": "forensic-numerique",
+  "title": "Évaluation — Forensic Numérique",
+  "passing_score": 75,
+  "questions": [
+    {
+      "question": "Quel principe affirme que tout contact laisse une trace?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Principe de Locard",
+          "correct": true
+        },
+        {
+          "answer": "Principe de moindre privilège",
+          "correct": false
+        },
+        {
+          "answer": "Principe DNS",
+          "correct": false
+        },
+        {
+          "answer": "Principe de chiffrement",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quelle donnée est généralement plus volatile?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "RAM",
+          "correct": true
+        },
+        {
+          "answer": "Archive distante",
+          "correct": false
+        },
+        {
+          "answer": "Sauvegarde froide",
+          "correct": false
+        },
+        {
+          "answer": "Document imprimé",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Pourquoi travailler sur une copie de preuve?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Pour préserver l’original",
+          "correct": true
+        },
+        {
+          "answer": "Pour modifier les métadonnées",
+          "correct": false
+        },
+        {
+          "answer": "Pour accélérer Internet",
+          "correct": false
+        },
+        {
+          "answer": "Pour éviter les checksums",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Quel est le rôle d’un hash de preuve?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Vérifier l’intégrité d’un contenu",
+          "correct": true
+        },
+        {
+          "answer": "Déchiffrer automatiquement le disque",
+          "correct": false
+        },
+        {
+          "answer": "Identifier avec certitude l’auteur",
+          "correct": false
+        },
+        {
+          "answer": "Remplacer la chaîne de garde",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Que doit documenter une chaîne de garde?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Qui, quand, comment et où la preuve a été manipulée",
+          "correct": true
+        },
+        {
+          "answer": "Uniquement le nom du fichier",
+          "correct": false
+        },
+        {
+          "answer": "Le mot de passe root",
+          "correct": false
+        },
+        {
+          "answer": "La conclusion finale seulement",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Pourquoi normaliser les heures dans une timeline?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Pour comparer correctement des événements de sources différentes",
+          "correct": true
+        },
+        {
+          "answer": "Pour supprimer les événements",
+          "correct": false
+        },
+        {
+          "answer": "Pour cacher la timezone",
+          "correct": false
+        },
+        {
+          "answer": "Pour modifier la preuve",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Un seul événement de log suffit-il généralement à prouver toute une intrusion?",
+      "type": "true_false",
+      "answers": [
+        {
+          "answer": "Oui",
+          "correct": false
+        },
+        {
+          "answer": "Non, il doit être corrélé et interprété avec ses limites",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "question": "Quel artefact Windows peut renseigner sur des programmes lancés?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Prefetch",
+          "correct": true
+        },
+        {
+          "answer": "ARP uniquement",
+          "correct": false
+        },
+        {
+          "answer": "DNS uniquement",
+          "correct": false
+        },
+        {
+          "answer": "Clipboard réseau uniquement",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Que faut-il faire avant toute acquisition forensique?",
+      "type": "single_choice",
+      "answers": [
+        {
+          "answer": "Définir le périmètre et préserver la preuve",
+          "correct": true
+        },
+        {
+          "answer": "Ouvrir tous les fichiers",
+          "correct": false
+        },
+        {
+          "answer": "Redémarrer immédiatement",
+          "correct": false
+        },
+        {
+          "answer": "Désactiver les logs",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "question": "Un rapport forensic doit-il présenter les hypothèses alternatives?",
+      "type": "true_false",
+      "answers": [
+        {
+          "answer": "Vrai",
+          "correct": true
+        },
+        {
+          "answer": "Faux",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

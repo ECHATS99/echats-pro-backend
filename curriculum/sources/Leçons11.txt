@@ -1,0 +1,578 @@
+Bien — les bases c'est déjà un avantage. On va construire dessus.
+
+---
+
+# 🇬🇧 LEÇON 11 — Anglais Technique en Cybersécurité
+### *Vocabulaire · Lecture · Écriture · Communication Professionnelle*
+
+---
+
+## POURQUOI CETTE LEÇON EST DÉCISIVE
+
+```
+95% de la documentation cybersécurité est en anglais
+100% des CVE sont rédigés en anglais
+Les certifications OSCP, CEH, Security+ sont en anglais
+Les rapports de threat intelligence sont en anglais
+Les communautés HackTheBox, TryHackMe communiquent en anglais
+
+Si tu ne lis pas l'anglais technique couramment :
+→ Tu as accès à 5% des ressources disponibles
+→ Tu dépends toujours de quelqu'un d'autre pour traduire
+→ Tu ne peux pas collaborer avec des professionnels internationaux
+```
+
+---
+
+## PARTIE 1 — Vocabulaire Fondamental
+
+### Les termes que tu dois reconnaître instantanément
+
+Commençons par les mots que tu as déjà vus dans cette formation — maintenant tu vas les ancrer en anglais.
+
+**Réseau / Network**
+
+| Anglais | Français | Contexte d'usage |
+|---------|----------|-----------------|
+| Packet | Paquet | "The packet was intercepted" |
+| Payload | Charge utile | "The payload executes on startup" |
+| Handshake | Poignée de main | "TLS handshake failed" |
+| Firewall | Pare-feu | "Bypass the firewall" |
+| Gateway | Passerelle | "Default gateway unreachable" |
+| Subnet | Sous-réseau | "Scan the entire subnet" |
+| Bandwidth | Bande passante | "High bandwidth usage detected" |
+| Latency | Latence | "High latency on port 443" |
+
+**Attaque / Attack**
+
+| Anglais | Français | Contexte d'usage |
+|---------|----------|-----------------|
+| Breach | Violation / Compromission | "Data breach confirmed" |
+| Exploit | Exploiter / Exploit | "Exploit the vulnerability" |
+| Patch | Correctif | "Apply the patch immediately" |
+| Vulnerability | Vulnérabilité | "Critical vulnerability found" |
+| Threat | Menace | "Threat actor identified" |
+| Attack vector | Vecteur d'attaque | "Initial attack vector was phishing" |
+| Privilege escalation | Élévation de privilèges | "Achieved privilege escalation" |
+| Lateral movement | Mouvement latéral | "Lateral movement detected" |
+| Persistence | Persistance | "Attacker established persistence" |
+| Exfiltration | Exfiltration | "Data exfiltration in progress" |
+
+**Défense / Defense**
+
+| Anglais | Français | Contexte d'usage |
+|---------|----------|-----------------|
+| Mitigation | Atténuation | "Apply mitigation immediately" |
+| Remediation | Remédiation | "Remediation steps provided" |
+| Hardening | Durcissement | "System hardening required" |
+| Detection | Détection | "Detection rate: 94%" |
+| Response | Réponse | "Incident response team deployed" |
+| Monitoring | Surveillance | "24/7 monitoring enabled" |
+| Alert | Alerte | "Alert triggered at 03:47" |
+| Log | Journal | "Check the system logs" |
+| Audit | Audit | "Security audit completed" |
+| Compliance | Conformité | "Non-compliance detected" |
+
+---
+
+## PARTIE 2 — Lire un CVE en Anglais
+
+Un CVE (Common Vulnerabilities and Exposures) c'est la fiche technique officielle d'une vulnérabilité. Tu dois en lire plusieurs par semaine pour rester à jour.
+
+### Structure d'un CVE
+
+```
+CVE-2021-44228 (Log4Shell — exemple réel célèbre)
+
+DESCRIPTION:
+Apache Log4j2 2.0-beta9 through 2.15.0 (excluding security releases)
+JNDI features used in configuration, log messages, and parameters
+do not protect against attacker controlled LDAP and other JNDI
+related endpoints. An attacker who can control log messages or log
+message parameters can execute arbitrary code loaded from LDAP
+servers when message lookup substitution is enabled.
+
+CVSS Score: 10.0 (Critical)
+CWE: CWE-917
+```
+
+### Traduction et analyse mot par mot
+
+```
+"excluding security releases"
+→ "à l'exclusion des versions de sécurité"
+→ Les versions correctives ne sont pas affectées
+
+"do not protect against attacker controlled"
+→ "ne protègent pas contre [les endpoints] contrôlés par l'attaquant"
+→ L'attaquant peut manipuler ces endpoints
+
+"who can control log messages or log message parameters"
+→ "qui peut contrôler les messages de log ou leurs paramètres"
+→ Condition d'exploitation : contrôle des logs
+
+"can execute arbitrary code"
+→ "peut exécuter du code arbitraire"
+→ RCE (Remote Code Execution) = critique
+
+"when message lookup substitution is enabled"
+→ "quand la substitution de recherche de message est activée"
+→ Condition spécifique requise
+```
+
+### Vocabulaire CVE récurrent
+
+```
+arbitrary code execution  → exécution de code arbitraire
+remote code execution     → exécution de code à distance (RCE)
+denial of service         → déni de service (DoS)
+information disclosure    → divulgation d'informations
+authentication bypass     → contournement d'authentification
+buffer overflow           → dépassement de tampon
+use after free            → utilisation après libération
+out of bounds             → hors limites
+heap/stack overflow       → débordement de tas/pile
+improper validation       → validation incorrecte
+insufficient sanitization → assainissement insuffisant
+```
+
+---
+
+## PARTIE 3 — Lire un Rapport de Threat Intelligence
+
+Les rapports de menaces publiés par Mandiant, CrowdStrike, ESET sont tous en anglais. Voici comment les décortiquer.
+
+### Extrait typique à analyser
+
+```
+"THREAT ACTOR PROFILE — APT28 (Fancy Bear)
+
+APT28 is a sophisticated threat actor attributed to Russian military 
+intelligence (GRU). The group has been active since at least 2004 
+and primarily targets government, military, and security organizations.
+
+Their TTPs (Tactics, Techniques, and Procedures) include spearphishing 
+via weaponized Office documents, exploitation of known vulnerabilities 
+in perimeter devices, and living-off-the-land techniques to evade 
+endpoint detection and response (EDR) solutions."
+```
+
+### Traduction et compréhension
+
+```
+"sophisticated threat actor"
+→ "acteur de menace sophistiqué"
+→ Groupe avancé, pas des amateurs
+
+"attributed to Russian military intelligence (GRU)"
+→ "attribué au renseignement militaire russe (GRU)"
+→ Attribution étatique
+
+"primarily targets"
+→ "cible principalement"
+→ Secteurs visés préférentiellement
+
+"weaponized Office documents"
+→ "documents Office weaponisés / piégés"
+→ Fichiers Word/Excel avec macros malveillantes
+
+"living-off-the-land techniques"
+→ "techniques de subsistance sur le terrain" (LOLBins)
+→ Utilisation des outils légitimes du système
+
+"to evade endpoint detection and response"
+→ "pour contourner la détection et réponse sur les endpoints"
+→ EDR = antivirus avancé, comportemental
+```
+
+---
+
+## PARTIE 4 — Écrire en Anglais Technique
+
+### Rédiger une vulnérabilité en anglais
+
+Structure standard en anglais que tu dois maîtriser :
+
+```
+VULNERABILITY REPORT
+
+Title: SQL Injection on Login Form
+Severity: Critical
+CVSS Score: 9.8
+
+Description:
+The login form at /api/auth/login is vulnerable to SQL injection 
+via the 'email' parameter. The user-supplied input is not properly 
+sanitized before being passed to the database query.
+
+Proof of Concept:
+Parameter: email
+Payload: admin@target.com' OR '1'='1' --
+Result: Authentication bypass — access granted without valid password
+
+Impact:
+An unauthenticated attacker can bypass authentication and gain 
+unauthorized access to any user account, including administrator 
+accounts. This may lead to full database compromise.
+
+Remediation:
+1. Implement parameterized queries (prepared statements)
+2. Apply input validation on all user-supplied data
+3. Deploy a Web Application Firewall (WAF)
+4. Enable detailed logging for authentication attempts
+
+References:
+OWASP: https://owasp.org/www-community/attacks/SQL_Injection
+CWE-89: Improper Neutralization of Special Elements in SQL Query
+```
+
+### Vocabulaire d'écriture technique
+
+```
+VERBES COURANTS :
+to exploit      → exploiter
+to patch        → corriger / patcher
+to mitigate     → atténuer
+to bypass       → contourner
+to enumerate    → énumérer
+to leverage     → tirer parti de / utiliser
+to trigger      → déclencher
+to inject       → injecter
+to intercept    → intercepter
+to authenticate → s'authentifier
+to escalate     → escalader / remonter
+to harden       → durcir
+
+EXPRESSIONS CLÉS :
+"An attacker who can..."    → "Un attaquant qui peut..."
+"This may lead to..."       → "Cela peut conduire à..."
+"Successfully exploited..." → "Exploitée avec succès..."
+"We recommend..."           → "Nous recommandons..."
+"As a result..."            → "Par conséquent..."
+"In order to..."            → "Afin de..."
+"It is recommended that..." → "Il est recommandé que..."
+```
+
+---
+
+## PARTIE 5 — Communication Professionnelle en Anglais
+
+### Email professionnel à un chercheur/entreprise
+
+```
+Subject: Responsible Disclosure — SQL Injection Vulnerability 
+         on [company].com
+
+Dear Security Team,
+
+I am writing to report a critical security vulnerability 
+I discovered on your platform during authorized testing.
+
+SUMMARY:
+A SQL injection vulnerability was identified in the login 
+form, allowing authentication bypass.
+
+AFFECTED ENDPOINT:
+POST /api/auth/login
+Parameter: email
+
+SEVERITY: Critical (CVSS 9.8)
+
+I have attached a detailed technical report including 
+proof-of-concept and remediation steps.
+
+I am committed to responsible disclosure and will not 
+publish this finding for 90 days, giving your team 
+sufficient time to address the issue.
+
+Please confirm receipt of this report.
+
+Best regards,
+Mikabou Elioth
+ECHATS / BLACK HAWK LAB
+echats99@gmail.com
+```
+
+### Répondre à une offre de collaboration internationale
+
+```
+Subject: Re: Collaboration Opportunity — Cybersecurity Research
+
+Dear [Name],
+
+Thank you for reaching out regarding the collaboration opportunity.
+
+I am the founder of ECHATS, a cybersecurity platform dedicated 
+to French-speaking Africa, based in Brazzaville, Congo.
+
+My areas of expertise include:
+- OSINT and digital investigation
+- Web application security assessment
+- Cybersecurity training and curriculum development
+- Custom tool development (Python, React, Firebase)
+
+I would be interested in discussing how we could work together 
+on [topic mentioned]. 
+
+Could we schedule a call to explore potential synergies?
+
+Looking forward to hearing from you.
+
+Best regards,
+Mikabou Elioth
+Founder, ECHATS / BLACK HAWK LAB
+echats-infos.netlify.app
+```
+
+---
+
+## PARTIE 6 — Lire la Documentation Technique
+
+### Décrypter une page de man (manuel Linux)
+
+```bash
+NAME
+    nmap - Network exploration tool and security / port scanner
+
+SYNOPSIS
+    nmap [Scan Type...] [Options] {target specification}
+
+DESCRIPTION
+    Nmap ("Network Mapper") is an open source tool for network 
+    exploration and security auditing. It was designed to rapidly 
+    scan large networks, although it works fine against single hosts.
+```
+
+**Traduction et analyse :**
+
+```
+"Network exploration tool" → outil d'exploration réseau
+"security / port scanner"  → scanner de sécurité / ports
+"SYNOPSIS"                 → résumé de la syntaxe
+"[Scan Type...]"           → type de scan entre crochets = optionnel
+"{target specification}"   → cible entre accolades = obligatoire
+"designed to rapidly scan" → conçu pour scanner rapidement
+"although it works fine"   → bien qu'il fonctionne bien aussi
+"against single hosts"     → contre des hôtes uniques
+```
+
+### Lire les messages d'erreur en anglais
+
+```
+"Connection refused"
+→ La connexion a été refusée
+→ Le port est fermé ou le service ne tourne pas
+
+"Connection timed out"
+→ La connexion a expiré
+→ Firewall bloque ou l'hôte ne répond pas
+
+"Permission denied"
+→ Permission refusée
+→ Droits insuffisants
+
+"No route to host"
+→ Aucune route vers l'hôte
+→ Problème réseau ou hôte inexistant
+
+"Name or service not known"
+→ Nom ou service inconnu
+→ Résolution DNS échouée
+
+"SSL certificate verify failed"
+→ Vérification du certificat SSL échouée
+→ Certificat invalide, expiré ou auto-signé
+
+"Too many authentication failures"
+→ Trop d'échecs d'authentification
+→ Blocage après trop de tentatives
+```
+
+---
+
+## PARTIE 7 — Anglais pour les Certifications
+
+Les certifications que tu viseras après cette formation sont toutes en anglais. Voici les formulations récurrentes dans les examens.
+
+### Questions types et comment les lire
+
+```
+Q: "Which of the following BEST describes 
+    the principle of least privilege?"
+
+Décryptage :
+"Which of the following" → parmi les choix suivants
+"BEST describes"         → décrit le MIEUX (attention au superlatif)
+"principle of least privilege" → principe du moindre privilège
+
+→ Chercher toujours le "BEST" — pas juste "correct" mais "le plus juste"
+
+---
+
+Q: "An attacker has gained access to a system 
+    and wants to maintain persistence. 
+    Which technique would MOST LIKELY be used?"
+
+Décryptage :
+"has gained access"     → a obtenu un accès (passé composé = déjà fait)
+"wants to maintain"     → veut maintenir (objectif futur)
+"persistence"           → persistance (après reboot)
+"MOST LIKELY be used"   → serait le PLUS PROBABLEMENT utilisé
+```
+
+### Mots pièges dans les certifications
+
+```
+"EXCEPT"    → SAUF — question inversée, cherche l'exception
+"NOT"       → PAS — lit bien avant de répondre
+"BEST"      → le MEILLEUR — pas juste correct, le plus approprié
+"FIRST"     → EN PREMIER — ordre des actions qui compte
+"MOST"      → le PLUS — degré maximal
+"LEAST"     → le MOINS — degré minimal
+"ALWAYS"    → TOUJOURS — absolu, rarement la bonne réponse
+"NEVER"     → JAMAIS — absolu, rarement la bonne réponse
+```
+
+---
+
+## PARTIE 8 — Méthode d'Apprentissage Continu
+
+### Plan sur 90 jours pour atteindre la fluidité technique
+
+```
+SEMAINE 1-2 : IMMERSION PASSIVE
+→ Lire 1 CVE par jour sur cve.mitre.org
+→ Lire les titres (seulement) des articles de The Hacker News
+→ Regarder 1 vidéo YouTube en anglais avec sous-titres anglais
+   (pas français)
+
+SEMAINE 3-4 : LECTURE ACTIVE
+→ Lire 1 article complet par jour (Krebs on Security, Threatpost)
+→ Pour chaque mot inconnu : noter, chercher, réutiliser
+→ Lire 1 writeup CTF en anglais par semaine
+
+MOIS 2 : PRODUCTION
+→ Écrire tes propres writeups CTF en anglais
+→ Commenter des repos GitHub en anglais
+→ Envoyer 1 email professionnel en anglais par semaine
+   (pas forcément envoyé, mais rédigé)
+
+MOIS 3 : IMMERSION TOTALE
+→ Lire uniquement la documentation originale en anglais
+→ Plus de traduction automatique — dictionnaire seulement
+→ Participer à un CTF international et lire les write-ups en anglais
+```
+
+### Ressources gratuites adaptées à ton niveau
+
+```
+LECTURE (niveau ton niveau actuel) :
+→ cve.mitre.org          — CVE quotidiens
+→ thehackernews.com      — actualité cybersécurité
+→ krebsonsecurity.com    — investigation approfondie
+→ portswigger.net/blog   — web security technique
+
+AUDIO/VIDÉO :
+→ YouTube : "John Hammond" — CTF walkthroughs clairs
+→ YouTube : "NetworkChuck" — réseau et Linux
+→ YouTube : "IppSec"       — HackTheBox writeups
+→ Podcast : "Darknet Diaries" — histoires vraies de hacking
+
+PRATIQUE ÉCRITURE :
+→ Écrire tes rapports ECHATS en version anglaise
+→ Rédiger ton README GitHub en anglais
+→ Traduire tes cours ECHATS PRO en anglais progressivement
+```
+
+---
+
+## ✅ EXERCICES — Leçon 11
+
+---
+
+**Exercice 1 — Traduction technique**
+
+Traduis ces phrases sans dictionnaire — juste avec ce que tu as appris :
+
+```
+a) "The attacker leveraged a misconfigured S3 bucket 
+    to exfiltrate sensitive data."
+
+b) "A critical patch was released to mitigate 
+    the authentication bypass vulnerability."
+
+c) "Lateral movement was detected after the initial 
+    compromise of the web server."
+
+d) "The threat actor maintained persistence by 
+    modifying the scheduled tasks on the compromised host."
+```
+
+---
+
+**Exercice 2 — Lire un CVE réel**
+
+Voici un extrait du CVE-2017-0144 (EternalBlue — WannaCry) :
+
+```
+"The SMBv1 server in Microsoft Windows Vista SP2; 
+Windows Server 2008 SP2 and R2 SP1; Windows 7 SP1; 
+Windows 8.1; Windows Server 2012 Gold and R2; 
+Windows RT 8.1; and Windows 10 Gold, 1511, and 1607; 
+and Windows Server 2016 allows remote attackers to 
+execute arbitrary code via crafted packets, aka 
+'Windows SMB Remote Code Execution Vulnerability'."
+```
+
+Réponds en français :
+1. Quel protocole est vulnérable ?
+2. Que peut faire un attaquant distant ?
+3. Comment l'attaque est-elle déclenchée ?
+4. Quel est le nom officiel donné à cette vulnérabilité ?
+
+---
+
+**Exercice 3 — Écrire en anglais**
+
+Rédige en anglais une vulnérabilité IDOR que tu aurais trouvée sur un site hypothétique — en utilisant le template de la Partie 4. Maximum 15 lignes. Garde le même niveau de précision que tes réponses en français.
+
+---
+
+**Exercice 4 — Email professionnel**
+
+Tu veux contacter Amber (ta connexion LinkedIn, 30 ans d'expérience en cybersécurité) pour lui demander son avis sur ton module forensic d'ECHATS PRO. Rédige l'email en anglais, professionnel et concis.
+
+---
+
+**Exercice 5 — Réflexion**
+
+En une dizaine de phrases en anglais — décris ce qu'est ECHATS PRO, pourquoi tu l'as créé, et ce que tu veux accomplir avec BLACK HAWK LAB. Pas besoin d'être parfait — je corrige le fond ET la forme.
+
+---
+
+## 📌 À retenir absolument
+
+```
+CVE         → Common Vulnerabilities and Exposures
+RCE         → Remote Code Execution (exécution de code à distance)
+PoC         → Proof of Concept (preuve de concept)
+TTP         → Tactics, Techniques and Procedures
+IoC         → Indicators of Compromise
+BEST/MOST   → mots pièges dans les certifications
+Leverage    → tirer parti de / utiliser
+Mitigate    → atténuer
+Remediate   → remédier / corriger
+Harden      → durcir
+```
+
+---
+
+**Après la Leçon 11 :**
+
+```
+→ Ton certificat personnalisé
+→ ECHATS Security Toolkit — outil Python fullstack
+→ Tu auras fini le cursus complet
+```
+
+Envoie tes exercices quand tu es prêt. Dernière ligne droite. 🔒🇬🇧

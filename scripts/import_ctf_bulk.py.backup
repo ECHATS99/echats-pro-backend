@@ -1,0 +1,266 @@
+"""Import en masse : curriculum/ctf_challenges.json -> PostgreSQL (CTFEvent/CTFCategory/CTFChallenge).
+
+Contexte
+--------
+Le fichier `curriculum/ctf_challenges.json` contient ~150 challenges extraits de :
+- OWASP Juice Shop (licence MIT)
+- 404CTF 2023 (contenu français)
+
+Sécurité :
+- `--dry-run` par défaut, aucune écriture.
+- `--apply` explicite, une seule transaction, rollback si erreur.
+- Idempotent : un challenge déjà importé (même event + même titre) est réutilisé,
+  jamais réécrit. Relancer ne duplique rien.
+- Les challenges sont importés en `published=True` par défaut (contenu prêt).
+
+Usage :
+    # Aperçu sans écrire (toujours commencer par ça)
+    python -m scripts.import_ctf_bulk --dry-run
+
+    # Import réel
+    python -m scripts.import_ctf_bulk --apply
+
+    # Import réel sans publication
+    python -m scripts.import_ctf_bulk --apply --no-publish
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+import uuid
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+DEFAULT_INPUT = REPO_ROOT / "curriculum" / "ctf_challenges.json"
+
+
+class ImportInputError(RuntimeError):
+    pass
+
+
+@dataclass
+class ChallengePlan:
+    item: dict[str, Any]
+    warnings: list[str] = field(default_factory=list)
+
+
+@dataclass
+class ImportPlan:
+    input_path: Path
+    events: dict[str, dict[str, Any]]      # event_title -> {title, status}
+    categories: set[str]                    # noms de catégories uniques
+    challenges: list[ChallengePlan]
+    warnings: list[str] = field(default_factory=list)
+
+
+def _load_plan(input_path: Path) -> ImportPlan:
+    if not input_path.exists():
+        raise ImportInputError(f"Fichier introuvable : {input_path}")
+
+    with open(input_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    if not isinstance(data, list):
+        raise ImportInputError("Le fichier doit contenir une liste de challenges.")
+
+    events: dict[str, dict[str, Any]] = {}
+    categories: set[str] = set()
+    challenges: list[ChallengePlan] = []
+    warnings: list[str] = []
+
+    for idx, item in enumerate(data):
+        if not isinstance(item, dict):
+            warnings.append(f"[{idx}] item non-dict ignoré")
+            continue
+
+        title = item.get("title", "").strip()
+        if not title:
+            warnings.append(f"[{idx}] titre vide ignoré")
+            continue
+
+        event_title = item.get("event_title", "CTF Événements").strip()
+        event_status = item.get("event_status", "active")
+        events[event_title] = {"title": event_title, "status": event_status}
+
+        category = item.get("category", "Misc").strip() or "Misc"
+        categories.add(category)
+
+        plan = ChallengePlan(item=item)
+        challenges.append(plan)
+
+    return ImportPlan(
+        input_path=input_path,
+        events=events,
+        categories=categories,
+        challenges=challenges,
+        warnings=warnings,
+    )
+
+
+def _print_plan(plan: ImportPlan) -> None:
+    print(f"\n{'=' * 60}")
+    print(f"📋 PLAN D'IMPORT")
+    print(f"{'=' * 60}")
+    print(f"Fichier source : {plan.input_path}")
+    print(f"Events         : {len(plan.events)}")
+    for evt_title in sorted(plan.events.keys()):
+        count = sum(1 for c in plan.challenges if c.item.get("event_title") == evt_title)
+        print(f"  - {evt_title} : {count} challenges")
+    print(f"\nCatégories     : {len(plan.categories)}")
+    for cat in sorted(plan.categories):
+        count = sum(1 for c in plan.challenges if c.item.get("category") == cat)
+        print(f"  - {cat} : {count}")
+    print(f"\nChallenges     : {len(plan.challenges)}")
+    print(f"{'=' * 60}\n")
+
+    if plan.warnings:
+        print("⚠️  Avertissements :")
+        for w in plan.warnings[:20]:
+            print(f"  - {w}")
+        if len(plan.warnings) > 20:
+            print(f"  ... et {len(plan.warnings) - 20} autres")
+        print()
+
+
+def _apply_import(plan: ImportPlan, publish: bool) -> dict[str, int]:
+    """Applique l'import dans une seule transaction."""
+    from sqlalchemy import select
+    from app.core.database import SessionLocal
+    from app.models.ctf import CTFCategory, CTFChallenge, CTFEvent
+    from app.security.hash import generate_salt, hash_flag
+
+    stats = {
+        "events_created": 0,
+        "categories_created": 0,
+        "challenges_created": 0,
+        "challenges_reused": 0,
+        "errors": 0,
+    }
+
+    db = SessionLocal()
+    try:
+        # 1. Créer les events
+        event_map: dict[str, uuid.UUID] = {}
+        for evt_title, evt_data in plan.events.items():
+            existing = db.execute(
+                select(CTFEvent).where(CTFEvent.title == evt_title)
+            ).scalar_one_or_none()
+            if existing:
+                event_map[evt_title] = existing.id
+                continue
+            event = CTFEvent(
+                title=evt_data["title"],
+                status=evt_data.get("status", "active"),
+            )
+            db.add(event)
+            db.flush()
+            event_map[evt_title] = event.id
+            stats["events_created"] += 1
+            print(f"  ✅ Event créé : {evt_title}")
+
+        # 2. Créer les catégories
+        category_map: dict[str, uuid.UUID] = {}
+        for cat_name in plan.categories:
+            existing = db.execute(
+                select(CTFCategory).where(CTFCategory.name == cat_name)
+            ).scalar_one_or_none()
+            if existing:
+                category_map[cat_name] = existing.id
+                continue
+            cat = CTFCategory(name=cat_name)
+            db.add(cat)
+            db.flush()
+            category_map[cat_name] = cat.id
+            stats["categories_created"] += 1
+            print(f"  ✅ Catégorie créée : {cat_name}")
+
+        # 3. Créer les challenges
+        for plan_ch in plan.challenges:
+            item = plan_ch.item
+            title = item["title"]
+            event_title = item.get("event_title", "CTF Événements")
+            category_name = item.get("category", "Misc")
+
+            # Idempotence : vérifier si déjà présent (même event + même titre)
+            existing = db.execute(
+                select(CTFChallenge).where(
+                    CTFChallenge.event_id == event_map[event_title],
+                    CTFChallenge.title == title,
+                )
+            ).scalar_one_or_none()
+
+            if existing:
+                stats["challenges_reused"] += 1
+                continue
+
+            # Hash du flag
+            flag = item.get("flag", "")
+            if not flag:
+                plan_ch.warnings.append(f"Flag manquant pour '{title}'")
+
+            salt = generate_salt()
+            flag_hash = hash_flag(flag, salt) if flag else None
+
+            challenge = CTFChallenge(
+                category_id=category_map.get(category_name),
+                event_id=event_map.get(event_title),
+                title=title,
+                description=item.get("description", ""),
+                difficulty=item.get("difficulty", "medium"),
+                points=int(item.get("points", 100)),
+                docker_image=None,
+                image_url=None,
+                published=publish,
+                flag_hash=flag_hash,
+                flag_salt=salt if flag else None,
+                terminal_commands=item.get("terminal_commands", []),
+                default_output=item.get("default_output", ""),
+            )
+            db.add(challenge)
+            stats["challenges_created"] += 1
+
+        db.commit()
+        print(f"\n✅ Import terminé")
+        print(f"   Events créés      : {stats['events_created']}")
+        print(f"   Catégories créées : {stats['categories_created']}")
+        print(f"   Challenges créés  : {stats['challenges_created']}")
+        print(f"   Challenges réutilisés : {stats['challenges_reused']}")
+
+    except Exception as e:
+        db.rollback()
+        print(f"\n❌ Erreur lors de l'import : {e}")
+        stats["errors"] += 1
+        raise
+    finally:
+        db.close()
+
+    return stats
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Import en masse des challenges CTF.")
+    parser.add_argument("--dry-run", action="store_true", default=True, help="Aperçu sans écrire (défaut).")
+    parser.add_argument("--apply", action="store_true", help="Applique l'import réel.")
+    parser.add_argument("--no-publish", action="store_true", help="Importe en brouillon (published=False).")
+    parser.add_argument("--input", type=str, default=str(DEFAULT_INPUT), help="Chemin du JSON source.")
+    args = parser.parse_args()
+
+    input_path = Path(args.input)
+    plan = _load_plan(input_path)
+    _print_plan(plan)
+
+    if args.apply:
+        print("🚀 Application de l'import...\n")
+        _apply_import(plan, publish=not args.no_publish)
+    else:
+        print("ℹ️  Mode dry-run (aucune écriture). Utilisez --apply pour importer réellement.\n")
+
+
+if __name__ == "__main__":
+    main()

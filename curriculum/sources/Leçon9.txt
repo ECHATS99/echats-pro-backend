@@ -1,0 +1,931 @@
+# 🦠 LEÇON 9 — Malware Analysis
+### *Analyse Statique · Analyse Dynamique · Reverse Engineering*
+
+---
+
+## POURQUOI CETTE LEÇON EST DANGEREUSE ET NÉCESSAIRE
+
+Analyser un malware c'est manipuler une arme. Cette leçon t'apprend à le faire **en sécurité totale** — jamais sur ta machine principale.
+
+```
+RÈGLE ABSOLUE AVANT TOUT :
+
+JAMAIS analyser un malware sur ta machine de travail
+TOUJOURS dans une machine virtuelle isolée
+TOUJOURS sans connexion réseau (sauf simulation contrôlée)
+TOUJOURS avec des snapshots pour revenir en arrière
+
+Un malware mal géré peut :
+→ Chiffrer tes propres fichiers
+→ Se propager sur ton réseau
+→ Voler tes propres credentials
+→ Détruire ton matériel
+```
+
+---
+
+## PARTIE 1 — Les Deux Approches Fondamentales
+
+```
+ANALYSE STATIQUE
+→ Examiner le malware SANS l'exécuter
+→ Lire le code, les chaînes de caractères, la structure
+→ Sûr mais limité — certains malwares se cachent
+
+ANALYSE DYNAMIQUE
+→ Exécuter le malware dans un environnement contrôlé
+→ Observer son comportement réel
+→ Plus risqué mais révèle la vérité du comportement
+```
+
+Un analyste professionnel utilise **toujours les deux**, dans cet ordre : statique d'abord pour comprendre le terrain, dynamique ensuite pour confirmer.
+
+---
+
+## PARTIE 2 — Analyse Statique
+
+### Étape 1 — Identification de base
+
+```bash
+# Type de fichier réel — pas l'extension, le contenu
+file suspect.exe
+# → PE32 executable for MS Windows
+
+file suspect_script
+# → Python script, ASCII text
+
+# Hash pour identification et recherche en base
+sha256sum suspect.exe
+md5sum suspect.exe
+
+# Comparer avec des bases connues
+# VirusTotal, MalwareBazaar utilisent ces hashes
+```
+
+### Étape 2 — Extraction de chaînes de caractères
+
+Les chaînes (strings) révèlent souvent énormément sur un malware — URLs, IPs, messages d'erreur, clés de chiffrement, commandes.
+
+```bash
+# Extraire toutes les chaînes lisibles
+strings suspect.exe
+
+# Chaînes de 8 caractères minimum (réduit le bruit)
+strings -n 8 suspect.exe
+
+# Chercher des patterns intéressants
+strings suspect.exe | grep -E "http|ftp|\.onion"
+strings suspect.exe | grep -E "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"
+strings suspect.exe | grep -iE "password|key|token|secret"
+```
+
+### Analyse de strings en Python
+
+```python
+import re
+import subprocess
+
+def analyser_strings(chemin_fichier):
+    """
+    Extrait et catégorise les chaînes intéressantes
+    d'un fichier suspect — analyse statique pure
+    """
+    print(f"\n[*] Analyse statique : {chemin_fichier}")
+
+    try:
+        # Lire le fichier en mode binaire
+        with open(chemin_fichier, "rb") as f:
+            contenu = f.read()
+    except FileNotFoundError:
+        print("  Fichier non trouvé")
+        return {}
+
+    # Extraire les chaînes ASCII imprimables de 4+ caractères
+    # Pattern : séquences de caractères imprimables
+    pattern_strings = rb"[\x20-\x7E]{4,}"
+    chaines_brutes = re.findall(pattern_strings, contenu)
+    chaines = [c.decode("ascii", errors="ignore") for c in chaines_brutes]
+
+    resultats = {
+        "urls": [],
+        "ips": [],
+        "emails": [],
+        "fichiers_references": [],
+        "registry_keys": [],
+        "suspectes": []
+    }
+
+    pattern_url = re.compile(r'https?://[^\s<>"]+')
+    pattern_ip = re.compile(r'\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b')
+    pattern_email = re.compile(r'[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}')
+    pattern_fichier = re.compile(r'[A-Za-z]:\\[^\s<>"]+|/[a-z]+/[^\s<>"]+')
+    pattern_registry = re.compile(r'HKEY_[A-Z_]+\\[^\s<>"]+')
+
+    mots_suspects = [
+        "cmd.exe", "powershell", "RegCreateKey", "CreateRemoteThread",
+        "VirtualAlloc", "WriteProcessMemory", "keylog", "screenshot",
+        "encrypt", "ransom", "bitcoin", "wallet", "decrypt",
+        "WScript.Shell", "base64_decode", "eval(", "exec("
+    ]
+
+    for chaine in chaines:
+        if pattern_url.search(chaine):
+            resultats["urls"].extend(pattern_url.findall(chaine))
+        if pattern_ip.search(chaine):
+            resultats["ips"].extend(pattern_ip.findall(chaine))
+        if pattern_email.search(chaine):
+            resultats["emails"].extend(pattern_email.findall(chaine))
+        if pattern_fichier.search(chaine):
+            resultats["fichiers_references"].append(chaine)
+        if pattern_registry.search(chaine):
+            resultats["registry_keys"].append(chaine)
+
+        for mot in mots_suspects:
+            if mot.lower() in chaine.lower():
+                resultats["suspectes"].append(chaine)
+                break
+
+    # Dédupliquer
+    for cle in resultats:
+        resultats[cle] = list(set(resultats[cle]))[:20]  # Limiter l'affichage
+
+    # Afficher le rapport
+    print(f"\n  Chaînes totales extraites : {len(chaines)}")
+    print(f"  URLs trouvées      : {len(resultats['urls'])}")
+    for url in resultats["urls"][:5]:
+        print(f"    → {url}")
+
+    print(f"  IPs trouvées       : {len(resultats['ips'])}")
+    for ip in resultats["ips"][:5]:
+        print(f"    → {ip}")
+
+    print(f"  Emails trouvés     : {len(resultats['emails'])}")
+    for email in resultats["emails"][:5]:
+        print(f"    → {email}")
+
+    print(f"  Mots-clés suspects : {len(resultats['suspectes'])}")
+    for s in resultats["suspectes"][:10]:
+        print(f"    ⚠️  {s}")
+
+    return resultats
+```
+
+### Étape 3 — Analyse des Hashes contre bases connues
+
+```python
+import hashlib
+import requests
+
+def verifier_hash_virustotal(chemin_fichier, api_key=None):
+    """
+    Calcule le hash et vérifie contre VirusTotal
+    Nécessite une clé API gratuite de virustotal.com
+    """
+    # Calculer les hashes
+    with open(chemin_fichier, "rb") as f:
+        contenu = f.read()
+
+    md5 = hashlib.md5(contenu).hexdigest()
+    sha1 = hashlib.sha1(contenu).hexdigest()
+    sha256 = hashlib.sha256(contenu).hexdigest()
+
+    print(f"\n[*] Hashes calculés :")
+    print(f"  MD5    : {md5}")
+    print(f"  SHA1   : {sha1}")
+    print(f"  SHA256 : {sha256}")
+
+    if api_key:
+        try:
+            headers = {"x-apikey": api_key}
+            url = f"https://www.virustotal.com/api/v3/files/{sha256}"
+            r = requests.get(url, headers=headers, timeout=10)
+
+            if r.status_code == 200:
+                data = r.json()
+                stats = data["data"]["attributes"]["last_analysis_stats"]
+                print(f"\n[*] Résultats VirusTotal :")
+                print(f"  Malveillant : {stats['malicious']}")
+                print(f"  Suspect     : {stats['suspicious']}")
+                print(f"  Inoffensif  : {stats['harmless']}")
+                print(f"  Non détecté : {stats['undetected']}")
+
+                if stats["malicious"] > 0:
+                    print(f"\n  🚨 FICHIER MALVEILLANT CONFIRMÉ")
+                    print(f"     {stats['malicious']} moteurs antivirus l'ont détecté")
+            elif r.status_code == 404:
+                print("\n  Fichier inconnu de VirusTotal — pourrait être nouveau")
+        except Exception as e:
+            print(f"  Erreur API : {e}")
+
+    return {"md5": md5, "sha1": sha1, "sha256": sha256}
+```
+
+### Étape 4 — Examiner la structure PE (Windows)
+
+```python
+# pip install pefile
+import pefile
+
+def analyser_pe(chemin_fichier):
+    """
+    Analyse la structure d'un exécutable Windows (PE)
+    Révèle les fonctions importées — indique le comportement
+    """
+    try:
+        pe = pefile.PE(chemin_fichier)
+    except pefile.PEFormatError:
+        print("  Pas un fichier PE valide")
+        return None
+
+    print(f"\n=== ANALYSE PE : {chemin_fichier} ===\n")
+
+    # Timestamp de compilation — peut révéler quand le malware a été créé
+    import datetime
+    timestamp = pe.FILE_HEADER.TimeDateStamp
+    date_compile = datetime.datetime.fromtimestamp(timestamp)
+    print(f"Date de compilation : {date_compile}")
+
+    # Architecture
+    machine = pe.FILE_HEADER.Machine
+    archs = {0x14c: "x86 (32-bit)", 0x8664: "x64 (64-bit)"}
+    print(f"Architecture : {archs.get(machine, 'Inconnue')}")
+
+    # DLLs importées — révèle les capacités du programme
+    print(f"\n--- DLLs et fonctions importées ---")
+
+    fonctions_suspectes = {
+        "VirtualAlloc": "Allocation mémoire — injection possible",
+        "WriteProcessMemory": "Écriture dans un autre processus",
+        "CreateRemoteThread": "Exécution de code dans un autre processus",
+        "RegSetValue": "Modification du registre — persistance",
+        "InternetOpen": "Communication réseau",
+        "URLDownloadToFile": "Téléchargement de fichiers",
+        "GetAsyncKeyState": "Capture clavier — possible keylogger",
+        "FindWindow": "Recherche de fenêtres — évasion sandbox",
+        "IsDebuggerPresent": "Détection debugger — anti-analyse",
+        "CryptEncrypt": "Chiffrement — possible ransomware",
+        "ShellExecute": "Exécution de commandes"
+    }
+
+    alertes = []
+
+    if hasattr(pe, "DIRECTORY_ENTRY_IMPORT"):
+        for entry in pe.DIRECTORY_ENTRY_IMPORT:
+            dll_name = entry.dll.decode()
+            for imp in entry.imports:
+                if imp.name:
+                    func_name = imp.name.decode()
+                    if func_name in fonctions_suspectes:
+                        alertes.append(
+                            f"{func_name} ({dll_name}) — {fonctions_suspectes[func_name]}"
+                        )
+
+    if alertes:
+        print(f"\n🚨 {len(alertes)} fonction(s) suspecte(s) trouvée(s) :")
+        for a in alertes:
+            print(f"  ⚠️  {a}")
+    else:
+        print("\n✅ Aucune fonction suspecte évidente détectée")
+
+    # Sections — entropie élevée = possible packing/chiffrement
+    print(f"\n--- Sections ---")
+    for section in pe.sections:
+        nom = section.Name.decode(errors="ignore").strip("\x00")
+        entropie = section.get_entropy()
+        suspect = " ⚠️ ENTROPIE ÉLEVÉE (possible packing)" if entropie > 7.0 else ""
+        print(f"  {nom:10} Entropie: {entropie:.2f}{suspect}")
+
+    return alertes
+```
+
+---
+
+## PARTIE 3 — Analyse Dynamique (En Environnement Isolé Uniquement)
+
+### Préparer un environnement de sandbox
+
+```
+RÈGLES POUR UNE SANDBOX SÛRE :
+
+1. Machine virtuelle dédiée (VirtualBox, VMware)
+2. Snapshot AVANT chaque analyse
+3. Réseau isolé ou simulé (INetSim, FakeNet)
+4. Pas de partage de dossiers avec l'hôte
+5. Pas de connexion Internet réelle
+6. Restaurer le snapshot après chaque test
+```
+
+### Surveiller le comportement — Processus
+
+```python
+import psutil
+import time
+import json
+
+def surveiller_processus(duree_secondes=30):
+    """
+    Surveille les nouveaux processus créés pendant
+    l'exécution d'un malware en sandbox
+    À lancer juste avant d'exécuter le fichier suspect
+    """
+    print(f"\n[*] Surveillance processus pendant {duree_secondes}s")
+    print("[*] Lancez maintenant le malware dans la sandbox...")
+
+    processus_avant = set(p.pid for p in psutil.process_iter())
+
+    nouveaux_processus = []
+    debut = time.time()
+
+    while time.time() - debut < duree_secondes:
+        processus_actuels = set(p.pid for p in psutil.process_iter())
+        nouveaux_pids = processus_actuels - processus_avant
+
+        for pid in nouveaux_pids:
+            try:
+                p = psutil.Process(pid)
+                info = {
+                    "pid": pid,
+                    "nom": p.name(),
+                    "cmdline": " ".join(p.cmdline()),
+                    "parent": p.ppid(),
+                    "heure_detection": time.time() - debut
+                }
+                nouveaux_processus.append(info)
+                print(f"  [NOUVEAU] PID {pid}: {info['nom']}")
+                print(f"            Commande: {info['cmdline'][:80]}")
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                pass
+
+        processus_avant = processus_actuels
+        time.sleep(1)
+
+    print(f"\n[+] {len(nouveaux_processus)} processus créés pendant l'analyse")
+    return nouveaux_processus
+```
+
+### Surveiller les modifications du système de fichiers
+
+```python
+import os
+import time
+
+def surveiller_filesystem(dossiers_surveilles, duree_secondes=30):
+    """
+    Détecte les fichiers créés/modifiés/supprimés
+    pendant l'exécution d'un malware
+    """
+    print(f"\n[*] Surveillance filesystem : {dossiers_surveilles}")
+
+    def snapshot_dossiers():
+        etat = {}
+        for dossier in dossiers_surveilles:
+            for racine, dirs, fichiers in os.walk(dossier):
+                for f in fichiers:
+                    chemin = os.path.join(racine, f)
+                    try:
+                        etat[chemin] = os.path.getmtime(chemin)
+                    except:
+                        pass
+        return etat
+
+    print("[*] Snapshot initial...")
+    etat_avant = snapshot_dossiers()
+
+    print(f"[*] Attente {duree_secondes}s — exécutez le malware maintenant...")
+    time.sleep(duree_secondes)
+
+    print("[*] Snapshot final...")
+    etat_apres = snapshot_dossiers()
+
+    fichiers_crees = set(etat_apres.keys()) - set(etat_avant.keys())
+    fichiers_supprimes = set(etat_avant.keys()) - set(etat_apres.keys())
+    fichiers_modifies = {
+        f for f in etat_avant.keys() & etat_apres.keys()
+        if etat_avant[f] != etat_apres[f]
+    }
+
+    print(f"\n  Fichiers créés    : {len(fichiers_crees)}")
+    for f in list(fichiers_crees)[:10]:
+        print(f"    + {f}")
+
+    print(f"\n  Fichiers modifiés : {len(fichiers_modifies)}")
+    for f in list(fichiers_modifies)[:10]:
+        print(f"    ~ {f}")
+
+    print(f"\n  Fichiers supprimés : {len(fichiers_supprimes)}")
+    for f in list(fichiers_supprimes)[:10]:
+        print(f"    - {f}")
+
+    # Ransomware indicator — extension suspecte en masse
+    extensions_ransomware = [".locked", ".encrypted", ".crypto", ".enc", ".crypt"]
+    fichiers_chiffres = [
+        f for f in fichiers_crees
+        if any(f.endswith(ext) for ext in extensions_ransomware)
+    ]
+
+    if len(fichiers_chiffres) > 5:
+        print(f"\n  🚨🚨 ALERTE RANSOMWARE")
+        print(f"  {len(fichiers_chiffres)} fichiers avec extension de chiffrement")
+
+    return {
+        "crees": list(fichiers_crees),
+        "modifies": list(fichiers_modifies),
+        "supprimes": list(fichiers_supprimes)
+    }
+```
+
+### Surveiller le réseau
+
+```python
+import subprocess
+import re
+
+def surveiller_reseau_simple():
+    """
+    Capture les connexions réseau actives
+    Identifie les communications C2
+    """
+    print("\n[*] Connexions réseau actuelles")
+
+    try:
+        result = subprocess.run(
+            ["ss", "-tupn"],
+            capture_output=True, text=True
+        )
+
+        lignes = result.stdout.split("\n")
+        connexions_externes = []
+
+        for ligne in lignes:
+            if "ESTAB" in ligne:
+                # Extraire l'IP distante
+                match = re.search(r':\d+\s+([\d.]+):(\d+)', ligne)
+                if match:
+                    ip = match.group(1)
+                    port = match.group(2)
+
+                    # Ignorer le loopback et les réseaux privés
+                    if not ip.startswith(("127.", "192.168.", "10.")):
+                        connexions_externes.append({"ip": ip, "port": port})
+                        print(f"  [EXTERNE] {ip}:{port}")
+
+        if connexions_externes:
+            print(f"\n  ⚠️  {len(connexions_externes)} connexion(s) externe(s) détectée(s)")
+            print(f"  Possible communication C2")
+
+        return connexions_externes
+
+    except Exception as e:
+        print(f"  Erreur : {e}")
+        return []
+```
+
+---
+
+## PARTIE 4 — Comportements Malveillants Courants
+
+### Catégories de malwares et leurs signatures
+
+```
+RANSOMWARE
+→ Comportement : chiffre massivement les fichiers
+→ Indicateurs : extensions modifiées en masse, note de rançon créée
+→ APIs utilisées : CryptEncrypt, CryptGenKey
+
+KEYLOGGER
+→ Comportement : capture les frappes clavier
+→ Indicateurs : hooks clavier, fichiers logs cachés
+→ APIs utilisées : SetWindowsHookEx, GetAsyncKeyState
+
+BACKDOOR / RAT (Remote Access Trojan)
+→ Comportement : ouvre un accès distant caché
+→ Indicateurs : connexions réseau persistantes, port en écoute
+→ APIs utilisées : socket, CreateProcess à distance
+
+TROJAN BANCAIRE
+→ Comportement : intercepte les sessions bancaires
+→ Indicateurs : injection dans navigateurs, redirection DNS
+→ APIs utilisées : WriteProcessMemory dans browser.exe
+
+WORM (Ver)
+→ Comportement : se propage automatiquement
+→ Indicateurs : scan réseau actif, copie sur partages
+→ APIs utilisées : énumération réseau, copie de fichiers
+
+CRYPTOMINER
+→ Comportement : utilise le CPU/GPU pour miner
+→ Indicateurs : CPU à 100% constant, connexions vers pools de minage
+→ Signatures : processus cachés consommant les ressources
+```
+
+### Identifier le comportement par les patterns réseau
+
+```python
+def classifier_comportement(connexions, processus, fichiers):
+    """
+    Tente de classifier le type de malware
+    basé sur le comportement observé
+    """
+    indicateurs = []
+    score_ransomware = 0
+    score_backdoor = 0
+    score_keylogger = 0
+    score_miner = 0
+
+    # Indicateurs ransomware
+    extensions_chiffrement = [".locked", ".encrypted", ".crypto"]
+    if any(any(f.endswith(e) for e in extensions_chiffrement)
+           for f in fichiers.get("crees", [])):
+        score_ransomware += 3
+        indicateurs.append("Fichiers chiffrés détectés")
+
+    if len(fichiers.get("modifies", [])) > 100:
+        score_ransomware += 2
+        indicateurs.append("Modification massive de fichiers")
+
+    # Indicateurs backdoor/RAT
+    if len(connexions) > 0:
+        ports_suspects = ["4444", "1337", "31337", "8080", "9001"]
+        for conn in connexions:
+            if conn.get("port") in ports_suspects:
+                score_backdoor += 3
+                indicateurs.append(f"Port backdoor classique : {conn['port']}")
+
+    if len(connexions) > 0:
+        score_backdoor += 1
+        indicateurs.append("Connexions réseau externes actives")
+
+    # Indicateurs keylogger
+    for p in processus:
+        if "log" in p.get("nom", "").lower():
+            score_keylogger += 2
+            indicateurs.append(f"Processus avec 'log' dans le nom : {p['nom']}")
+
+    print("\n=== CLASSIFICATION COMPORTEMENTALE ===\n")
+    scores = {
+        "RANSOMWARE": score_ransomware,
+        "BACKDOOR/RAT": score_backdoor,
+        "KEYLOGGER": score_keylogger
+    }
+
+    for type_malware, score in sorted(scores.items(), key=lambda x: -x[1]):
+        if score > 0:
+            print(f"  {type_malware}: score {score}")
+
+    print("\nIndicateurs détectés :")
+    for ind in indicateurs:
+        print(f"  → {ind}")
+
+    type_probable = max(scores, key=scores.get)
+    if scores[type_probable] > 0:
+        print(f"\n🎯 Classification probable : {type_probable}")
+
+    return scores
+```
+
+---
+
+## PARTIE 5 — Reverse Engineering Basique
+
+### Désassemblage — Comprendre sans exécuter
+
+Le reverse engineering complet nécessite des outils comme IDA Pro, Ghidra (gratuit de la NSA), ou radare2. C'est une discipline entière, mais voici les bases.
+
+```bash
+# objdump — désassembleur basique inclus sur Linux
+objdump -d suspect_binary
+
+# Lire les symboles exportés/importés
+objdump -T suspect_binary
+
+# readelf pour les binaires ELF (Linux)
+readelf -h suspect_binary    # En-tête
+readelf -S suspect_binary    # Sections
+readelf -s suspect_binary    # Symboles
+```
+
+### Ghidra — L'outil gratuit de référence
+
+```
+Ghidra (développé par la NSA, gratuit) :
+→ Désassembleur ET décompileur
+→ Transforme l'assembleur en pseudo-code lisible
+→ Standard de l'industrie pour le reverse engineering
+
+Workflow basique :
+1. Importer le binaire
+2. Laisser l'analyse automatique tourner
+3. Examiner la fonction main()
+4. Suivre les appels de fonctions suspects
+5. Identifier les chaînes de caractères liées au code
+```
+
+### Désobfuscation basique de scripts
+
+Les malwares en script (PowerShell, JavaScript, Python) sont souvent obfusqués pour échapper à la détection.
+
+```python
+import base64
+import re
+
+def desobfusquer_basique(code_suspect):
+    """
+    Tente de désobfusquer des techniques basiques
+    couramment trouvées dans les malwares scriptés
+    """
+    print("\n[*] Tentative de désobfuscation...")
+
+    resultats = []
+
+    # 1. Détecter et décoder le Base64
+    pattern_b64 = r'[A-Za-z0-9+/]{20,}={0,2}'
+    matches_b64 = re.findall(pattern_b64, code_suspect)
+
+    for match in matches_b64:
+        try:
+            decode = base64.b64decode(match).decode("utf-8", errors="ignore")
+            if decode.isprintable() and len(decode) > 5:
+                print(f"\n  [Base64 décodé]")
+                print(f"  Original : {match[:50]}...")
+                print(f"  Décodé   : {decode[:200]}")
+                resultats.append({"type": "base64", "decode": decode})
+        except:
+            pass
+
+    # 2. Détecter PowerShell encodé
+    if "-enc" in code_suspect.lower() or "-encodedcommand" in code_suspect.lower():
+        print("\n  ⚠️  Commande PowerShell encodée détectée")
+        print("  PowerShell utilise UTF-16LE + Base64")
+        resultats.append({"type": "powershell_encoded"})
+
+    # 3. Détecter eval/exec avec contenu encodé — JavaScript/Python
+    pattern_eval = r'eval\s*\(\s*[\'"]?([^)]+)'
+    matches_eval = re.findall(pattern_eval, code_suspect)
+    if matches_eval:
+        print(f"\n  ⚠️  {len(matches_eval)} appel(s) eval() détecté(s)")
+        print("  Technique d'obfuscation/exécution dynamique courante")
+
+    # 4. Détecter les caractères avec codes ASCII (chr())
+    pattern_chr = r'chr\(\d+\)'
+    if re.search(pattern_chr, code_suspect):
+        print("\n  ⚠️  Construction de chaîne via chr() détectée")
+        print("  Technique d'obfuscation pour échapper aux signatures")
+
+    return resultats
+```
+
+---
+
+## PARTIE 6 — Outil Complet d'Analyse Statique
+
+```python
+#!/usr/bin/env python3
+"""
+ECHATS MALWARE ANALYZER — Module Analyse Statique
+Usage : Sur fichiers en environnement isolé uniquement
+"""
+
+import hashlib
+import re
+import os
+import json
+import datetime
+
+def analyse_complete(chemin_fichier):
+    """
+    Pipeline complet d'analyse statique d'un fichier suspect
+    """
+    print(f"\n{'='*55}")
+    print(f"  ECHATS MALWARE ANALYZER")
+    print(f"  Fichier : {chemin_fichier}")
+    print(f"{'='*55}")
+
+    if not os.path.exists(chemin_fichier):
+        print("[-] Fichier introuvable")
+        return None
+
+    rapport = {
+        "fichier": chemin_fichier,
+        "date_analyse": datetime.datetime.now().isoformat(),
+        "taille": os.path.getsize(chemin_fichier)
+    }
+
+    # 1. Hashes
+    with open(chemin_fichier, "rb") as f:
+        contenu = f.read()
+
+    rapport["md5"] = hashlib.md5(contenu).hexdigest()
+    rapport["sha1"] = hashlib.sha1(contenu).hexdigest()
+    rapport["sha256"] = hashlib.sha256(contenu).hexdigest()
+
+    print(f"\n[1/4] Identification")
+    print(f"  Taille : {rapport['taille']} bytes")
+    print(f"  SHA256 : {rapport['sha256']}")
+
+    # 2. Type de fichier (magic bytes)
+    signatures = {
+        b"MZ": "Exécutable Windows (PE)",
+        b"\x7fELF": "Exécutable Linux (ELF)",
+        b"PK\x03\x04": "Archive ZIP (possible APK, JAR, Office)",
+        b"%PDF": "Document PDF",
+        b"\x89PNG": "Image PNG",
+        b"#!/": "Script avec shebang"
+    }
+
+    type_detecte = "Inconnu"
+    for signature, nom in signatures.items():
+        if contenu.startswith(signature):
+            type_detecte = nom
+            break
+
+    rapport["type_fichier"] = type_detecte
+    print(f"\n[2/4] Type de fichier : {type_detecte}")
+
+    # 3. Calcul d'entropie globale — packing/chiffrement
+    def calculer_entropie(data):
+        if not data:
+            return 0
+        from collections import Counter
+        import math
+        compteur = Counter(data)
+        longueur = len(data)
+        entropie = 0
+        for count in compteur.values():
+            p = count / longueur
+            entropie -= p * math.log2(p)
+        return entropie
+
+    entropie = calculer_entropie(contenu)
+    rapport["entropie"] = round(entropie, 2)
+
+    print(f"\n[3/4] Entropie : {entropie:.2f}/8.0")
+    if entropie > 7.2:
+        print("  ⚠️  Entropie élevée — possible packing/chiffrement/compression")
+        rapport["alerte_entropie"] = True
+
+    # 4. Extraction de chaînes suspectes
+    pattern_strings = rb"[\x20-\x7E]{5,}"
+    chaines = [s.decode("ascii", errors="ignore")
+               for s in re.findall(pattern_strings, contenu)]
+
+    mots_suspects = [
+        "cmd.exe", "powershell", "wscript", "cscript",
+        "VirtualAlloc", "CreateRemoteThread", "WriteProcessMemory",
+        "RegSetValue", "InternetOpen", "URLDownload",
+        "encrypt", "decrypt", "ransom", "bitcoin",
+        ".onion", "base64_decode", "eval(", "exec("
+    ]
+
+    alertes = []
+    for chaine in chaines:
+        for mot in mots_suspects:
+            if mot.lower() in chaine.lower():
+                alertes.append(chaine[:100])
+                break
+
+    rapport["chaines_suspectes"] = list(set(alertes))[:20]
+
+    print(f"\n[4/4] Chaînes suspectes : {len(rapport['chaines_suspectes'])}")
+    for a in rapport["chaines_suspectes"][:10]:
+        print(f"  ⚠️  {a}")
+
+    # Score de risque global
+    score = 0
+    if rapport.get("alerte_entropie"):
+        score += 30
+    score += min(len(rapport["chaines_suspectes"]) * 10, 50)
+
+    rapport["score_risque"] = min(score, 100)
+
+    print(f"\n{'='*55}")
+    print(f"  SCORE DE RISQUE : {rapport['score_risque']}/100")
+    if rapport["score_risque"] > 60:
+        print(f"  🚨 RISQUE ÉLEVÉ — Analyse approfondie recommandée")
+    elif rapport["score_risque"] > 30:
+        print(f"  ⚠️  RISQUE MODÉRÉ — Vigilance requise")
+    else:
+        print(f"  ✅ RISQUE FAIBLE — Probablement sain")
+    print(f"{'='*55}")
+
+    # Sauvegarder le rapport
+    nom_rapport = f"analyse_{rapport['sha256'][:12]}.json"
+    with open(nom_rapport, "w", encoding="utf-8") as f:
+        json.dump(rapport, f, indent=4, ensure_ascii=False)
+
+    print(f"\n[+] Rapport sauvegardé : {nom_rapport}")
+    return rapport
+```
+
+---
+
+## PARTIE 7 — Sandboxes en Ligne (Sans Risque)
+
+Quand tu n'as pas d'environnement isolé, ces services analysent pour toi en ligne :
+
+```
+ANY.RUN (any.run)
+→ Sandbox interactive en ligne
+→ Voir le comportement en temps réel
+→ Gratuit avec limitations
+
+VirusTotal (virustotal.com)
+→ Scan multi-antivirus
+→ Analyse de comportement basique
+→ Gratuit
+
+Hybrid Analysis (hybrid-analysis.com)
+→ Sandbox complète gratuite
+→ Rapports détaillés
+→ Par Crowdstrike
+
+Joe Sandbox (joesandbox.com)
+→ Analyse comportementale avancée
+→ Version gratuite limitée
+
+IMPORTANT : Ne jamais uploader de fichiers contenant
+des informations sensibles ou liées à une investigation
+confidentielle sur ces plateformes publiques —
+les fichiers peuvent être partagés avec des tiers
+```
+
+---
+
+## ✅ EXERCICES — Leçon 9
+
+---
+
+**Exercice 1 — Méthodologie**
+
+Tu reçois un fichier `facture.pdf.exe` envoyé à un employé de la DGRH par email. Décris dans l'ordre les étapes d'analyse statique que tu effectuerais, AVANT toute exécution.
+
+---
+
+**Exercice 2 — Interpréter les résultats**
+
+Une analyse de strings sur un fichier révèle :
+
+```
+http://185.220.101.42/panel/gate.php
+SOFTWARE\Microsoft\Windows\CurrentVersion\Run
+cmd.exe /c vssadmin delete shadows /all /quiet
+README_DECRYPT.txt
+Your files have been encrypted
+bitcoin
+```
+
+1. Quel type de malware est-ce probablement ?
+2. Que signifie la commande `vssadmin delete shadows` ?
+3. Que fait probablement la clé de registre mentionnée ?
+
+---
+
+**Exercice 3 — Analyse d'entropie**
+
+Un fichier de 2MB a une entropie de 7.8/8.0. Un autre fichier de même taille a une entropie de 4.2/8.0.
+
+1. Lequel est probablement packé/chiffré ?
+2. Pourquoi l'entropie est-elle un indicateur utile mais pas une preuve définitive ?
+
+---
+
+**Exercice 4 — Classification comportementale**
+
+Pendant une analyse dynamique en sandbox, tu observes :
+```
+- 3 nouveaux processus créés
+- Connexion sortante vers 91.219.236.18:443 toutes les 60 secondes
+- Aucune modification de fichiers
+- Clé de registre Run ajoutée
+- CPU utilisation normale
+```
+
+Quel type de malware est-ce probablement ? Justifie avec au moins 3 indicateurs.
+
+---
+
+**Exercice 5 — Cas réel DGRH**
+
+Si le malware utilisé dans l'affaire DGRH avait été capturé — décris la procédure complète que tu suivrais, de la réception du fichier suspect jusqu'au rapport final. Intègre analyse statique ET dynamique.
+
+---
+
+## 📌 À retenir absolument
+
+```
+Statique avant dynamique → Toujours dans cet ordre
+Jamais sur machine principale → VM isolée obligatoire
+Snapshot avant chaque test → Pour revenir en arrière
+Entropie élevée (>7.2) → Possible packing/chiffrement
+strings → Révèle URLs, IPs, comportements
+VirtualAlloc + WriteProcessMemory → Injection de code
+vssadmin delete shadows → Signature ransomware classique
+CreateRemoteThread → Technique d'injection courante
+Ghidra → Outil gratuit de référence (NSA)
+Sandbox en ligne → ANY.RUN, Hybrid Analysis, VirusTotal
+```
+
+---
+
+**Leçon 10 dans tes propres délais : Red Team.**
+
+La dernière leçon technique du cursus principal. Simulation d'adversaire complète, opérations offensives structurées, command & control, techniques d'évasion. Tout ce qu'on a construit ensemble converge ici. 🔒
