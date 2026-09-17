@@ -189,19 +189,3 @@ def get_settings() -> Settings:
 
 
 settings = get_settings()
-
-# ECHATS IA — Configuration
-GROQ_API_KEY: str = ""
-GROQ_BASE_URL: str = "https://api.groq.com/openai/v1"
-GROQ_MODEL: str = "openai/gpt-oss-120b"
-
-IA_MAX_MESSAGE_LENGTH: int = 4000
-IA_MAX_TOKENS: int = 1500
-IA_TIMEOUT_SECONDS: float = 30.0
-IA_TEMPERATURE: float = 0.5
-IA_RATE_PER_MINUTE: int = 10
-
-IA_QUOTA_GO: int = 10
-IA_QUOTA_PRO: int = 50
-IA_QUOTA_ELITE: int = 100
-IA_QUOTA_PARABEN: int = 300
