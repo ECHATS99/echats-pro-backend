@@ -9,7 +9,7 @@ import logging
 
 logger = logging.getLogger("echats.workers.scheduler")
 
-NEWS_REFRESH_INTERVAL_SECONDS = 3600  # toutes les heures (Partie 11 du SRS)
+NEWS_REFRESH_INTERVAL_SECONDS = 900  # toutes les 15 minutes (fraîcheur des news)
 CLEANUP_INTERVAL_SECONDS = 900  # toutes les 15 minutes
 KEEP_ALIVE_INTERVAL_SECONDS = 600  # toutes les 10 minutes (Anti-veille Render)
 

@@ -13,18 +13,33 @@ logger = logging.getLogger("echats.rss")
 
 # Sources RSS (Partie 11 du SRS)
 RSS_FEEDS: dict[str, str] = {
+    # === Sources internationales (références mondiales) ===
     "TheHackersNews": "https://thehackernews.com/feeds/posts/default",
     "CERT-FR": "https://www.cert.ssi.gouv.fr/feed/",
     "Krebs on Security": "https://krebsonsecurity.com/feed/",
     "Bleeping Computer": "https://www.bleepingcomputer.com/feed/",
+    
+    # === Sources africaines (souveraineté) ===
+    "AfricaCERT": "https://www.africacert.org/feed/",
+    "AFRINIC": "https://www.afrinic.net/rss/news.xml",
+    
+    # === Sources spécialisées ===
+    "Google Security Blog": "https://security.googleblog.com/feeds/posts/default",
+    "Microsoft Security": "https://www.microsoft.com/en-us/security/blog/feed/",
 }
 
 CATEGORY_KEYWORDS = {
-    "malware": ["malware", "ransomware", "trojan", "virus"],
-    "vulnerability": ["cve", "vulnerability", "exploit", "patch"],
-    "data_breach": ["breach", "leak", "data exposed"],
-    "phishing": ["phishing", "smishing"],
-    "cloud": ["aws", "azure", "gcp", "cloud"],
+    "malware": ["malware", "ransomware", "trojan", "virus", "worm", "spyware", "rootkit"],
+    "vulnerability": ["cve", "vulnerability", "exploit", "patch", "0day", "0-day", "zero-day"],
+    "data_breach": ["breach", "leak", "data exposed", "exfiltration", "stolen data"],
+    "phishing": ["phishing", "smishing", "vishing", "social engineering"],
+    "cloud": ["aws", "azure", "gcp", "cloud", "kubernetes", "docker", "container"],
+    "apt": ["apt", "state-sponsored", "nation-state", "cyber espionage", "threat actor"],
+    "ransomware": ["ransomware", "double extortion", "encryption attack"],
+    "ai_security": ["ai security", "llm", "prompt injection", "ai model", "deepfake"],
+    "iot": ["iot", "internet of things", "smart device", "firmware"],
+    "politics": ["regulation", "gdpr", "law", "government", "policy", "compliance"],
+    "africa": ["africa", "african", "afrique", "congo", "nigeria", "kenya", "cemac"],
 }
 
 
@@ -65,7 +80,7 @@ def _parse_rss_item(item: ElementTree.Element, source: str) -> dict | None:
 
 def fetch_feed(url: str, source: str) -> list[dict]:
     try:
-        response = httpx.get(url, timeout=10.0, follow_redirects=True, headers={"User-Agent": "EchatsProBot/1.0"})
+        response = httpx.get(url, timeout=10.0, follow_redirects=True, headers={"User-Agent": "Mozilla/5.0 (compatible; EchatsPro/1.0; +https://echats-projets.web.app)"})
         response.raise_for_status()
         root = ElementTree.fromstring(response.content)
         items = root.findall(".//item")
