@@ -15,9 +15,6 @@ from app.middlewares.security_headers import SecurityHeadersMiddleware
 from app.middlewares.timing import TimingMiddleware
 from app.websocket import activity, classroom, leaderboard, notifications, terminal
 
-# ⚠️ IMPORT TEMPORAIRE — À RETIRER APRÈS USAGE
-from app.api.v1._import_ctf_temp import router as _import_ctf_router
-
 configure_logging()
 
 app = FastAPI(
@@ -39,9 +36,7 @@ app.add_middleware(RequestIDMiddleware)
 register_exception_handlers(app)
 
 app.include_router(api_router, prefix=settings.API_V1_PREFIX)
-
-# ⚠️ ROUTER TEMPORAIRE D'IMPORT CTF — À RETIRER APRÈS USAGE
-app.include_router(_import_ctf_router, prefix=settings.API_V1_PREFIX)
+, prefix=settings.API_V1_PREFIX)
 
 # Canaux WebSocket temps réel (Partie 14 du SRS) — hors préfixe /api/v1, montés à la racine.
 app.include_router(notifications.router)

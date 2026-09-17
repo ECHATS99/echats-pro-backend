@@ -248,6 +248,7 @@ def main() -> None:
     parser.add_argument("--dry-run", action="store_true", default=True, help="Aperçu sans écrire (défaut).")
     parser.add_argument("--apply", action="store_true", help="Applique l'import réel.")
     parser.add_argument("--no-publish", action="store_true", help="Importe en brouillon (published=False).")
+    parser.add_argument("--publish", action="store_true", help="Alias rétrocompatible : publie tout.")
     parser.add_argument("--input", type=str, default=str(DEFAULT_INPUT), help="Chemin du JSON source.")
     args = parser.parse_args()
 
