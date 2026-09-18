@@ -54,7 +54,7 @@ def list_all_lessons(db: Session = Depends(get_db)):
                     "id": str(l.id),
                     "module_id": str(l.module_id),
                     "title": l.title,
-                    "has_content": bool(l.content),
+                    "content": l.content,
                     "video": getattr(l, "video", None),
                     "duration_minutes": l.duration_minutes or 0,
                     "order": l.order or 0,
