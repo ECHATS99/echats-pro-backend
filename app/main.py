@@ -36,7 +36,6 @@ app.add_middleware(RequestIDMiddleware)
 register_exception_handlers(app)
 
 app.include_router(api_router, prefix=settings.API_V1_PREFIX)
-, prefix=settings.API_V1_PREFIX)
 
 # Canaux WebSocket temps réel (Partie 14 du SRS) — hors préfixe /api/v1, montés à la racine.
 app.include_router(notifications.router)
