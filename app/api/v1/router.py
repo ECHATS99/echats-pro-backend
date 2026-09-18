@@ -4,6 +4,7 @@ par app/main.py.
 from fastapi import APIRouter
 
 from app.api.v1 import (
+    institutions,
     admin, analytics, auth, badges, certificates, classroom, course_modules, ctf,
     exercises, forum, health, ia, labs, leaderboard, lessons, media, mentoring, news,
     notifications, orders, organizations, paraben, payments, products, quizzes, search,
@@ -15,6 +16,7 @@ api_router = APIRouter()
 # Publiques / santé
 api_router.include_router(health.router)
 api_router.include_router(auth.router)
+api_router.include_router(institutions.router)
 
 # Cœur utilisateur
 api_router.include_router(users.router)

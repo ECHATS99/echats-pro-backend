@@ -53,3 +53,4 @@ __all__ = [
     "ParabenCourse", "ParabenProgress", "ParabenRevenue",
     "AdminSetting", "FeatureFlag", "SystemMessage", "MaintenanceWindow", "IAPrompt", "RefreshSession",
 ]
+from app.models.institution_access_key import InstitutionAccessKey  # noqa: F401
