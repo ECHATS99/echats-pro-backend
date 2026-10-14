@@ -1,0 +1,135 @@
+{
+  "lesson": "14-ssh-tunneling",
+  "title": "SSH et Tunneling",
+  "module": "Réseau & Linux",
+  "order": 14,
+  "difficulty": "intermediaire",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Quel est le port par défaut de SSH ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "21"
+        },
+        {
+          "key": "B",
+          "text": "22"
+        },
+        {
+          "key": "C",
+          "text": "23"
+        },
+        {
+          "key": "D",
+          "text": "80"
+        }
+      ],
+      "correct": "B",
+      "explanation": "21 est FTP, 23 Telnet, 80 HTTP ; SSH utilise TCP 22."
+    },
+    {
+      "id": 2,
+      "question": "Quelle clé doit rester secrète ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "La clé publique"
+        },
+        {
+          "key": "B",
+          "text": "La clé privée"
+        },
+        {
+          "key": "C",
+          "text": "Les deux"
+        },
+        {
+          "key": "D",
+          "text": "Aucune"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la clé privée prouve ton identité ; la publique peut être déposée sur les serveurs."
+    },
+    {
+      "id": 3,
+      "question": "Que fait `ssh -L 8080:127.0.0.1:80 user@serveur` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Il ouvre le port 8080 sur le serveur"
+        },
+        {
+          "key": "B",
+          "text": "Il ouvre le port local 8080 qui mène au port 80 vu depuis le serveur, via un tunnel chiffré"
+        },
+        {
+          "key": "C",
+          "text": "Il copie un fichier"
+        },
+        {
+          "key": "D",
+          "text": "Il supprime la connexion"
+        }
+      ],
+      "correct": "B",
+      "explanation": "c'est une redirection locale (-L) : le trafic vers localhost:8080 est transporté par SSH jusqu'au port 80 côté serveur."
+    },
+    {
+      "id": 4,
+      "question": "Quel réglage empêche la connexion directe du compte administrateur ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "`PermitRootLogin no`"
+        },
+        {
+          "key": "B",
+          "text": "`X11Forwarding yes`"
+        },
+        {
+          "key": "C",
+          "text": "`PermitEmptyPasswords yes`"
+        },
+        {
+          "key": "D",
+          "text": "`Port 22`"
+        }
+      ],
+      "correct": "A",
+      "explanation": "l'interdiction de la connexion root oblige à passer par un compte nominatif puis `sudo`, ce qui améliore la traçabilité."
+    },
+    {
+      "id": 5,
+      "question": "Quel outil bannit automatiquement les adresses qui multiplient les échecs de connexion ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "nmap"
+        },
+        {
+          "key": "B",
+          "text": "fail2ban"
+        },
+        {
+          "key": "C",
+          "text": "scp"
+        },
+        {
+          "key": "D",
+          "text": "tcpdump"
+        }
+      ],
+      "correct": "B",
+      "explanation": "fail2ban analyse les journaux et ajoute des règles de pare-feu contre les adresses insistantes."
+    }
+  ]
+}

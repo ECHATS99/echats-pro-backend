@@ -1,0 +1,135 @@
+{
+  "lesson": "19-rapport-osint",
+  "title": "Rédiger un Rapport OSINT",
+  "module": "Python & OSINT",
+  "order": 19,
+  "difficulty": "intermediaire",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Pourquoi la traçabilité est-elle un critère essentiel d'un rapport OSINT ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Parce que la loi impose un format précis"
+        },
+        {
+          "key": "B",
+          "text": "Parce qu'elle permet à un lecteur qui n'a pas participé à l'enquête de comprendre et vérifier chaque conclusion par lui-même"
+        },
+        {
+          "key": "C",
+          "text": "Parce qu'elle rend le rapport plus long"
+        },
+        {
+          "key": "D",
+          "text": "Elle n'a qu'une importance esthétique"
+        }
+      ],
+      "correct": "B",
+      "explanation": "un rapport qui ne permet pas de retracer comment une conclusion a été atteinte perd l'essentiel de sa valeur de preuve."
+    },
+    {
+      "id": 2,
+      "question": "Comment doit-on formuler une déduction logique issue d'indices, plutôt qu'une information directement confirmée ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Comme une affirmation directe et certaine"
+        },
+        {
+          "key": "B",
+          "text": "Avec une formulation conditionnelle qui signale explicitement qu'il s'agit d'une hypothèse à confirmer"
+        },
+        {
+          "key": "C",
+          "text": "En l'omettant totalement du rapport"
+        },
+        {
+          "key": "D",
+          "text": "Format identique à un fait établi, pour simplifier la lecture"
+        }
+      ],
+      "correct": "B",
+      "explanation": "mélanger les registres de certitude induirait le lecteur en erreur sur la fiabilité réelle de chaque élément du rapport."
+    },
+    {
+      "id": 3,
+      "question": "Que doit contenir, au minimum, l'annexe des sources d'un rapport OSINT ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Uniquement le nom de l'enquêteur"
+        },
+        {
+          "key": "B",
+          "text": "La nature de chaque source, sa date de consultation, et de quoi permettre de la retrouver ou de la reproduire"
+        },
+        {
+          "key": "C",
+          "text": "Les mots de passe utilisés pendant l'enquête"
+        },
+        {
+          "key": "D",
+          "text": "Rien, les sources sont facultatives"
+        }
+      ],
+      "correct": "B",
+      "explanation": "cette annexe est ce qui rend le rapport vérifiable et reproductible par un tiers."
+    },
+    {
+      "id": 4,
+      "question": "Pourquoi un rapport OSINT, même basé sur des sources publiques, doit-il être traité comme un document confidentiel une fois assemblé ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Parce que la loi l'interdit de toute façon"
+        },
+        {
+          "key": "B",
+          "text": "Parce que la synthèse et la corrélation de plusieurs sources publiques peuvent révéler, assemblées, davantage que chaque source prise isolément"
+        },
+        {
+          "key": "C",
+          "text": "Parce que les sources publiques deviennent automatiquement privées une fois citées"
+        },
+        {
+          "key": "D",
+          "text": "Ce n'est jamais nécessaire si les sources étaient déjà publiques"
+        }
+      ],
+      "correct": "B",
+      "explanation": "ce principe rejoint directement celui déjà vu en leçon 11 à propos de la corrélation entre comptes associés à un même pseudonyme."
+    },
+    {
+      "id": 5,
+      "question": "Quel est l'objectif principal de la section « Limites et zones d'incertitude » d'un rapport OSINT ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Minimiser artificiellement la valeur du travail accompli"
+        },
+        {
+          "key": "B",
+          "text": "Indiquer honnêtement ce que l'enquête n'a pas permis d'établir avec certitude, plutôt que de le passer sous silence"
+        },
+        {
+          "key": "C",
+          "text": "Remplacer la section méthodologie"
+        },
+        {
+          "key": "D",
+          "text": "Cette section n'a aucune utilité réelle"
+        }
+      ],
+      "correct": "B",
+      "explanation": "l'honnêteté sur les limites d'une enquête fait partie intégrante de sa rigueur, au même titre que la distinction entre faits et hypothèses."
+    }
+  ]
+}

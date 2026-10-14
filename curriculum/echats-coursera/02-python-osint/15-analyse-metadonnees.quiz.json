@@ -1,0 +1,135 @@
+{
+  "lesson": "15-analyse-metadonnees",
+  "title": "Analyse de Métadonnées : ce que les Fichiers Révèlent",
+  "module": "Python & OSINT",
+  "order": 15,
+  "difficulty": "intermediaire",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Que désigne le terme « métadonnées » appliqué à un fichier ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Le contenu principal du fichier, comme le texte ou les pixels"
+        },
+        {
+          "key": "B",
+          "text": "Des informations sur le fichier lui-même — auteur, date, appareil, parfois localisation — distinctes de son contenu principal"
+        },
+        {
+          "key": "C",
+          "text": "Un type de virus informatique"
+        },
+        {
+          "key": "D",
+          "text": "Le nom du fichier uniquement"
+        }
+      ],
+      "correct": "B",
+      "explanation": "les métadonnées décrivent le contexte de création d'un fichier, séparément de son contenu visible."
+    },
+    {
+      "id": 2,
+      "question": "Quel standard regroupe les métadonnées techniques des photos, incluant parfois des coordonnées GPS ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "HTML"
+        },
+        {
+          "key": "B",
+          "text": "EXIF"
+        },
+        {
+          "key": "C",
+          "text": "CSV"
+        },
+        {
+          "key": "D",
+          "text": "DNS"
+        }
+      ],
+      "correct": "B",
+      "explanation": "EXIF est le format standard intégré par défaut par la quasi-totalité des appareils photo et smartphones."
+    },
+    {
+      "id": 3,
+      "question": "Pourquoi une photo téléchargée depuis certains réseaux sociaux a-t-elle souvent perdu ses métadonnées EXIF ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Parce que les réseaux sociaux ne peuvent pas techniquement les afficher"
+        },
+        {
+          "key": "B",
+          "text": "Parce que de nombreuses plateformes les suppriment automatiquement, notamment pour des raisons de confidentialité"
+        },
+        {
+          "key": "C",
+          "text": "Parce que les métadonnées disparaissent naturellement avec le temps"
+        },
+        {
+          "key": "D",
+          "text": "Parce que seules les photos prises avec un appareil professionnel en contiennent"
+        }
+      ],
+      "correct": "B",
+      "explanation": "cette suppression automatique, pratiquée par plusieurs grandes plateformes, répond précisément au risque de confidentialité illustré dans cette leçon."
+    },
+    {
+      "id": 4,
+      "question": "Que révélait la métadonnée GPS dans le cas John McAfee cité dans cette leçon ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Le mot de passe de son ordinateur"
+        },
+        {
+          "key": "B",
+          "text": "Les coordonnées précises du lieu où la photo publiée en ligne avait été prise"
+        },
+        {
+          "key": "C",
+          "text": "Son numéro de téléphone"
+        },
+        {
+          "key": "D",
+          "text": "Son adresse e-mail"
+        }
+      ],
+      "correct": "B",
+      "explanation": "les coordonnées GPS intégrées à la photo publiée par Vice situaient précisément sa localisation au Guatemala, qu'il ait ou non falsifié ces données par la suite."
+    },
+    {
+      "id": 5,
+      "question": "Quelle commande exiftool permet de retirer toutes les métadonnées d'un fichier avant de le partager ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "`exiftool -list photo.jpg`"
+        },
+        {
+          "key": "B",
+          "text": "`exiftool -all= photo.jpg`"
+        },
+        {
+          "key": "C",
+          "text": "`exiftool -gps photo.jpg`"
+        },
+        {
+          "key": "D",
+          "text": "`exiftool -copy photo.jpg`"
+        }
+      ],
+      "correct": "B",
+      "explanation": "l'option `-all=` indique à exiftool de supprimer l'ensemble des champs de métadonnées du fichier, tout en conservant son contenu principal."
+    }
+  ]
+}

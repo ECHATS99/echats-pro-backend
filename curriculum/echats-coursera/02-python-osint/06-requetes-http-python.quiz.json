@@ -1,0 +1,135 @@
+{
+  "lesson": "06-requetes-http-python",
+  "title": "Requêtes HTTP en Python",
+  "module": "Python & OSINT",
+  "order": 6,
+  "difficulty": "intermediaire",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Pourquoi toujours préciser `timeout` dans `requests.get` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Pour chiffrer la requête"
+        },
+        {
+          "key": "B",
+          "text": "Pour éviter que le programme attende indéfiniment une réponse"
+        },
+        {
+          "key": "C",
+          "text": "Pour augmenter la vitesse du serveur"
+        },
+        {
+          "key": "D",
+          "text": "C'est obligatoire pour HTTPS"
+        }
+      ],
+      "correct": "B",
+      "explanation": "sans délai d'attente, une connexion bloquée peut figer le programme."
+    },
+    {
+      "id": 2,
+      "question": "Quelle méthode lève une exception si le code HTTP est 4xx ou 5xx ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "`r.json()`"
+        },
+        {
+          "key": "B",
+          "text": "`r.raise_for_status()`"
+        },
+        {
+          "key": "C",
+          "text": "`r.close()`"
+        },
+        {
+          "key": "D",
+          "text": "`r.verify()`"
+        }
+      ],
+      "correct": "B",
+      "explanation": "`raise_for_status()` transforme les erreurs HTTP en exceptions faciles à gérer."
+    },
+    {
+      "id": 3,
+      "question": "Quel est l'intérêt d'un objet `Session` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Il désactive TLS"
+        },
+        {
+          "key": "B",
+          "text": "Il conserve les cookies et réutilise la connexion entre les requêtes"
+        },
+        {
+          "key": "C",
+          "text": "Il envoie les requêtes en parallèle automatiquement"
+        },
+        {
+          "key": "D",
+          "text": "Il chiffre le code source"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la session maintient l'état (cookies, en-têtes communs) et améliore les performances."
+    },
+    {
+      "id": 4,
+      "question": "Pourquoi est-il dangereux d'utiliser `verify=False` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Cela ralentit la requête"
+        },
+        {
+          "key": "B",
+          "text": "Cela supprime la vérification du certificat et expose à l'interception"
+        },
+        {
+          "key": "C",
+          "text": "Cela supprime les cookies"
+        },
+        {
+          "key": "D",
+          "text": "Cela change l'adresse IP"
+        }
+      ],
+      "correct": "B",
+      "explanation": "sans vérification, un attaquant en position d'homme du milieu peut se faire passer pour le serveur."
+    },
+    {
+      "id": 5,
+      "question": "Que doit faire un client poli face à une réponse 429 ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Renvoyer immédiatement la requête en boucle"
+        },
+        {
+          "key": "B",
+          "text": "Attendre (en respectant `Retry-After` si présent) puis réessayer avec un délai croissant"
+        },
+        {
+          "key": "C",
+          "text": "Changer d'adresse IP"
+        },
+        {
+          "key": "D",
+          "text": "Ignorer l'erreur"
+        }
+      ],
+      "correct": "B",
+      "explanation": "429 signifie « trop de requêtes » ; il faut ralentir, pas insister."
+    }
+  ]
+}

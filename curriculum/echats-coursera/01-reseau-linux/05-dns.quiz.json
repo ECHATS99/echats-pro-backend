@@ -1,0 +1,135 @@
+{
+  "lesson": "05-dns",
+  "title": "Le DNS : l'annuaire d'Internet",
+  "module": "Réseau & Linux",
+  "order": 5,
+  "difficulty": "debutant",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Quel enregistrement associe un nom à une adresse IPv4 ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "MX"
+        },
+        {
+          "key": "B",
+          "text": "CNAME"
+        },
+        {
+          "key": "C",
+          "text": "A"
+        },
+        {
+          "key": "D",
+          "text": "TXT"
+        }
+      ],
+      "correct": "C",
+      "explanation": "l'enregistrement A fait correspondre un nom à une IPv4 ; AAAA fait de même pour l'IPv6."
+    },
+    {
+      "id": 2,
+      "question": "Quel protocole et quel port utilise principalement le DNS ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "TCP 80"
+        },
+        {
+          "key": "B",
+          "text": "UDP 53"
+        },
+        {
+          "key": "C",
+          "text": "TCP 443"
+        },
+        {
+          "key": "D",
+          "text": "UDP 67"
+        }
+      ],
+      "correct": "B",
+      "explanation": "les requêtes DNS standard passent en UDP port 53, avec repli sur TCP 53 quand c'est nécessaire."
+    },
+    {
+      "id": 3,
+      "question": "À quoi sert le TTL d'un enregistrement ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "À chiffrer la réponse"
+        },
+        {
+          "key": "B",
+          "text": "À indiquer combien de temps la réponse peut rester en cache"
+        },
+        {
+          "key": "C",
+          "text": "À choisir le serveur de messagerie"
+        },
+        {
+          "key": "D",
+          "text": "À bloquer un domaine"
+        }
+      ],
+      "correct": "B",
+      "explanation": "le TTL fixe la durée pendant laquelle un résolveur garde la réponse avant de la redemander."
+    },
+    {
+      "id": 4,
+      "question": "L'empoisonnement de cache DNS consiste à…",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Surcharger un serveur de requêtes"
+        },
+        {
+          "key": "B",
+          "text": "Injecter de fausses réponses dans le cache d'un résolveur"
+        },
+        {
+          "key": "C",
+          "text": "Chiffrer le trafic DNS"
+        },
+        {
+          "key": "D",
+          "text": "Supprimer un domaine du registre"
+        }
+      ],
+      "correct": "B",
+      "explanation": "les utilisateurs du résolveur sont alors redirigés vers de fausses adresses."
+    },
+    {
+      "id": 5,
+      "question": "Quel mécanisme ajoute des signatures pour authentifier les réponses DNS ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "DHCP"
+        },
+        {
+          "key": "B",
+          "text": "NAT"
+        },
+        {
+          "key": "C",
+          "text": "DNSSEC"
+        },
+        {
+          "key": "D",
+          "text": "ARP"
+        }
+      ],
+      "correct": "C",
+      "explanation": "DNSSEC permet de vérifier que la réponse provient bien du serveur légitime et n'a pas été modifiée."
+    }
+  ]
+}

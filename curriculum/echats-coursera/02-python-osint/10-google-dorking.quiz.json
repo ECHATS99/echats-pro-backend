@@ -1,0 +1,135 @@
+{
+  "lesson": "10-google-dorking",
+  "title": "Google Dorking : exploiter les opérateurs de recherche avancés",
+  "module": "Python & OSINT",
+  "order": 10,
+  "difficulty": "intermediaire",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Que fait l'opérateur `filetype:pdf` dans une recherche ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Il recherche le mot « pdf » dans le texte de la page"
+        },
+        {
+          "key": "B",
+          "text": "Il limite les résultats aux fichiers au format PDF"
+        },
+        {
+          "key": "C",
+          "text": "Il exclut tous les fichiers PDF des résultats"
+        },
+        {
+          "key": "D",
+          "text": "Il ne fonctionne que sur les sites gouvernementaux"
+        }
+      ],
+      "correct": "B",
+      "explanation": "`filetype:` restreint les résultats à un format de fichier précis, utile pour cibler des documents plutôt que des pages web."
+    },
+    {
+      "id": 2,
+      "question": "Pourquoi un fichier sensible peut-il se retrouver indexé par un moteur de recherche sans que personne ne l'ait voulu ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Les moteurs de recherche piratent les serveurs pour trouver des fichiers cachés"
+        },
+        {
+          "key": "B",
+          "text": "Parce qu'aucun contrôle d'accès ne protège le dossier qui le contient, et qu'un lien y a mené à un moment donné"
+        },
+        {
+          "key": "C",
+          "text": "Parce que tous les fichiers sont indexés automatiquement, sans exception"
+        },
+        {
+          "key": "D",
+          "text": "Parce que le propriétaire du site l'a explicitement demandé"
+        }
+      ],
+      "correct": "B",
+      "explanation": "l'indexation suit les liens et explore les dossiers accessibles ; un fichier non protégé et atteignable finit par être trouvé."
+    },
+    {
+      "id": 3,
+      "question": "Qu'est-ce que la Google Hacking Database (GHDB) ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Un outil pour pirater des comptes Google"
+        },
+        {
+          "key": "B",
+          "text": "Une base publique de dorks classés par catégorie, créée à l'origine pour sensibiliser à ce type de fuite"
+        },
+        {
+          "key": "C",
+          "text": "Un service payant de Google réservé aux entreprises"
+        },
+        {
+          "key": "D",
+          "text": "Une liste de mots de passe compromis"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la GHDB a été conçue dans un but défensif, pour aider les administrateurs à identifier ce type d'exposition sur leurs propres sites."
+    },
+    {
+      "id": 4,
+      "question": "Pourquoi faut-il privilégier une API officielle plutôt qu'un script de scraping pour automatiser des recherches répétées sur un moteur de recherche ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Parce qu'une API est toujours gratuite"
+        },
+        {
+          "key": "B",
+          "text": "Parce que les conditions d'utilisation des moteurs de recherche interdisent généralement l'automatisation de requêtes à grande échelle sans passer par leur API"
+        },
+        {
+          "key": "C",
+          "text": "Parce qu'un script Python ne peut techniquement pas effectuer de recherches"
+        },
+        {
+          "key": "D",
+          "text": "Parce que les résultats d'une API sont toujours plus complets"
+        }
+      ],
+      "correct": "B",
+      "explanation": "ce principe rejoint directement les règles éthiques du scraping déjà posées dans le module Python, leçon 07."
+    },
+    {
+      "id": 5,
+      "question": "Que faire si un exercice de Google Dorking révèle, sans intention de votre part, une vraie fuite sur un site qui n'est pas le vôtre ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Exploiter immédiatement l'information trouvée pour démontrer sa gravité"
+        },
+        {
+          "key": "B",
+          "text": "La diffuser publiquement pour alerter un maximum de personnes"
+        },
+        {
+          "key": "C",
+          "text": "Appliquer une divulgation responsable : contacter l'organisation concernée sans exploiter l'information, en lui laissant le temps de corriger"
+        },
+        {
+          "key": "D",
+          "text": "Ignorer la découverte, elle ne vous concerne pas"
+        }
+      ],
+      "correct": "C",
+      "explanation": "la divulgation responsable protège à la fois l'organisation concernée et les personnes dont les données pourraient être exposées."
+    }
+  ]
+}

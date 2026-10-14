@@ -1,0 +1,252 @@
+{
+  "lesson": "bonus-fondation-reseau",
+  "title": "LEÇON 1  Le Réseau : Fondation de tout",
+  "module": "Réseau & Linux",
+  "order": 90,
+  "difficulty": "intermediaire",
+  "questions_count": 10,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Quelle couche OSI est principalement associée à l’adressage IP et au routage?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Couche 1"
+        },
+        {
+          "key": "B",
+          "text": "Couche 2"
+        },
+        {
+          "key": "C",
+          "text": "Couche 3"
+        },
+        {
+          "key": "D",
+          "text": "Couche 7"
+        }
+      ],
+      "correct": "C",
+      "explanation": "la bonne pratique professionnelle est « Couche 3 » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 2,
+      "question": "Quelles sont les étapes du three-way handshake TCP?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "SYN, SYN-ACK, ACK"
+        },
+        {
+          "key": "B",
+          "text": "ACK, FIN, RST"
+        },
+        {
+          "key": "C",
+          "text": "DNS, ARP, ICMP"
+        },
+        {
+          "key": "D",
+          "text": "GET, POST, 200"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « SYN, SYN-ACK, ACK » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 3,
+      "question": "Quel énoncé décrit UDP?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Il garantit chaque livraison"
+        },
+        {
+          "key": "B",
+          "text": "Il évite l’établissement de connexion et privilégie la faible latence"
+        },
+        {
+          "key": "C",
+          "text": "Il chiffre toujours les données"
+        },
+        {
+          "key": "D",
+          "text": "Il remplace toujours TCP"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la bonne pratique professionnelle est « Il évite l’établissement de connexion et privilégie la faible latence » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 4,
+      "question": "Laquelle est une adresse IPv4 privée?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "8.8.8.8"
+        },
+        {
+          "key": "B",
+          "text": "172.20.4.10"
+        },
+        {
+          "key": "C",
+          "text": "1.1.1.1"
+        },
+        {
+          "key": "D",
+          "text": "203.0.113.10"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la bonne pratique professionnelle est « 172.20.4.10 » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 5,
+      "question": "Que signifie principalement /24 dans 192.168.1.0/24?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "24 ports"
+        },
+        {
+          "key": "B",
+          "text": "24 bits de partie réseau"
+        },
+        {
+          "key": "C",
+          "text": "24 machines exactement"
+        },
+        {
+          "key": "D",
+          "text": "24 octets"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la bonne pratique professionnelle est « 24 bits de partie réseau » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 6,
+      "question": "Quel est le rôle principal du DNS?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Associer des noms à des informations réseau"
+        },
+        {
+          "key": "B",
+          "text": "Chiffrer les fichiers"
+        },
+        {
+          "key": "C",
+          "text": "Remplacer un pare-feu"
+        },
+        {
+          "key": "D",
+          "text": "Attribuer des mots de passe"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Associer des noms à des informations réseau » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 7,
+      "question": "Quel risque est associé à une usurpation ARP?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Détournement du trafic local"
+        },
+        {
+          "key": "B",
+          "text": "Plus de bande passante"
+        },
+        {
+          "key": "C",
+          "text": "Création d’un domaine public"
+        },
+        {
+          "key": "D",
+          "text": "Conversion de TCP en UDP"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Détournement du trafic local » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 8,
+      "question": "Un port ouvert prouve-t-il une vulnérabilité?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Oui, toujours"
+        },
+        {
+          "key": "B",
+          "text": "Non, il indique surtout une surface exposée"
+        },
+        {
+          "key": "C",
+          "text": "Oui, si le port est connu"
+        },
+        {
+          "key": "D",
+          "text": "Non, les ports ne concernent pas les services"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la bonne pratique professionnelle est « Non, il indique surtout une surface exposée » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 9,
+      "question": "Quelle commande observe les sockets locaux en écoute?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "ss -tuln"
+        },
+        {
+          "key": "B",
+          "text": "chmod 777"
+        },
+        {
+          "key": "C",
+          "text": "passwd --delete"
+        },
+        {
+          "key": "D",
+          "text": "ip neigh --flush"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « ss -tuln » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 10,
+      "question": "Une analyse professionnelle doit-elle distinguer observation et hypothèse?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Vrai"
+        },
+        {
+          "key": "B",
+          "text": "Faux"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Vrai » — à préciser/enrichir par un relecteur."
+    }
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "lesson": "07-routage",
+  "title": "Le Routage",
+  "module": "Réseau & Linux",
+  "order": 7,
+  "difficulty": "debutant",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "À quoi sert la passerelle par défaut ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "À traduire les noms de domaine"
+        },
+        {
+          "key": "B",
+          "text": "À recevoir les paquets destinés à l'extérieur du réseau local"
+        },
+        {
+          "key": "C",
+          "text": "À chiffrer le trafic"
+        },
+        {
+          "key": "D",
+          "text": "À distribuer les adresses IP"
+        }
+      ],
+      "correct": "B",
+      "explanation": "quand la destination n'est pas dans le réseau local, la machine envoie le paquet à la passerelle."
+    },
+    {
+      "id": 2,
+      "question": "Entre `10.0.0.0/8` et `10.20.0.0/16`, quelle route est choisie pour `10.20.5.5` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "10.0.0.0/8"
+        },
+        {
+          "key": "B",
+          "text": "10.20.0.0/16"
+        },
+        {
+          "key": "C",
+          "text": "Aucune"
+        },
+        {
+          "key": "D",
+          "text": "Les deux en même temps"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la règle du préfixe le plus long retient la route la plus précise."
+    },
+    {
+      "id": 3,
+      "question": "Quel protocole est utilisé entre les opérateurs sur Internet ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "RIP"
+        },
+        {
+          "key": "B",
+          "text": "OSPF"
+        },
+        {
+          "key": "C",
+          "text": "BGP"
+        },
+        {
+          "key": "D",
+          "text": "DHCP"
+        }
+      ],
+      "correct": "C",
+      "explanation": "BGP relie les systèmes autonomes qui composent Internet."
+    },
+    {
+      "id": 4,
+      "question": "Qu'est-ce que le routage statique ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Des routes saisies manuellement par l'administrateur"
+        },
+        {
+          "key": "B",
+          "text": "Des routes apprises automatiquement"
+        },
+        {
+          "key": "C",
+          "text": "Un routage chiffré"
+        },
+        {
+          "key": "D",
+          "text": "Un routage sans passerelle"
+        }
+      ],
+      "correct": "A",
+      "explanation": "les routes statiques ne changent pas seules, contrairement au routage dynamique."
+    },
+    {
+      "id": 5,
+      "question": "Quel est un risque lié à BGP ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Le détournement de préfixes IP"
+        },
+        {
+          "key": "B",
+          "text": "L'attribution d'adresses MAC"
+        },
+        {
+          "key": "C",
+          "text": "L'expiration d'un bail DHCP"
+        },
+        {
+          "key": "D",
+          "text": "La compression de données"
+        }
+      ],
+      "correct": "A",
+      "explanation": "un AS peut annoncer à tort des préfixes qui ne lui appartiennent pas, ce qui dévie le trafic."
+    }
+  ]
+}

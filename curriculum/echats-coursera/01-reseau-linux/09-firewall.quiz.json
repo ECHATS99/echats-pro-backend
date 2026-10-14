@@ -1,0 +1,135 @@
+{
+  "lesson": "09-firewall",
+  "title": "Le Pare-feu (Firewall)",
+  "module": "Réseau & Linux",
+  "order": 9,
+  "difficulty": "debutant",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Quelle approche est recommandée pour un pare-feu ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Tout autoriser puis bloquer ce qui est dangereux"
+        },
+        {
+          "key": "B",
+          "text": "Tout bloquer par défaut puis autoriser le nécessaire"
+        },
+        {
+          "key": "C",
+          "text": "Ne rien filtrer en sortie"
+        },
+        {
+          "key": "D",
+          "text": "Désactiver le pare-feu sur le réseau interne"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la politique « refuser par défaut » applique le moindre privilège et limite la surface d'attaque."
+    },
+    {
+      "id": 2,
+      "question": "Qu'apporte un pare-feu avec état (stateful) ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Il chiffre le trafic"
+        },
+        {
+          "key": "B",
+          "text": "Il suit les connexions et autorise automatiquement les réponses légitimes"
+        },
+        {
+          "key": "C",
+          "text": "Il remplace l'antivirus"
+        },
+        {
+          "key": "D",
+          "text": "Il attribue les adresses IP"
+        }
+      ],
+      "correct": "B",
+      "explanation": "il mémorise les connexions initiées de l'intérieur et laisse revenir les réponses correspondantes."
+    },
+    {
+      "id": 3,
+      "question": "Quelle est la différence entre DROP et REJECT ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "DROP jette silencieusement le paquet, REJECT prévient l'émetteur"
+        },
+        {
+          "key": "B",
+          "text": "DROP autorise, REJECT bloque"
+        },
+        {
+          "key": "C",
+          "text": "Il n'y en a aucune"
+        },
+        {
+          "key": "D",
+          "text": "REJECT chiffre le paquet"
+        }
+      ],
+      "correct": "A",
+      "explanation": "avec DROP l'émetteur n'a aucune réponse (timeout), avec REJECT il reçoit un refus explicite."
+    },
+    {
+      "id": 4,
+      "question": "Qu'est-ce qu'une DMZ ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Une zone intermédiaire hébergeant les serveurs accessibles depuis Internet"
+        },
+        {
+          "key": "B",
+          "text": "Un type de câble"
+        },
+        {
+          "key": "C",
+          "text": "Un protocole de routage"
+        },
+        {
+          "key": "D",
+          "text": "Un antivirus réseau"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la DMZ isole les serveurs publics du réseau interne pour limiter les dégâts en cas de compromission."
+    },
+    {
+      "id": 5,
+      "question": "Un pare-feu classique bloque-t-il une injection SQL envoyée sur le port 443 ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Oui, toujours"
+        },
+        {
+          "key": "B",
+          "text": "Non, le trafic vers un port autorisé passe ; il faut un WAF et du code sécurisé"
+        },
+        {
+          "key": "C",
+          "text": "Oui, s'il est stateful"
+        },
+        {
+          "key": "D",
+          "text": "Seulement si le port est 80"
+        }
+      ],
+      "correct": "B",
+      "explanation": "le pare-feu réseau filtre selon IP et ports, il ne comprend pas le contenu applicatif."
+    }
+  ]
+}

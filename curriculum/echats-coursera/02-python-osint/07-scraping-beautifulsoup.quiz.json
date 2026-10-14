@@ -1,0 +1,135 @@
+{
+  "lesson": "07-scraping-beautifulsoup",
+  "title": "Web Scraping avec BeautifulSoup",
+  "module": "Python & OSINT",
+  "order": 7,
+  "difficulty": "intermediaire",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "À quoi sert le fichier `robots.txt` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Il chiffre le site"
+        },
+        {
+          "key": "B",
+          "text": "Il indique aux robots les parties du site qu'ils peuvent ou non visiter"
+        },
+        {
+          "key": "C",
+          "text": "Il liste les mots de passe"
+        },
+        {
+          "key": "D",
+          "text": "Il accélère le serveur"
+        }
+      ],
+      "correct": "B",
+      "explanation": "c'est une convention que les robots respectueux suivent avant de parcourir un site."
+    },
+    {
+      "id": 2,
+      "question": "Quelle méthode BeautifulSoup utilise un sélecteur CSS ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "`find_all()`"
+        },
+        {
+          "key": "B",
+          "text": "`select()`"
+        },
+        {
+          "key": "C",
+          "text": "`get_text()`"
+        },
+        {
+          "key": "D",
+          "text": "`parse()`"
+        }
+      ],
+      "correct": "B",
+      "explanation": "`select` et `select_one` acceptent des sélecteurs CSS comme `ul.liste li a`."
+    },
+    {
+      "id": 3,
+      "question": "Pourquoi `requests` ne voit-il parfois qu'une page presque vide ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Le site est en panne"
+        },
+        {
+          "key": "B",
+          "text": "Le contenu est chargé dynamiquement par JavaScript après le chargement initial"
+        },
+        {
+          "key": "C",
+          "text": "BeautifulSoup est défectueux"
+        },
+        {
+          "key": "D",
+          "text": "Le certificat est expiré"
+        }
+      ],
+      "correct": "B",
+      "explanation": "`requests` n'exécute pas le JavaScript ; il faut utiliser l'API de la page ou un navigateur automatisé."
+    },
+    {
+      "id": 4,
+      "question": "Une information publique sur une personne peut-elle être collectée sans limite ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Oui, puisqu'elle est publique"
+        },
+        {
+          "key": "B",
+          "text": "Non, la collecte et la réutilisation de données personnelles restent encadrées par la loi"
+        },
+        {
+          "key": "C",
+          "text": "Oui, si on utilise un VPN"
+        },
+        {
+          "key": "D",
+          "text": "Oui, si on la stocke chiffrée"
+        }
+      ],
+      "correct": "B",
+      "explanation": "le caractère public d'une donnée ne supprime pas les obligations de finalité, de minimisation et de protection."
+    },
+    {
+      "id": 5,
+      "question": "Quelle pratique rend un scraper « poli » ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Envoyer des requêtes en parallèle le plus vite possible"
+        },
+        {
+          "key": "B",
+          "text": "S'identifier par un User-Agent, temporiser entre les requêtes et respecter `robots.txt`"
+        },
+        {
+          "key": "C",
+          "text": "Cacher son identité pour éviter d'être bloqué"
+        },
+        {
+          "key": "D",
+          "text": "Contourner les CAPTCHA"
+        }
+      ],
+      "correct": "B",
+      "explanation": "identification, pauses et respect des règles du site limitent la charge et montrent une démarche de bonne foi."
+    }
+  ]
+}

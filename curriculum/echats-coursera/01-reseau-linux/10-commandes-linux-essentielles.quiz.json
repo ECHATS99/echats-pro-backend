@@ -1,0 +1,135 @@
+{
+  "lesson": "10-commandes-linux-essentielles",
+  "title": "Commandes Linux Essentielles",
+  "module": "Réseau & Linux",
+  "order": 10,
+  "difficulty": "debutant",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Quelle commande affiche le dossier courant ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "`ls`"
+        },
+        {
+          "key": "B",
+          "text": "`cd`"
+        },
+        {
+          "key": "C",
+          "text": "`pwd`"
+        },
+        {
+          "key": "D",
+          "text": "`whoami`"
+        }
+      ],
+      "correct": "C",
+      "explanation": "`pwd` (print working directory) affiche le chemin absolu du dossier où tu te trouves."
+    },
+    {
+      "id": 2,
+      "question": "Quelle commande supprime définitivement un dossier et son contenu ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "`rm -r dossier`"
+        },
+        {
+          "key": "B",
+          "text": "`mv dossier /tmp`"
+        },
+        {
+          "key": "C",
+          "text": "`cp -r dossier`"
+        },
+        {
+          "key": "D",
+          "text": "`rmdir -f dossier`"
+        }
+      ],
+      "correct": "A",
+      "explanation": "`rm -r` supprime récursivement ; il n'y a pas de corbeille, il faut donc l'utiliser avec prudence."
+    },
+    {
+      "id": 3,
+      "question": "Que fait `grep -i \"erreur\" journal.log` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Supprime les lignes contenant « erreur »"
+        },
+        {
+          "key": "B",
+          "text": "Cherche « erreur » sans tenir compte de la casse"
+        },
+        {
+          "key": "C",
+          "text": "Remplace « erreur » par « i »"
+        },
+        {
+          "key": "D",
+          "text": "Compte les fichiers"
+        }
+      ],
+      "correct": "B",
+      "explanation": "`-i` rend la recherche insensible à la casse (erreur, Erreur, ERREUR)."
+    },
+    {
+      "id": 4,
+      "question": "Que fait le symbole `|` (pipe) ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Il écrit dans un fichier"
+        },
+        {
+          "key": "B",
+          "text": "Il envoie la sortie d'une commande vers l'entrée de la suivante"
+        },
+        {
+          "key": "C",
+          "text": "Il lance une commande en arrière-plan"
+        },
+        {
+          "key": "D",
+          "text": "Il supprime un fichier"
+        }
+      ],
+      "correct": "B",
+      "explanation": "le pipe permet de chaîner des commandes simples pour effectuer un traitement complexe."
+    },
+    {
+      "id": 5,
+      "question": "Quelle différence entre `>` et `>>` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Aucune"
+        },
+        {
+          "key": "B",
+          "text": "`>` écrase le fichier, `>>` ajoute à la fin"
+        },
+        {
+          "key": "C",
+          "text": "`>` ajoute, `>>` écrase"
+        },
+        {
+          "key": "D",
+          "text": "`>>` lit un fichier"
+        }
+      ],
+      "correct": "B",
+      "explanation": "`>` remplace le contenu du fichier, `>>` conserve le contenu existant et ajoute à la suite."
+    }
+  ]
+}

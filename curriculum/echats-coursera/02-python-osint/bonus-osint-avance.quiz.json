@@ -1,0 +1,236 @@
+{
+  "lesson": "bonus-osint-avance",
+  "title": "LEÇON 5  OSINT Avancé",
+  "module": "Python & OSINT",
+  "order": 91,
+  "difficulty": "intermediaire",
+  "questions_count": 10,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Quelle est la première étape du cycle du renseignement?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Planification"
+        },
+        {
+          "key": "B",
+          "text": "Diffusion"
+        },
+        {
+          "key": "C",
+          "text": "Exploitation"
+        },
+        {
+          "key": "D",
+          "text": "Effacement"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Planification » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 2,
+      "question": "Que doit préciser une exigence de renseignement?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "La question recherchée et son objectif légal"
+        },
+        {
+          "key": "B",
+          "text": "Un accès administrateur"
+        },
+        {
+          "key": "C",
+          "text": "Une conclusion déjà choisie"
+        },
+        {
+          "key": "D",
+          "text": "Une donnée personnelle inutile"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « La question recherchée et son objectif légal » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 3,
+      "question": "Pourquoi recouper plusieurs sources?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Pour réduire les faux positifs et les biais"
+        },
+        {
+          "key": "B",
+          "text": "Pour publier plus de données"
+        },
+        {
+          "key": "C",
+          "text": "Pour éviter toute documentation"
+        },
+        {
+          "key": "D",
+          "text": "Pour contourner une autorisation"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Pour réduire les faux positifs et les biais » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 4,
+      "question": "Un résultat de moteur de recherche est-il automatiquement une preuve?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Oui"
+        },
+        {
+          "key": "B",
+          "text": "Non, il doit être vérifié et contextualisé"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la bonne pratique professionnelle est « Non, il doit être vérifié et contextualisé » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 5,
+      "question": "Que doit contenir une fiche de collecte?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Source, date, extrait, fiabilité et limites"
+        },
+        {
+          "key": "B",
+          "text": "Uniquement un nom"
+        },
+        {
+          "key": "C",
+          "text": "Un mot de passe"
+        },
+        {
+          "key": "D",
+          "text": "Une conclusion sans lien"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Source, date, extrait, fiabilité et limites » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 6,
+      "question": "Quel principe protège les personnes dans une enquête OSINT?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Minimisation et respect du cadre légal"
+        },
+        {
+          "key": "B",
+          "text": "Collecter tout ce qui est possible"
+        },
+        {
+          "key": "C",
+          "text": "Publier les profils"
+        },
+        {
+          "key": "D",
+          "text": "Contourner les contrôles"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Minimisation et respect du cadre légal » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 7,
+      "question": "Quelle différence sépare un fait d’une hypothèse?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Le fait est soutenu par une observation; l’hypothèse doit encore être testée"
+        },
+        {
+          "key": "B",
+          "text": "Aucune"
+        },
+        {
+          "key": "C",
+          "text": "L’hypothèse est toujours certaine"
+        },
+        {
+          "key": "D",
+          "text": "Le fait est toujours secret"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Le fait est soutenu par une observation; l’hypothèse doit encore être testée » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 8,
+      "question": "Quel élément rend un rapport OSINT reproductible?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Les sources, dates, méthodes et critères d’interprétation"
+        },
+        {
+          "key": "B",
+          "text": "Une capture sans contexte"
+        },
+        {
+          "key": "C",
+          "text": "Une affirmation anonyme"
+        },
+        {
+          "key": "D",
+          "text": "Une recherche non datée"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Les sources, dates, méthodes et critères d’interprétation » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 9,
+      "question": "Une enquête de formation doit-elle cibler une personne privée réelle?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Oui"
+        },
+        {
+          "key": "B",
+          "text": "Non, elle doit utiliser des cas fictifs ou explicitement autorisés"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la bonne pratique professionnelle est « Non, elle doit utiliser des cas fictifs ou explicitement autorisés » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 10,
+      "question": "L’OPSEC concerne-t-elle aussi l’identité et les données de l’analyste?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Vrai"
+        },
+        {
+          "key": "B",
+          "text": "Faux"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Vrai » — à préciser/enrichir par un relecteur."
+    }
+  ]
+}

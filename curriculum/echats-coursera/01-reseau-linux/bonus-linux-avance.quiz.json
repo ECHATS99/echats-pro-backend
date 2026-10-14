@@ -1,0 +1,252 @@
+{
+  "lesson": "bonus-linux-avance",
+  "title": "LEÇON 2  Linux : L'OS du Hacker",
+  "module": "Réseau & Linux",
+  "order": 91,
+  "difficulty": "intermediaire",
+  "questions_count": 10,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Quel répertoire contient généralement les journaux variables?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "/etc"
+        },
+        {
+          "key": "B",
+          "text": "/var"
+        },
+        {
+          "key": "C",
+          "text": "/home"
+        },
+        {
+          "key": "D",
+          "text": "/dev"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la bonne pratique professionnelle est « /var » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 2,
+      "question": "Que signifie rwx pour un propriétaire?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Lecture seule"
+        },
+        {
+          "key": "B",
+          "text": "Lecture, écriture et exécution"
+        },
+        {
+          "key": "C",
+          "text": "Écriture seulement"
+        },
+        {
+          "key": "D",
+          "text": "Aucun droit"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la bonne pratique professionnelle est « Lecture, écriture et exécution » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 3,
+      "question": "Quelle valeur octale correspond à rwxr-xr-x?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "644"
+        },
+        {
+          "key": "B",
+          "text": "700"
+        },
+        {
+          "key": "C",
+          "text": "755"
+        },
+        {
+          "key": "D",
+          "text": "777"
+        }
+      ],
+      "correct": "C",
+      "explanation": "la bonne pratique professionnelle est « 755 » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 4,
+      "question": "Pourquoi le mode 777 est-il généralement déconseillé?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Il chiffre les fichiers"
+        },
+        {
+          "key": "B",
+          "text": "Il accorde trop de droits à tous les utilisateurs"
+        },
+        {
+          "key": "C",
+          "text": "Il interdit root"
+        },
+        {
+          "key": "D",
+          "text": "Il désactive les logs"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la bonne pratique professionnelle est « Il accorde trop de droits à tous les utilisateurs » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 5,
+      "question": "Que représente un fichier SUID appartenant à root?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Il s’exécute avec les droits du lanceur seulement"
+        },
+        {
+          "key": "B",
+          "text": "Il peut s’exécuter avec les droits de son propriétaire"
+        },
+        {
+          "key": "C",
+          "text": "Il est toujours un malware"
+        },
+        {
+          "key": "D",
+          "text": "Il ne peut pas être exécuté"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la bonne pratique professionnelle est « Il peut s’exécuter avec les droits de son propriétaire » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 6,
+      "question": "Quelle commande affiche l’identité et les groupes effectifs?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "id"
+        },
+        {
+          "key": "B",
+          "text": "pwd"
+        },
+        {
+          "key": "C",
+          "text": "touch"
+        },
+        {
+          "key": "D",
+          "text": "tar"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « id » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 7,
+      "question": "Que montre principalement ss -tulnp?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Les sockets en écoute et processus associés"
+        },
+        {
+          "key": "B",
+          "text": "Les fichiers supprimés"
+        },
+        {
+          "key": "C",
+          "text": "Les hash de mots de passe"
+        },
+        {
+          "key": "D",
+          "text": "Les paquets installés"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Les sockets en écoute et processus associés » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 8,
+      "question": "Quel est le rôle d’un pipe |?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Relier la sortie d’une commande à l’entrée d’une autre"
+        },
+        {
+          "key": "B",
+          "text": "Supprimer un fichier"
+        },
+        {
+          "key": "C",
+          "text": "Changer le propriétaire"
+        },
+        {
+          "key": "D",
+          "text": "Créer un utilisateur"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Relier la sortie d’une commande à l’entrée d’une autre » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 9,
+      "question": "Quel principe est recommandé avant une commande potentiellement destructive?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "La lancer en production pour voir"
+        },
+        {
+          "key": "B",
+          "text": "Vérifier le périmètre et utiliser un laboratoire ou une sauvegarde"
+        },
+        {
+          "key": "C",
+          "text": "La masquer dans l’historique"
+        },
+        {
+          "key": "D",
+          "text": "Désactiver les logs"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la bonne pratique professionnelle est « Vérifier le périmètre et utiliser un laboratoire ou une sauvegarde » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 10,
+      "question": "Les permissions et les processus doivent-ils être analysés avec leur contexte et leurs limites?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Vrai"
+        },
+        {
+          "key": "B",
+          "text": "Faux"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Vrai » — à préciser/enrichir par un relecteur."
+    }
+  ]
+}

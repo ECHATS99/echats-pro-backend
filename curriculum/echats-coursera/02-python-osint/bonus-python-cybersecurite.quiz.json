@@ -1,0 +1,244 @@
+{
+  "lesson": "bonus-python-cybersecurite",
+  "title": "LEÇON 3  Python pour la Cybersécurité",
+  "module": "Python & OSINT",
+  "order": 90,
+  "difficulty": "intermediaire",
+  "questions_count": 10,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Quel type Python représente du texte?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "str"
+        },
+        {
+          "key": "B",
+          "text": "int"
+        },
+        {
+          "key": "C",
+          "text": "bool"
+        },
+        {
+          "key": "D",
+          "text": "bytesize"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « str » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 2,
+      "question": "Que retourne généralement une fonction sans return explicite?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "None"
+        },
+        {
+          "key": "B",
+          "text": "Toujours 0"
+        },
+        {
+          "key": "C",
+          "text": "Une exception"
+        },
+        {
+          "key": "D",
+          "text": "Un dictionnaire"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « None » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 3,
+      "question": "Pourquoi utiliser try/except autour d’une opération réseau?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Le réseau ne peut jamais échouer"
+        },
+        {
+          "key": "B",
+          "text": "Pour traiter proprement des erreurs attendues"
+        },
+        {
+          "key": "C",
+          "text": "Pour cacher toutes les erreurs"
+        },
+        {
+          "key": "D",
+          "text": "Pour donner les droits root"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la bonne pratique professionnelle est « Pour traiter proprement des erreurs attendues » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 4,
+      "question": "Quel module intégré est adapté au traitement de JSON?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "json"
+        },
+        {
+          "key": "B",
+          "text": "socketonly"
+        },
+        {
+          "key": "C",
+          "text": "randomnet"
+        },
+        {
+          "key": "D",
+          "text": "pip"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « json » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 5,
+      "question": "Quelle structure associe des clés et des valeurs?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Liste"
+        },
+        {
+          "key": "B",
+          "text": "Dictionnaire"
+        },
+        {
+          "key": "C",
+          "text": "Tuple vide"
+        },
+        {
+          "key": "D",
+          "text": "Boucle"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la bonne pratique professionnelle est « Dictionnaire » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 6,
+      "question": "Pourquoi valider une entrée avant de l’utiliser?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Pour éviter erreurs, ambiguïtés et abus"
+        },
+        {
+          "key": "B",
+          "text": "Pour ralentir volontairement le programme"
+        },
+        {
+          "key": "C",
+          "text": "Pour supprimer les tests"
+        },
+        {
+          "key": "D",
+          "text": "Parce que Python l’exige toujours"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Pour éviter erreurs, ambiguïtés et abus » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 7,
+      "question": "Quel résultat est préférable pour un outil d’analyse?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Une sortie non documentée"
+        },
+        {
+          "key": "B",
+          "text": "Un rapport reproductible avec erreurs et limites explicites"
+        },
+        {
+          "key": "C",
+          "text": "Un mot de passe affiché"
+        },
+        {
+          "key": "D",
+          "text": "Une exception silencieuse"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la bonne pratique professionnelle est « Un rapport reproductible avec erreurs et limites explicites » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 8,
+      "question": "Quel principe limite le risque d’une commande shell construite depuis une entrée?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Exécuter toute entrée sans contrôle"
+        },
+        {
+          "key": "B",
+          "text": "Valider strictement et éviter l’exécution shell lorsque possible"
+        },
+        {
+          "key": "C",
+          "text": "Encoder en base64 seulement"
+        },
+        {
+          "key": "D",
+          "text": "Supprimer les logs"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la bonne pratique professionnelle est « Valider strictement et éviter l’exécution shell lorsque possible » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 9,
+      "question": "Les tests doivent-ils inclure des entrées vides ou malformées?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Oui"
+        },
+        {
+          "key": "B",
+          "text": "Non"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Oui » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 10,
+      "question": "Une expression régulière constitue-t-elle toujours une validation complète d’une adresse IP?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Oui"
+        },
+        {
+          "key": "B",
+          "text": "Non"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la bonne pratique professionnelle est « Non » — à préciser/enrichir par un relecteur."
+    }
+  ]
+}

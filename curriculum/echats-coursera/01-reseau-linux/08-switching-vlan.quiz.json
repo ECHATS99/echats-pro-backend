@@ -1,0 +1,135 @@
+{
+  "lesson": "08-switching-vlan",
+  "title": "Switching et VLAN",
+  "module": "Réseau & Linux",
+  "order": 8,
+  "difficulty": "debutant",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Que fait un switch quand il ne connaît pas le port d'une adresse MAC de destination ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Il détruit la trame"
+        },
+        {
+          "key": "B",
+          "text": "Il envoie la trame sur tous les ports sauf celui d'origine"
+        },
+        {
+          "key": "C",
+          "text": "Il demande l'adresse IP au routeur"
+        },
+        {
+          "key": "D",
+          "text": "Il redémarre"
+        }
+      ],
+      "correct": "B",
+      "explanation": "c'est l'inondation (flooding) ; il apprend ensuite l'emplacement grâce à la réponse."
+    },
+    {
+      "id": 2,
+      "question": "À quoi sert le protocole ARP ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Traduire les noms en adresses IP"
+        },
+        {
+          "key": "B",
+          "text": "Trouver l'adresse MAC correspondant à une adresse IP dans le réseau local"
+        },
+        {
+          "key": "C",
+          "text": "Chiffrer les trames"
+        },
+        {
+          "key": "D",
+          "text": "Distribuer les adresses IP"
+        }
+      ],
+      "correct": "B",
+      "explanation": "le DNS traduit les noms, le DHCP distribue les adresses, ARP relie IP et MAC."
+    },
+    {
+      "id": 3,
+      "question": "Quel est le principal intérêt des VLAN ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Augmenter la vitesse de la fibre"
+        },
+        {
+          "key": "B",
+          "text": "Segmenter logiquement un réseau pour isoler les groupes"
+        },
+        {
+          "key": "C",
+          "text": "Remplacer le routeur"
+        },
+        {
+          "key": "D",
+          "text": "Chiffrer le Wi-Fi"
+        }
+      ],
+      "correct": "B",
+      "explanation": "les VLAN créent des domaines de diffusion séparés et permettent d'isoler les usages."
+    },
+    {
+      "id": 4,
+      "question": "Que provoque une attaque de type ARP spoofing ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Un déni de service sur le DNS"
+        },
+        {
+          "key": "B",
+          "text": "Le passage du trafic de la victime par la machine de l'attaquant"
+        },
+        {
+          "key": "C",
+          "text": "La suppression d'un VLAN"
+        },
+        {
+          "key": "D",
+          "text": "La saturation d'un serveur web"
+        }
+      ],
+      "correct": "B",
+      "explanation": "l'attaquant se fait passer pour la passerelle auprès de la victime (homme du milieu)."
+    },
+    {
+      "id": 5,
+      "question": "Quelle protection limite le nombre d'adresses MAC par port d'un switch ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "DNSSEC"
+        },
+        {
+          "key": "B",
+          "text": "NAT"
+        },
+        {
+          "key": "C",
+          "text": "Port security"
+        },
+        {
+          "key": "D",
+          "text": "HSTS"
+        }
+      ],
+      "correct": "C",
+      "explanation": "la port security réduit les risques de MAC flooding et d'usurpation de MAC."
+    }
+  ]
+}

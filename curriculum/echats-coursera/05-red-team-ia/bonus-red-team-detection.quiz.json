@@ -1,0 +1,236 @@
+{
+  "lesson": "bonus-red-team-detection",
+  "title": "LEÇON 10  Red Team",
+  "module": "Red Team & IA",
+  "order": 90,
+  "difficulty": "intermediaire",
+  "questions_count": 10,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Quel est l’objectif principal du Red Team?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Tester détection et réponse face à un adversaire simulé"
+        },
+        {
+          "key": "B",
+          "text": "Trouver uniquement le plus de CVE"
+        },
+        {
+          "key": "C",
+          "text": "Détruire les données"
+        },
+        {
+          "key": "D",
+          "text": "Remplacer le Blue Team"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Tester détection et réponse face à un adversaire simulé » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 2,
+      "question": "Que catalogue MITRE ATT&CK?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Tactiques et techniques adversariales documentées"
+        },
+        {
+          "key": "B",
+          "text": "Des mots de passe"
+        },
+        {
+          "key": "C",
+          "text": "Des certificats TLS"
+        },
+        {
+          "key": "D",
+          "text": "Des adresses privées uniquement"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Tactiques et techniques adversariales documentées » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 3,
+      "question": "Quel document définit le périmètre et les limites d’un engagement?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Rules of Engagement"
+        },
+        {
+          "key": "B",
+          "text": "Un fichier temporaire"
+        },
+        {
+          "key": "C",
+          "text": "Une capture d’écran"
+        },
+        {
+          "key": "D",
+          "text": "Un ticket sans approbation"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Rules of Engagement » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 4,
+      "question": "Que surveille une détection de beacon?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Des régularités ou signaux de communication périodique"
+        },
+        {
+          "key": "B",
+          "text": "Uniquement la couleur d’un site"
+        },
+        {
+          "key": "C",
+          "text": "Les permissions d’un fichier local seulement"
+        },
+        {
+          "key": "D",
+          "text": "Le score d’un quiz"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Des régularités ou signaux de communication périodique » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 5,
+      "question": "Purple Team implique-t-il une collaboration Red/Blue?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Vrai"
+        },
+        {
+          "key": "B",
+          "text": "Faux"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Vrai » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 6,
+      "question": "Pourquoi documenter les faux positifs?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Pour améliorer la précision et éviter la fatigue d’alerte"
+        },
+        {
+          "key": "B",
+          "text": "Pour supprimer toute télémétrie"
+        },
+        {
+          "key": "C",
+          "text": "Pour justifier une intrusion"
+        },
+        {
+          "key": "D",
+          "text": "Pour cacher un incident"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Pour améliorer la précision et éviter la fatigue d’alerte » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 7,
+      "question": "Quel indicateur mesure le délai entre événement et alerte?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Temps de détection"
+        },
+        {
+          "key": "B",
+          "text": "Taille du binaire"
+        },
+        {
+          "key": "C",
+          "text": "CIDR"
+        },
+        {
+          "key": "D",
+          "text": "Nonce"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Temps de détection » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 8,
+      "question": "Le niveau conceptuel C2 doit-il être accompagné de contrôles et d’un cadre autorisé?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Oui"
+        },
+        {
+          "key": "B",
+          "text": "Non"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Oui » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 9,
+      "question": "Quel résultat est prioritaire après un exercice Red Team?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Des améliorations défensives mesurables"
+        },
+        {
+          "key": "B",
+          "text": "Une publication de secrets"
+        },
+        {
+          "key": "C",
+          "text": "Une destruction de preuves"
+        },
+        {
+          "key": "D",
+          "text": "Une nouvelle attaque réelle"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Des améliorations défensives mesurables » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 10,
+      "question": "Un scénario Red Team peut-il démarrer sans contact d’urgence ni procédure d’arrêt?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Oui"
+        },
+        {
+          "key": "B",
+          "text": "Non"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la bonne pratique professionnelle est « Non » — à préciser/enrichir par un relecteur."
+    }
+  ]
+}

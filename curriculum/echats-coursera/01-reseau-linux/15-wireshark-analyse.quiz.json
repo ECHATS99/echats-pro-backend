@@ -1,0 +1,135 @@
+{
+  "lesson": "15-wireshark-analyse",
+  "title": "Analyse Réseau avec Wireshark",
+  "module": "Réseau & Linux",
+  "order": 15,
+  "difficulty": "intermediaire",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Quelle est la différence entre un filtre de capture et un filtre d'affichage ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Il n'y en a pas"
+        },
+        {
+          "key": "B",
+          "text": "Le filtre de capture limite ce qui est enregistré, le filtre d'affichage trie ce qui est déjà capturé"
+        },
+        {
+          "key": "C",
+          "text": "Le filtre d'affichage chiffre le trafic"
+        },
+        {
+          "key": "D",
+          "text": "Le filtre de capture ne fonctionne que sous Windows"
+        }
+      ],
+      "correct": "B",
+      "explanation": "le filtre de capture (BPF) agit avant l'enregistrement ; le filtre d'affichage agit après, sur les paquets déjà capturés."
+    },
+    {
+      "id": 2,
+      "question": "Quel filtre d'affichage montre uniquement le trafic DNS ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "`dns`"
+        },
+        {
+          "key": "B",
+          "text": "`show dns`"
+        },
+        {
+          "key": "C",
+          "text": "`port == dns`"
+        },
+        {
+          "key": "D",
+          "text": "`tcp.dns`"
+        }
+      ],
+      "correct": "A",
+      "explanation": "`dns` suffit à sélectionner les paquets décodés comme DNS."
+    },
+    {
+      "id": 3,
+      "question": "À quoi sert « Suivre le flux TCP » ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "À bloquer une connexion"
+        },
+        {
+          "key": "B",
+          "text": "À reconstituer et lire une conversation complète entre un client et un serveur"
+        },
+        {
+          "key": "C",
+          "text": "À chiffrer la capture"
+        },
+        {
+          "key": "D",
+          "text": "À changer l'adresse IP"
+        }
+      ],
+      "correct": "B",
+      "explanation": "Wireshark réassemble les paquets du flux dans l'ordre, côté client et côté serveur."
+    },
+    {
+      "id": 4,
+      "question": "Pourquoi ne voit-on pas le contenu d'une page en HTTPS dans Wireshark ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Parce que Wireshark est limité"
+        },
+        {
+          "key": "B",
+          "text": "Parce que le contenu est chiffré par TLS"
+        },
+        {
+          "key": "C",
+          "text": "Parce que HTTPS n'utilise pas TCP"
+        },
+        {
+          "key": "D",
+          "text": "Parce que la capture est trop lente"
+        }
+      ],
+      "correct": "B",
+      "explanation": "seule la poignée de main et certaines métadonnées (comme le SNI) restent visibles."
+    },
+    {
+      "id": 5,
+      "question": "Quel comportement dans une capture évoque un scan de ports ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Un seul long téléchargement"
+        },
+        {
+          "key": "B",
+          "text": "Une même IP envoyant des SYN vers de nombreux ports de destination, avec beaucoup de RST en retour"
+        },
+        {
+          "key": "C",
+          "text": "Des requêtes DNS vers un seul domaine"
+        },
+        {
+          "key": "D",
+          "text": "Des paquets ARP normaux"
+        }
+      ],
+      "correct": "B",
+      "explanation": "un scan teste de nombreux ports en peu de temps ; les ports fermés répondent par RST."
+    }
+  ]
+}

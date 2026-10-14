@@ -1,0 +1,135 @@
+{
+  "lesson": "04-adressage-ip",
+  "title": "Adressage IP et Sous-réseaux",
+  "module": "Réseau & Linux",
+  "order": 4,
+  "difficulty": "debutant",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Combien de bits compose une adresse IPv4 ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "16"
+        },
+        {
+          "key": "B",
+          "text": "32"
+        },
+        {
+          "key": "C",
+          "text": "64"
+        },
+        {
+          "key": "D",
+          "text": "128"
+        }
+      ],
+      "correct": "B",
+      "explanation": "4 octets de 8 bits = 32 bits."
+    },
+    {
+      "id": 2,
+      "question": "À quel masque correspond /24 ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "255.255.0.0"
+        },
+        {
+          "key": "B",
+          "text": "255.255.255.0"
+        },
+        {
+          "key": "C",
+          "text": "255.255.255.128"
+        },
+        {
+          "key": "D",
+          "text": "255.0.0.0"
+        }
+      ],
+      "correct": "B",
+      "explanation": "24 bits à 1 = trois octets pleins = 255.255.255.0."
+    },
+    {
+      "id": 3,
+      "question": "Combien d'hôtes utilisables dans un réseau /26 ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "30"
+        },
+        {
+          "key": "B",
+          "text": "64"
+        },
+        {
+          "key": "C",
+          "text": "62"
+        },
+        {
+          "key": "D",
+          "text": "126"
+        }
+      ],
+      "correct": "C",
+      "explanation": "6 bits hôte = 2⁶ = 64 adresses, moins 2 réservées = 62."
+    },
+    {
+      "id": 4,
+      "question": "Laquelle de ces adresses est privée ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "172.20.5.10"
+        },
+        {
+          "key": "B",
+          "text": "172.32.5.10"
+        },
+        {
+          "key": "C",
+          "text": "8.8.4.4"
+        },
+        {
+          "key": "D",
+          "text": "41.220.10.1"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la plage privée 172.16.0.0/12 va de 172.16.x.x à 172.31.x.x. 172.32 est donc publique."
+    },
+    {
+      "id": 5,
+      "question": "Quel est le rôle du NAT ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Chiffrer les données"
+        },
+        {
+          "key": "B",
+          "text": "Traduire des adresses privées en adresse publique"
+        },
+        {
+          "key": "C",
+          "text": "Attribuer les adresses automatiquement"
+        },
+        {
+          "key": "D",
+          "text": "Résoudre les noms de domaine"
+        }
+      ],
+      "correct": "B",
+      "explanation": "le NAT permet à plusieurs machines privées de partager une adresse publique. L'attribution automatique, c'est le DHCP ; la résolution de noms, c'est le DNS."
+    }
+  ]
+}

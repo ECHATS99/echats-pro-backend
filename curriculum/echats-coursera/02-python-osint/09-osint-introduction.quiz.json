@@ -1,0 +1,135 @@
+{
+  "lesson": "09-osint-introduction",
+  "title": "OSINT : enquêter avec les sources ouvertes",
+  "module": "Python & OSINT",
+  "order": 9,
+  "difficulty": "debutant",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Que signifie OSINT ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Online Security Investigation"
+        },
+        {
+          "key": "B",
+          "text": "Open Source Intelligence, renseignement de sources ouvertes"
+        },
+        {
+          "key": "C",
+          "text": "Offensive Security International"
+        },
+        {
+          "key": "D",
+          "text": "Open Standard Internet Tracking"
+        }
+      ],
+      "correct": "B",
+      "explanation": "« sources ouvertes » désigne toute information légalement accessible au public, pas uniquement les sources en ligne."
+    },
+    {
+      "id": 2,
+      "question": "Quelle est la règle d'or face à une information importante en OSINT ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "La publier immédiatement si elle semble crédible"
+        },
+        {
+          "key": "B",
+          "text": "Toujours chercher au moins une source indépendante qui la confirme avant de la considérer comme établie"
+        },
+        {
+          "key": "C",
+          "text": "Ne se fier qu'aux sources gouvernementales"
+        },
+        {
+          "key": "D",
+          "text": "Ignorer toute information qui vient d'un réseau social"
+        }
+      ],
+      "correct": "B",
+      "explanation": "une source réputée fiable peut se tromper ; le recoupement avec une source indépendante reste la meilleure protection contre l'erreur."
+    },
+    {
+      "id": 3,
+      "question": "Dans le cycle du renseignement, pourquoi la première étape (définir l'objectif) est-elle si importante ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Parce que la loi l'exige"
+        },
+        {
+          "key": "B",
+          "text": "Parce qu'un objectif flou produit une collecte sans fin et un résultat impossible à synthétiser"
+        },
+        {
+          "key": "C",
+          "text": "Parce qu'elle détermine automatiquement les outils à utiliser"
+        },
+        {
+          "key": "D",
+          "text": "Elle n'est pas réellement nécessaire pour une enquête simple"
+        }
+      ],
+      "correct": "B",
+      "explanation": "une question précise oriente efficacement toute la suite du cycle, de la collecte à la diffusion."
+    },
+    {
+      "id": 4,
+      "question": "Pourquoi l'enquête de Bellingcat sur le vol MH17 est-elle un exemple marquant d'OSINT ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Parce qu'elle s'appuyait sur des documents classifiés obtenus illégalement"
+        },
+        {
+          "key": "B",
+          "text": "Parce qu'elle a reconstitué un événement précis en recoupant méthodiquement des sources entièrement publiques"
+        },
+        {
+          "key": "C",
+          "text": "Parce qu'elle a été menée par une agence de renseignement officielle"
+        },
+        {
+          "key": "D",
+          "text": "Parce qu'elle ne reposait que sur une seule source"
+        }
+      ],
+      "correct": "B",
+      "explanation": "c'est la méthode de recoupement de données publiques, chacune anodine isolément, qui a permis cette reconstitution précise."
+    },
+    {
+      "id": 5,
+      "question": "Que doit-on strictement éviter lors d'une collecte OSINT purement passive ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Consulter le site officiel d'une organisation"
+        },
+        {
+          "key": "B",
+          "text": "Interagir directement avec les systèmes de la cible, comme un scan de ports"
+        },
+        {
+          "key": "C",
+          "text": "Utiliser une commande whois"
+        },
+        {
+          "key": "D",
+          "text": "Lire les enregistrements DNS publics"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la collecte passive se limite à des sources déjà publiques, sans interaction directe avec les systèmes de la cible, ce qui relève de la reconnaissance active et exige une autorisation."
+    }
+  ]
+}

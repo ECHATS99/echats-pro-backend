@@ -1,0 +1,135 @@
+{
+  "lesson": "14-shodan-censys",
+  "title": "Shodan et Censys : Cartographier ce qui est Exposé sur Internet",
+  "module": "Python & OSINT",
+  "order": 14,
+  "difficulty": "intermediaire",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Pourquoi consulter Shodan sur l'infrastructure d'un tiers est-il considéré comme une activité passive ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Parce que Shodan ne fonctionne que sur ses propres serveurs"
+        },
+        {
+          "key": "B",
+          "text": "Parce que le scan a déjà été réalisé par Shodan lui-même ; consulter ses résultats ne déclenche aucune nouvelle requête vers la cible"
+        },
+        {
+          "key": "C",
+          "text": "Parce que Shodan chiffre toutes ses requêtes"
+        },
+        {
+          "key": "D",
+          "text": "Ce n'est jamais le cas, Shodan est toujours une activité active"
+        }
+      ],
+      "correct": "B",
+      "explanation": "vous interrogez un index déjà constitué, exactement comme une recherche sur un moteur de recherche classique ne scanne pas le site visé en temps réel."
+    },
+    {
+      "id": 2,
+      "question": "Qu'est-ce qu'une bannière de service, au sens où Shodan l'utilise ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Une publicité affichée sur le site de Shodan"
+        },
+        {
+          "key": "B",
+          "text": "Le texte d'identification qu'un service renvoie en réponse à une connexion, révélant souvent son logiciel et sa version"
+        },
+        {
+          "key": "C",
+          "text": "Un certificat TLS"
+        },
+        {
+          "key": "D",
+          "text": "Un type de pare-feu"
+        }
+      ],
+      "correct": "B",
+      "explanation": "cette information, collectée par le scan continu de Shodan, permet d'identifier précisément la nature des services exposés."
+    },
+    {
+      "id": 3,
+      "question": "Pourquoi ne faut-il jamais se connecter à un service découvert via Shodan sans autorisation ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Parce que Shodan bloque techniquement toute connexion"
+        },
+        {
+          "key": "B",
+          "text": "Parce que le fait qu'un service réponde publiquement ne constitue aucune autorisation à l'utiliser, et cela resterait une tentative d'intrusion"
+        },
+        {
+          "key": "C",
+          "text": "Parce que ces services sont toujours protégés par un mot de passe"
+        },
+        {
+          "key": "D",
+          "text": "Parce que cela endommagerait automatiquement le service"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la visibilité publique d'un service n'a jamais été, en droit, une autorisation d'accès."
+    },
+    {
+      "id": 4,
+      "question": "Quel principe de sécurité, déjà rencontré dans ce cours, est directement illustré par les découvertes de caméras ou d'objets connectés exposés sans authentification ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Le principe du moindre privilège appliqué à l'exposition réseau : un service ne devrait être accessible que depuis là où il est réellement nécessaire"
+        },
+        {
+          "key": "B",
+          "text": "Le principe de la défense en profondeur uniquement"
+        },
+        {
+          "key": "C",
+          "text": "Le principe de non-répudiation"
+        },
+        {
+          "key": "D",
+          "text": "Le principe de disponibilité maximale"
+        }
+      ],
+      "correct": "A",
+      "explanation": "c'est une application directe du moindre privilège (module Réseau & Linux, leçon 11), étendu ici à l'exposition réseau plutôt qu'aux permissions système."
+    },
+    {
+      "id": 5,
+      "question": "Quel est l'intérêt d'utiliser l'API Shodan plutôt que l'interface web pour une veille régulière ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "L'API est toujours gratuite contrairement à l'interface web"
+        },
+        {
+          "key": "B",
+          "text": "Elle permet d'automatiser et de répéter la surveillance de sa propre surface d'exposition dans un script, plutôt que de répéter une recherche manuelle"
+        },
+        {
+          "key": "C",
+          "text": "L'API donne accès à des résultats différents de l'interface web"
+        },
+        {
+          "key": "D",
+          "text": "Elle ne nécessite aucune clé d'authentification"
+        }
+      ],
+      "correct": "B",
+      "explanation": "l'automatisation via API s'inscrit dans la même logique de veille que celle déjà présentée pour le Google Dorking (module Python, leçon 10)."
+    }
+  ]
+}

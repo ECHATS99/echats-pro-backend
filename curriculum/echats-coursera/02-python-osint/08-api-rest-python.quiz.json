@@ -1,0 +1,135 @@
+{
+  "lesson": "08-api-rest-python",
+  "title": "API REST en Python",
+  "module": "Python & OSINT",
+  "order": 8,
+  "difficulty": "intermediaire",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Quelle méthode HTTP est utilisée pour lire une ressource dans une API REST ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "POST"
+        },
+        {
+          "key": "B",
+          "text": "DELETE"
+        },
+        {
+          "key": "C",
+          "text": "GET"
+        },
+        {
+          "key": "D",
+          "text": "PUT"
+        }
+      ],
+      "correct": "C",
+      "explanation": "`GET` récupère une ressource sans la modifier ; POST crée, PUT/PATCH modifient, DELETE supprime."
+    },
+    {
+      "id": 2,
+      "question": "Où faut-il stocker une clé d'API ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "En clair dans le code source"
+        },
+        {
+          "key": "B",
+          "text": "Dans une variable d'environnement ou un fichier de secrets exclu du dépôt"
+        },
+        {
+          "key": "C",
+          "text": "Dans un commentaire HTML"
+        },
+        {
+          "key": "D",
+          "text": "Dans le nom du fichier"
+        }
+      ],
+      "correct": "B",
+      "explanation": "une clé dans le code peut fuiter avec le dépôt ; les variables d'environnement et fichiers `.env` ignorés par Git limitent ce risque."
+    },
+    {
+      "id": 3,
+      "question": "Que signifie le code HTTP 429 ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Ressource introuvable"
+        },
+        {
+          "key": "B",
+          "text": "Erreur interne du serveur"
+        },
+        {
+          "key": "C",
+          "text": "Trop de requêtes, le quota est dépassé"
+        },
+        {
+          "key": "D",
+          "text": "Authentification réussie"
+        }
+      ],
+      "correct": "C",
+      "explanation": "il faut ralentir et respecter l'en-tête `Retry-After` quand il est présent."
+    },
+    {
+      "id": 4,
+      "question": "Pourquoi la pagination est-elle nécessaire ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Pour chiffrer les réponses"
+        },
+        {
+          "key": "B",
+          "text": "Parce que l'API ne renvoie pas tous les résultats d'un coup, mais par morceaux"
+        },
+        {
+          "key": "C",
+          "text": "Pour changer le format JSON"
+        },
+        {
+          "key": "D",
+          "text": "Pour supprimer les doublons"
+        }
+      ],
+      "correct": "B",
+      "explanation": "sans parcourir les pages suivantes, on ne récupère qu'une partie des données."
+    },
+    {
+      "id": 5,
+      "question": "Quel risque OWASP API correspond au fait de changer `/commandes/101` en `/commandes/102` pour voir la commande d'un autre utilisateur ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Un déni de service"
+        },
+        {
+          "key": "B",
+          "text": "Une autorisation défaillante au niveau de l'objet (BOLA / IDOR)"
+        },
+        {
+          "key": "C",
+          "text": "Une injection SQL"
+        },
+        {
+          "key": "D",
+          "text": "Un défaut de chiffrement TLS"
+        }
+      ],
+      "correct": "B",
+      "explanation": "l'API ne vérifie pas que l'utilisateur a le droit d'accéder à cet objet précis."
+    }
+  ]
+}

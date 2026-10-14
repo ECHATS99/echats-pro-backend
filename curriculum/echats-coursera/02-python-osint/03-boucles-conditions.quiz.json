@@ -1,0 +1,135 @@
+{
+  "lesson": "03-boucles-conditions",
+  "title": "Boucles et Conditions",
+  "module": "Python & OSINT",
+  "order": 3,
+  "difficulty": "debutant",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Quelle est la différence entre `=` et `==` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Aucune"
+        },
+        {
+          "key": "B",
+          "text": "`=` affecte une valeur, `==` compare deux valeurs"
+        },
+        {
+          "key": "C",
+          "text": "`=` compare, `==` affecte"
+        },
+        {
+          "key": "D",
+          "text": "`==` supprime une variable"
+        }
+      ],
+      "correct": "B",
+      "explanation": "`x = 5` crée ou modifie une variable ; `x == 5` teste l'égalité et renvoie `True` ou `False`."
+    },
+    {
+      "id": 2,
+      "question": "Que génère `range(1, 6)` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "1, 2, 3, 4, 5, 6"
+        },
+        {
+          "key": "B",
+          "text": "0, 1, 2, 3, 4, 5"
+        },
+        {
+          "key": "C",
+          "text": "1, 2, 3, 4, 5"
+        },
+        {
+          "key": "D",
+          "text": "2, 3, 4, 5, 6"
+        }
+      ],
+      "correct": "C",
+      "explanation": "`range(début, fin)` inclut le début et exclut la fin."
+    },
+    {
+      "id": 3,
+      "question": "Que fait l'instruction `continue` dans une boucle ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Elle quitte la boucle"
+        },
+        {
+          "key": "B",
+          "text": "Elle passe directement à l'itération suivante"
+        },
+        {
+          "key": "C",
+          "text": "Elle relance le programme"
+        },
+        {
+          "key": "D",
+          "text": "Elle arrête Python"
+        }
+      ],
+      "correct": "B",
+      "explanation": "`continue` saute le reste du tour courant ; `break` quitte la boucle entièrement."
+    },
+    {
+      "id": 4,
+      "question": "Pourquoi utiliser `with open(...) as f` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Pour chiffrer le fichier"
+        },
+        {
+          "key": "B",
+          "text": "Pour que le fichier soit fermé automatiquement, même en cas d'erreur"
+        },
+        {
+          "key": "C",
+          "text": "Pour lire plus vite"
+        },
+        {
+          "key": "D",
+          "text": "C'est obligatoire pour les fichiers de plus de 1 Mo"
+        }
+      ],
+      "correct": "B",
+      "explanation": "le gestionnaire de contexte garantit la fermeture du fichier et évite les fuites de ressources."
+    },
+    {
+      "id": 5,
+      "question": "Que vaut `[n for n in range(1, 8) if n % 2 == 0]` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "`[1, 3, 5, 7]`"
+        },
+        {
+          "key": "B",
+          "text": "`[2, 4, 6]`"
+        },
+        {
+          "key": "C",
+          "text": "`[0, 2, 4, 6]`"
+        },
+        {
+          "key": "D",
+          "text": "`[2, 4, 6, 8]`"
+        }
+      ],
+      "correct": "B",
+      "explanation": "on garde les nombres de 1 à 7 divisibles par 2."
+    }
+  ]
+}

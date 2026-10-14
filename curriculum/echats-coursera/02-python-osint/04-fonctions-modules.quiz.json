@@ -1,0 +1,135 @@
+{
+  "lesson": "04-fonctions-modules",
+  "title": "Fonctions, Modules et Gestion des Erreurs",
+  "module": "Python & OSINT",
+  "order": 4,
+  "difficulty": "debutant",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Quel mot-clé permet à une fonction de renvoyer un résultat ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "`print`"
+        },
+        {
+          "key": "B",
+          "text": "`return`"
+        },
+        {
+          "key": "C",
+          "text": "`yield` uniquement"
+        },
+        {
+          "key": "D",
+          "text": "`output`"
+        }
+      ],
+      "correct": "B",
+      "explanation": "`return` renvoie une valeur à l'appelant ; `print` ne fait qu'afficher."
+    },
+    {
+      "id": 2,
+      "question": "Que fait le bloc `finally` dans un `try` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Il s'exécute seulement s'il y a une erreur"
+        },
+        {
+          "key": "B",
+          "text": "Il s'exécute toujours, qu'il y ait une erreur ou non"
+        },
+        {
+          "key": "C",
+          "text": "Il remplace `except`"
+        },
+        {
+          "key": "D",
+          "text": "Il arrête le programme"
+        }
+      ],
+      "correct": "B",
+      "explanation": "`finally` sert au nettoyage (fermer un fichier, une connexion) quelle que soit l'issue."
+    },
+    {
+      "id": 3,
+      "question": "Pourquoi éviter `except: pass` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Parce que c'est plus lent"
+        },
+        {
+          "key": "B",
+          "text": "Parce que cela masque les erreurs et empêche de comprendre ce qui se passe"
+        },
+        {
+          "key": "C",
+          "text": "Parce que Python l'interdit"
+        },
+        {
+          "key": "D",
+          "text": "Parce que cela chiffre l'erreur"
+        }
+      ],
+      "correct": "B",
+      "explanation": "une erreur ignorée en silence peut cacher un bug, une attaque ou une panne."
+    },
+    {
+      "id": 4,
+      "question": "Quel module faut-il utiliser pour générer un mot de passe ou un jeton sécurisé ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "`random`"
+        },
+        {
+          "key": "B",
+          "text": "`math`"
+        },
+        {
+          "key": "C",
+          "text": "`secrets`"
+        },
+        {
+          "key": "D",
+          "text": "`time`"
+        }
+      ],
+      "correct": "C",
+      "explanation": "`secrets` utilise un générateur adapté à la cryptographie, contrairement à `random`, prévisible."
+    },
+    {
+      "id": 5,
+      "question": "À quoi sert `if __name__ == \"__main__\":` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "À importer un module"
+        },
+        {
+          "key": "B",
+          "text": "À exécuter du code seulement quand le fichier est lancé directement, pas lorsqu'il est importé"
+        },
+        {
+          "key": "C",
+          "text": "À définir une constante"
+        },
+        {
+          "key": "D",
+          "text": "À arrêter une boucle"
+        }
+      ],
+      "correct": "B",
+      "explanation": "cela permet à un fichier d'être à la fois un script et un module réutilisable."
+    }
+  ]
+}

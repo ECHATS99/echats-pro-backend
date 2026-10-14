@@ -1,0 +1,135 @@
+{
+  "lesson": "18-domaine-whois",
+  "title": "WHOIS Approfondi : Au-delà des Bases",
+  "module": "Python & OSINT",
+  "order": 18,
+  "difficulty": "intermediaire",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Pourquoi de nombreuses informations personnelles ont-elles disparu des résultats WHOIS ces dernières années ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Parce que WHOIS a été entièrement remplacé"
+        },
+        {
+          "key": "B",
+          "text": "Sous l'effet de réglementations de protection des données comme le RGPD, qui imposent de masquer les données personnelles par défaut"
+        },
+        {
+          "key": "C",
+          "text": "Parce que les registres ont cessé de collecter ces informations"
+        },
+        {
+          "key": "D",
+          "text": "Parce que ces informations n'ont jamais été publiques"
+        }
+      ],
+      "correct": "B",
+      "explanation": "le masquage par défaut répond à une exigence légale de protection de la vie privée des titulaires de domaines, particuliers notamment."
+    },
+    {
+      "id": 2,
+      "question": "Quel est l'avantage principal de RDAP par rapport à WHOIS classique ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "RDAP est gratuit alors que WHOIS est payant"
+        },
+        {
+          "key": "B",
+          "text": "RDAP renvoie des données structurées en JSON, directement exploitables automatiquement, contrairement au texte libre de WHOIS"
+        },
+        {
+          "key": "C",
+          "text": "RDAP ne fonctionne que pour les domaines récents"
+        },
+        {
+          "key": "D",
+          "text": "RDAP ne masque jamais aucune information"
+        }
+      ],
+      "correct": "B",
+      "explanation": "cette structuration facilite grandement le traitement automatisé par un script, contrairement au format texte non standardisé de WHOIS."
+    },
+    {
+      "id": 3,
+      "question": "Pourquoi l'ancienneté d'un domaine est-elle un indicateur utile en analyse OSINT ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Parce qu'un domaine ancien ne peut jamais être malveillant"
+        },
+        {
+          "key": "B",
+          "text": "Parce qu'un domaine très récent, notamment s'il imite un domaine légitime, est un signal fréquent de typosquatting ou de campagne malveillante"
+        },
+        {
+          "key": "C",
+          "text": "Parce que WHOIS n'indique jamais la date de création"
+        },
+        {
+          "key": "D",
+          "text": "Ce n'est jamais un indicateur pertinent"
+        }
+      ],
+      "correct": "B",
+      "explanation": "combiné à d'autres indices, l'âge d'un domaine aide à distinguer un projet légitime récent d'une tentative d'usurpation."
+    },
+    {
+      "id": 4,
+      "question": "Pourquoi aucun indice de typosquatting, pris isolément, ne constitue-t-il une preuve suffisante ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Parce que le typosquatting n'existe pas réellement"
+        },
+        {
+          "key": "B",
+          "text": "Parce qu'un domaine récent ou des informations masquées peuvent aussi correspondre à un usage parfaitement légitime"
+        },
+        {
+          "key": "C",
+          "text": "Parce que WHOIS ne fournit jamais d'indices utiles"
+        },
+        {
+          "key": "D",
+          "text": "Parce que seul un expert judiciaire peut évaluer ces indices"
+        }
+      ],
+      "correct": "B",
+      "explanation": "le principe de recoupement, déjà posé tout au long de ce module, s'applique ici : combiner plusieurs indices avant de conclure."
+    },
+    {
+      "id": 5,
+      "question": "Quelle mesure défensive une organisation peut-elle mettre en place à partir des techniques de cette leçon ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Désactiver complètement son propre nom de domaine"
+        },
+        {
+          "key": "B",
+          "text": "Surveiller périodiquement l'enregistrement de domaines proches du sien, pour détecter rapidement une tentative de typosquatting"
+        },
+        {
+          "key": "C",
+          "text": "Supprimer tous ses enregistrements DNS"
+        },
+        {
+          "key": "D",
+          "text": "Masquer son propre domaine de tout moteur de recherche"
+        }
+      ],
+      "correct": "B",
+      "explanation": "une veille automatisée, construite sur le même principe que le script de cette leçon, permet une détection précoce de ce risque."
+    }
+  ]
+}

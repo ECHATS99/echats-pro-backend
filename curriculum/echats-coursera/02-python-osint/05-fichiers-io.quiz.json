@@ -1,0 +1,135 @@
+{
+  "lesson": "05-fichiers-io",
+  "title": "Fichiers et Entrées/Sorties",
+  "module": "Python & OSINT",
+  "order": 5,
+  "difficulty": "debutant",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Quel mode d'ouverture ajoute du texte à la fin d'un fichier sans l'écraser ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "`\"r\"`"
+        },
+        {
+          "key": "B",
+          "text": "`\"w\"`"
+        },
+        {
+          "key": "C",
+          "text": "`\"a\"`"
+        },
+        {
+          "key": "D",
+          "text": "`\"b\"`"
+        }
+      ],
+      "correct": "C",
+      "explanation": "`\"a\"` (append) conserve le contenu existant et écrit à la suite ; `\"w\"` l'efface."
+    },
+    {
+      "id": 2,
+      "question": "Pourquoi lire un gros journal ligne par ligne ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "C'est plus joli"
+        },
+        {
+          "key": "B",
+          "text": "Pour ne pas charger tout le fichier en mémoire"
+        },
+        {
+          "key": "C",
+          "text": "Pour chiffrer le contenu"
+        },
+        {
+          "key": "D",
+          "text": "Parce que `read()` n'existe pas"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la boucle `for ligne in fichier` consomme très peu de mémoire, même pour des fichiers de plusieurs gigaoctets."
+    },
+    {
+      "id": 3,
+      "question": "Que permet de détecter la signature (magic number) d'un fichier ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Son auteur"
+        },
+        {
+          "key": "B",
+          "text": "Son vrai type, même si l'extension a été modifiée"
+        },
+        {
+          "key": "C",
+          "text": "Son mot de passe"
+        },
+        {
+          "key": "D",
+          "text": "Sa date de création"
+        }
+      ],
+      "correct": "B",
+      "explanation": "les premiers octets identifient le format réel (ex. `%PDF`, `MZ`), indépendamment du nom."
+    },
+    {
+      "id": 4,
+      "question": "Quelle vulnérabilité exploite un chemin comme `../../etc/passwd` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "L'injection SQL"
+        },
+        {
+          "key": "B",
+          "text": "Le path traversal (traversée de répertoires)"
+        },
+        {
+          "key": "C",
+          "text": "Le XSS"
+        },
+        {
+          "key": "D",
+          "text": "Le SYN flood"
+        }
+      ],
+      "correct": "B",
+      "explanation": "l'attaquant remonte l'arborescence pour sortir du dossier prévu et lire un fichier sensible."
+    },
+    {
+      "id": 5,
+      "question": "Pourquoi éviter `pickle` pour des données de source non fiable ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Il est trop lent"
+        },
+        {
+          "key": "B",
+          "text": "La désérialisation d'un fichier piégé peut exécuter du code arbitraire"
+        },
+        {
+          "key": "C",
+          "text": "Il ne gère pas les listes"
+        },
+        {
+          "key": "D",
+          "text": "Il ne fonctionne pas sous Linux"
+        }
+      ],
+      "correct": "B",
+      "explanation": "`pickle` peut reconstruire des objets qui exécutent du code ; JSON ne transporte que des données."
+    }
+  ]
+}

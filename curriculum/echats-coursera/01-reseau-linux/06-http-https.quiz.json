@@ -1,0 +1,135 @@
+{
+  "lesson": "06-http-https",
+  "title": "HTTP et HTTPS : le langage du web",
+  "module": "Réseau & Linux",
+  "order": 6,
+  "difficulty": "debutant",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Quel port utilise HTTPS par défaut ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "80"
+        },
+        {
+          "key": "B",
+          "text": "22"
+        },
+        {
+          "key": "C",
+          "text": "443"
+        },
+        {
+          "key": "D",
+          "text": "8080"
+        }
+      ],
+      "correct": "C",
+      "explanation": "HTTP utilise 80, HTTPS 443."
+    },
+    {
+      "id": 2,
+      "question": "Que signifie qu'HTTP est « sans état » ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Il ne fonctionne pas sur Internet"
+        },
+        {
+          "key": "B",
+          "text": "Le serveur ne garde pas en mémoire les requêtes précédentes d'un client"
+        },
+        {
+          "key": "C",
+          "text": "Il ne peut pas envoyer de données"
+        },
+        {
+          "key": "D",
+          "text": "Il est toujours chiffré"
+        }
+      ],
+      "correct": "B",
+      "explanation": "chaque requête est indépendante ; les cookies servent à maintenir une session."
+    },
+    {
+      "id": 3,
+      "question": "Que signifie le code 404 ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Erreur interne du serveur"
+        },
+        {
+          "key": "B",
+          "text": "Accès interdit"
+        },
+        {
+          "key": "C",
+          "text": "Ressource introuvable"
+        },
+        {
+          "key": "D",
+          "text": "Redirection permanente"
+        }
+      ],
+      "correct": "C",
+      "explanation": "404 Not Found indique que la ressource demandée n'existe pas à cette adresse."
+    },
+    {
+      "id": 4,
+      "question": "Quel attribut empêche le JavaScript de lire un cookie ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Secure"
+        },
+        {
+          "key": "B",
+          "text": "HttpOnly"
+        },
+        {
+          "key": "C",
+          "text": "SameSite"
+        },
+        {
+          "key": "D",
+          "text": "Max-Age"
+        }
+      ],
+      "correct": "B",
+      "explanation": "`HttpOnly` réduit les conséquences d'une faille XSS en protégeant les cookies de session."
+    },
+    {
+      "id": 5,
+      "question": "Que garantit TLS ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Que le site est honnête"
+        },
+        {
+          "key": "B",
+          "text": "Confidentialité, intégrité et authentification du serveur"
+        },
+        {
+          "key": "C",
+          "text": "L'absence de failles dans l'application"
+        },
+        {
+          "key": "D",
+          "text": "L'anonymat de l'utilisateur"
+        }
+      ],
+      "correct": "B",
+      "explanation": "TLS protège la connexion, pas le comportement du site ni les failles de l'application."
+    }
+  ]
+}

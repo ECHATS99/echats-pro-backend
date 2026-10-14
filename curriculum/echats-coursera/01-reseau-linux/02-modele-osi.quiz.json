@@ -1,0 +1,135 @@
+{
+  "lesson": "02-modele-osi",
+  "title": "Le Modèle OSI",
+  "module": "Réseau & Linux",
+  "order": 2,
+  "difficulty": "debutant",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Combien de couches compte le modèle OSI ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "4"
+        },
+        {
+          "key": "B",
+          "text": "5"
+        },
+        {
+          "key": "C",
+          "text": "7"
+        },
+        {
+          "key": "D",
+          "text": "9"
+        }
+      ],
+      "correct": "C",
+      "explanation": "Physique, Liaison, Réseau, Transport, Session, Présentation, Application : sept couches."
+    },
+    {
+      "id": 2,
+      "question": "À quelle couche travaille un routeur ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Couche 2"
+        },
+        {
+          "key": "B",
+          "text": "Couche 3"
+        },
+        {
+          "key": "C",
+          "text": "Couche 5"
+        },
+        {
+          "key": "D",
+          "text": "Couche 7"
+        }
+      ],
+      "correct": "B",
+      "explanation": "le routeur utilise les adresses IP pour acheminer les paquets : c'est la couche Réseau."
+    },
+    {
+      "id": 3,
+      "question": "Quelle unité de données correspond à la couche 2 ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Le bit"
+        },
+        {
+          "key": "B",
+          "text": "Le paquet"
+        },
+        {
+          "key": "C",
+          "text": "La trame"
+        },
+        {
+          "key": "D",
+          "text": "Le segment"
+        }
+      ],
+      "correct": "C",
+      "explanation": "couche 1 = bits, 2 = trames, 3 = paquets, 4 = segments (TCP) ou datagrammes (UDP)."
+    },
+    {
+      "id": 4,
+      "question": "Une injection SQL est une attaque de quelle couche ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Couche 1"
+        },
+        {
+          "key": "B",
+          "text": "Couche 4"
+        },
+        {
+          "key": "C",
+          "text": "Couche 3"
+        },
+        {
+          "key": "D",
+          "text": "Couche 7"
+        }
+      ],
+      "correct": "D",
+      "explanation": "elle cible une application web, donc la couche Application."
+    },
+    {
+      "id": 5,
+      "question": "Que signifie l'encapsulation ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Compresser les données"
+        },
+        {
+          "key": "B",
+          "text": "Ajouter un en-tête à chaque couche lors de l'émission"
+        },
+        {
+          "key": "C",
+          "text": "Chiffrer un fichier"
+        },
+        {
+          "key": "D",
+          "text": "Supprimer les erreurs réseau"
+        }
+      ],
+      "correct": "B",
+      "explanation": "chaque couche enveloppe les données de la couche supérieure avec son propre en-tête."
+    }
+  ]
+}

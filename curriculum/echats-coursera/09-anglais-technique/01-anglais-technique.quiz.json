@@ -1,0 +1,236 @@
+{
+  "lesson": "01-anglais-technique",
+  "title": "LEÇON 11  Anglais Technique en Cybersécurité",
+  "module": "Anglais Technique en Cybersécurité",
+  "order": 1,
+  "difficulty": "intermediaire",
+  "questions_count": 10,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Que signifie CVE?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Common Vulnerabilities and Exposures"
+        },
+        {
+          "key": "B",
+          "text": "Cyber Verification Engine"
+        },
+        {
+          "key": "C",
+          "text": "Common Virtual Encryption"
+        },
+        {
+          "key": "D",
+          "text": "Critical Version Endpoint"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Common Vulnerabilities and Exposures » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 2,
+      "question": "Dans un rapport de vulnérabilité, où décrit-on la conséquence pour l’organisation?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Impact"
+        },
+        {
+          "key": "B",
+          "text": "Subject"
+        },
+        {
+          "key": "C",
+          "text": "Greeting"
+        },
+        {
+          "key": "D",
+          "text": "Appendix only"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Impact » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 3,
+      "question": "Que signifie “remediation”?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Mesures de correction"
+        },
+        {
+          "key": "B",
+          "text": "Collecte de logs"
+        },
+        {
+          "key": "C",
+          "text": "Chiffrement asymétrique"
+        },
+        {
+          "key": "D",
+          "text": "Adresse réseau"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Mesures de correction » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 4,
+      "question": "Pourquoi lire le mot “EXCEPT” avec attention dans un examen?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Il inverse la recherche demandée"
+        },
+        {
+          "key": "B",
+          "text": "Il indique toujours une vulnérabilité"
+        },
+        {
+          "key": "C",
+          "text": "Il signifie chiffrement"
+        },
+        {
+          "key": "D",
+          "text": "Il supprime les choix"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Il inverse la recherche demandée » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 5,
+      "question": "Un résumé technique doit-il distinguer faits et interprétations?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Vrai"
+        },
+        {
+          "key": "B",
+          "text": "Faux"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Vrai » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 6,
+      "question": "Quel élément rend une divulgation responsable?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Canal vérifié, preuve minimale et délai de correction coordonné"
+        },
+        {
+          "key": "B",
+          "text": "Publication immédiate de secrets"
+        },
+        {
+          "key": "C",
+          "text": "Absence de détails reproductibles"
+        },
+        {
+          "key": "D",
+          "text": "Menace publique"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Canal vérifié, preuve minimale et délai de correction coordonné » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 7,
+      "question": "Que signifie “lateral movement”?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Mouvement latéral dans l’environnement"
+        },
+        {
+          "key": "B",
+          "text": "Chiffrement du disque"
+        },
+        {
+          "key": "C",
+          "text": "Sauvegarde distante"
+        },
+        {
+          "key": "D",
+          "text": "Validation d’email"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Mouvement latéral dans l’environnement » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 8,
+      "question": "Quel format aide à présenter un finding en anglais?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Title, Severity, Description, Evidence, Impact, Remediation"
+        },
+        {
+          "key": "B",
+          "text": "Password, Token, Secret"
+        },
+        {
+          "key": "C",
+          "text": "Only screenshots"
+        },
+        {
+          "key": "D",
+          "text": "Random notes"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Title, Severity, Description, Evidence, Impact, Remediation » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 9,
+      "question": "Faut-il traduire automatiquement un acronyme sans vérifier son contexte?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Oui"
+        },
+        {
+          "key": "B",
+          "text": "Non"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la bonne pratique professionnelle est « Non » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 10,
+      "question": "La communication technique doit-elle être exacte et adaptée au public?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Vrai"
+        },
+        {
+          "key": "B",
+          "text": "Faux"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Vrai » — à préciser/enrichir par un relecteur."
+    }
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "lesson": "01-introduction-reseaux",
+  "title": "Introduction aux Réseaux Informatiques",
+  "module": "Réseau & Linux",
+  "order": 1,
+  "difficulty": "debutant",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Quel équipement permet de relier deux réseaux différents ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Le switch"
+        },
+        {
+          "key": "B",
+          "text": "Le routeur"
+        },
+        {
+          "key": "C",
+          "text": "Le hub"
+        },
+        {
+          "key": "D",
+          "text": "Le répéteur"
+        }
+      ],
+      "correct": "B",
+      "explanation": "le routeur travaille avec les adresses IP et achemine les paquets d'un réseau à un autre. Le switch, lui, relie les machines au sein d'un même réseau local."
+    },
+    {
+      "id": 2,
+      "question": "Quel type de réseau décrit le mieux le Wi-Fi d'un cybercafé ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "WAN"
+        },
+        {
+          "key": "B",
+          "text": "MAN"
+        },
+        {
+          "key": "C",
+          "text": "LAN"
+        },
+        {
+          "key": "D",
+          "text": "PAN"
+        }
+      ],
+      "correct": "C",
+      "explanation": "un LAN couvre un espace limité (un bâtiment) et est géré par une seule organisation."
+    },
+    {
+      "id": 3,
+      "question": "Quelle adresse est une adresse IP privée ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "8.8.8.8"
+        },
+        {
+          "key": "B",
+          "text": "192.168.1.25"
+        },
+        {
+          "key": "C",
+          "text": "41.77.10.5"
+        },
+        {
+          "key": "D",
+          "text": "142.250.74.46"
+        }
+      ],
+      "correct": "B",
+      "explanation": "les plages 10.0.0.0/8, 172.16.0.0/12 et 192.168.0.0/16 sont réservées aux réseaux privés et ne sont pas routées sur Internet."
+    },
+    {
+      "id": 4,
+      "question": "Que fait la commande `ping` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Elle chiffre les données"
+        },
+        {
+          "key": "B",
+          "text": "Elle mesure si une machine répond et le temps de réponse"
+        },
+        {
+          "key": "C",
+          "text": "Elle bloque un port"
+        },
+        {
+          "key": "D",
+          "text": "Elle change l'adresse IP"
+        }
+      ],
+      "correct": "B",
+      "explanation": "`ping` envoie des messages de test (ICMP) et mesure la réponse. C'est un outil de diagnostic de base."
+    },
+    {
+      "id": 5,
+      "question": "Que représente la passerelle par défaut ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Le serveur DNS"
+        },
+        {
+          "key": "B",
+          "text": "L'adresse MAC de la carte réseau"
+        },
+        {
+          "key": "C",
+          "text": "Le routeur vers lequel sont envoyés les paquets destinés à l'extérieur du LAN"
+        },
+        {
+          "key": "D",
+          "text": "Le mot de passe du Wi-Fi"
+        }
+      ],
+      "correct": "C",
+      "explanation": "quand la destination n'est pas dans ton réseau local, ta machine envoie le paquet à la passerelle, qui se charge de le faire suivre."
+    }
+  ]
+}

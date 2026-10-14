@@ -1,0 +1,135 @@
+{
+  "lesson": "12-systemd-services",
+  "title": "Systemd et Gestion des Services",
+  "module": "Réseau & Linux",
+  "order": 12,
+  "difficulty": "intermediaire",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Quel est le rôle de systemd ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Un antivirus"
+        },
+        {
+          "key": "B",
+          "text": "Le premier processus (PID 1), qui démarre et gère les services"
+        },
+        {
+          "key": "C",
+          "text": "Un éditeur de texte"
+        },
+        {
+          "key": "D",
+          "text": "Un pare-feu"
+        }
+      ],
+      "correct": "B",
+      "explanation": "systemd initialise l'espace utilisateur, lance les services et surveille leur état."
+    },
+    {
+      "id": 2,
+      "question": "Quelle commande active un service au démarrage ET le lance immédiatement ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "`systemctl start --enable`"
+        },
+        {
+          "key": "B",
+          "text": "`systemctl enable --now service`"
+        },
+        {
+          "key": "C",
+          "text": "`systemctl boot service`"
+        },
+        {
+          "key": "D",
+          "text": "`systemctl on service`"
+        }
+      ],
+      "correct": "B",
+      "explanation": "`enable` configure le démarrage automatique, `--now` démarre aussi le service tout de suite."
+    },
+    {
+      "id": 3,
+      "question": "Quelle commande affiche les journaux d'un service nommé `ssh` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "`systemctl logs ssh`"
+        },
+        {
+          "key": "B",
+          "text": "`cat /var/ssh.log`"
+        },
+        {
+          "key": "C",
+          "text": "`journalctl -u ssh`"
+        },
+        {
+          "key": "D",
+          "text": "`ssh --journal`"
+        }
+      ],
+      "correct": "C",
+      "explanation": "`journalctl -u` filtre le journal systemd sur une unité précise."
+    },
+    {
+      "id": 4,
+      "question": "Après modification d'un fichier `.service`, que faut-il exécuter ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "`systemctl daemon-reload`"
+        },
+        {
+          "key": "B",
+          "text": "`reboot` obligatoirement"
+        },
+        {
+          "key": "C",
+          "text": "`chmod 777`"
+        },
+        {
+          "key": "D",
+          "text": "Rien du tout"
+        }
+      ],
+      "correct": "A",
+      "explanation": "systemd doit relire les fichiers d'unité pour prendre en compte les changements."
+    },
+    {
+      "id": 5,
+      "question": "Pourquoi inspecter `/etc/systemd/system/` lors d'une investigation ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Pour y trouver des documents personnels"
+        },
+        {
+          "key": "B",
+          "text": "Parce qu'un attaquant peut y ajouter un service assurant sa persistance"
+        },
+        {
+          "key": "C",
+          "text": "Pour modifier le noyau"
+        },
+        {
+          "key": "D",
+          "text": "Pour changer l'heure"
+        }
+      ],
+      "correct": "B",
+      "explanation": "un service malveillant installé là redémarre automatiquement avec la machine."
+    }
+  ]
+}

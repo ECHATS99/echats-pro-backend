@@ -1,0 +1,135 @@
+{
+  "lesson": "11-permissions-linux",
+  "title": "Permissions et Utilisateurs Linux",
+  "module": "Réseau & Linux",
+  "order": 11,
+  "difficulty": "debutant",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Que signifie `-rwxr-xr--` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Propriétaire : rwx, groupe : r-x, autres : r--"
+        },
+        {
+          "key": "B",
+          "text": "Propriétaire : r-x, groupe : rwx, autres : r--"
+        },
+        {
+          "key": "C",
+          "text": "Tout le monde peut tout faire"
+        },
+        {
+          "key": "D",
+          "text": "Fichier exécutable uniquement par root"
+        }
+      ],
+      "correct": "A",
+      "explanation": "les trois blocs de trois caractères correspondent dans l'ordre au propriétaire, au groupe et aux autres."
+    },
+    {
+      "id": 2,
+      "question": "Quelle est la valeur octale de `rw-r--r--` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "755"
+        },
+        {
+          "key": "B",
+          "text": "644"
+        },
+        {
+          "key": "C",
+          "text": "600"
+        },
+        {
+          "key": "D",
+          "text": "777"
+        }
+      ],
+      "correct": "B",
+      "explanation": "rw- = 6, r-- = 4, r-- = 4, donc 644."
+    },
+    {
+      "id": 3,
+      "question": "Quelle commande rend un script exécutable pour son propriétaire ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "`chown +x script.sh`"
+        },
+        {
+          "key": "B",
+          "text": "`chmod u+x script.sh`"
+        },
+        {
+          "key": "C",
+          "text": "`chmod 000 script.sh`"
+        },
+        {
+          "key": "D",
+          "text": "`exec script.sh`"
+        }
+      ],
+      "correct": "B",
+      "explanation": "`chmod u+x` ajoute le droit d'exécution au propriétaire."
+    },
+    {
+      "id": 4,
+      "question": "Pourquoi un binaire SUID root mal sécurisé est-il dangereux ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Il consomme beaucoup de mémoire"
+        },
+        {
+          "key": "B",
+          "text": "Il s'exécute avec les droits de root et peut être détourné pour élever ses privilèges"
+        },
+        {
+          "key": "C",
+          "text": "Il ne peut pas être supprimé"
+        },
+        {
+          "key": "D",
+          "text": "Il bloque le réseau"
+        }
+      ],
+      "correct": "B",
+      "explanation": "tout défaut dans un programme SUID root peut donner à un utilisateur ordinaire des droits administrateur."
+    },
+    {
+      "id": 5,
+      "question": "Qui peut lire `/etc/shadow` par défaut ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Tous les utilisateurs"
+        },
+        {
+          "key": "B",
+          "text": "Uniquement root (et certains groupes de service)"
+        },
+        {
+          "key": "C",
+          "text": "Uniquement les utilisateurs connectés"
+        },
+        {
+          "key": "D",
+          "text": "Personne, même pas root"
+        }
+      ],
+      "correct": "B",
+      "explanation": "il contient les empreintes de mots de passe, son accès est donc strictement limité."
+    }
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "lesson": "13-bash-scripting",
+  "title": "Bash Scripting pour la Sécurité",
+  "module": "Réseau & Linux",
+  "order": 13,
+  "difficulty": "intermediaire",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Que signifie `#!/bin/bash` en première ligne ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Un commentaire sans importance"
+        },
+        {
+          "key": "B",
+          "text": "Le shebang, qui indique l'interpréteur à utiliser"
+        },
+        {
+          "key": "C",
+          "text": "Une redirection"
+        },
+        {
+          "key": "D",
+          "text": "Une variable"
+        }
+      ],
+      "correct": "B",
+      "explanation": "le shebang indique au système quel programme exécutera le script."
+    },
+    {
+      "id": 2,
+      "question": "Que contient la variable `$?` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Le nombre d'arguments"
+        },
+        {
+          "key": "B",
+          "text": "Le PID du script"
+        },
+        {
+          "key": "C",
+          "text": "Le code de retour de la dernière commande"
+        },
+        {
+          "key": "D",
+          "text": "Le nom de l'utilisateur"
+        }
+      ],
+      "correct": "C",
+      "explanation": "0 signifie succès, toute autre valeur indique une erreur."
+    },
+    {
+      "id": 3,
+      "question": "Quelle écriture d'affectation est correcte ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "`nom = \"Alice\"`"
+        },
+        {
+          "key": "B",
+          "text": "`nom=\"Alice\"`"
+        },
+        {
+          "key": "C",
+          "text": "`$nom=\"Alice\"`"
+        },
+        {
+          "key": "D",
+          "text": "`set nom Alice`"
+        }
+      ],
+      "correct": "B",
+      "explanation": "en Bash, il ne doit y avoir aucun espace autour du signe égal."
+    },
+    {
+      "id": 4,
+      "question": "Pourquoi mettre `\"$variable\"` entre guillemets ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Pour la chiffrer"
+        },
+        {
+          "key": "B",
+          "text": "Pour éviter les erreurs avec les espaces et les caractères spéciaux, et limiter les injections"
+        },
+        {
+          "key": "C",
+          "text": "Pour qu'elle soit plus rapide"
+        },
+        {
+          "key": "D",
+          "text": "C'est purement esthétique"
+        }
+      ],
+      "correct": "B",
+      "explanation": "sans guillemets, le shell découpe et interprète le contenu, ce qui provoque des bugs et des failles."
+    },
+    {
+      "id": 5,
+      "question": "Que fait `set -euo pipefail` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Il chiffre le script"
+        },
+        {
+          "key": "B",
+          "text": "Il fait échouer le script en cas d'erreur, de variable non définie ou d'échec dans un pipe"
+        },
+        {
+          "key": "C",
+          "text": "Il supprime les commentaires"
+        },
+        {
+          "key": "D",
+          "text": "Il lance le script en arrière-plan"
+        }
+      ],
+      "correct": "B",
+      "explanation": "ces options rendent le script plus strict et évitent de continuer silencieusement après une erreur."
+    }
+  ]
+}

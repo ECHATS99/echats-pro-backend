@@ -1,0 +1,135 @@
+{
+  "lesson": "11-recherche-utilisateur",
+  "title": "Recherche de Pseudonymes à Travers les Plateformes",
+  "module": "Python & OSINT",
+  "order": 11,
+  "difficulty": "intermediaire",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Pourquoi un pseudonyme original et distinctif est-il plus facile à relier entre plateformes qu'un pseudonyme générique ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Parce que les pseudonymes génériques sont interdits sur la plupart des plateformes"
+        },
+        {
+          "key": "B",
+          "text": "Parce qu'un pseudonyme générique peut appartenir à de nombreuses personnes différentes, rendant la corrélation incertaine, contrairement à un pseudonyme distinctif"
+        },
+        {
+          "key": "C",
+          "text": "Parce que les plateformes bloquent automatiquement les pseudonymes génériques"
+        },
+        {
+          "key": "D",
+          "text": "Il n'y a aucune différence pratique entre les deux"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la distinctivité d'un pseudonyme est précisément ce qui permet d'affirmer, avec une bonne confiance, que plusieurs comptes appartiennent à la même personne."
+    },
+    {
+      "id": 2,
+      "question": "Pourquoi la corrélation entre plusieurs comptes peut-elle révéler plus d'informations que chaque compte pris isolément ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Parce que chaque plateforme partage directement ses données avec les autres"
+        },
+        {
+          "key": "B",
+          "text": "Parce que l'assemblage d'informations publiques dispersées sur plusieurs contextes dresse un portrait plus complet qu'aucune des plateformes ne révèle seule"
+        },
+        {
+          "key": "C",
+          "text": "Parce que les mots de passe sont identiques sur toutes les plateformes"
+        },
+        {
+          "key": "D",
+          "text": "Ce n'est jamais le cas en pratique"
+        }
+      ],
+      "correct": "B",
+      "explanation": "c'est le même principe que l'enquête Bellingcat de la leçon précédente, appliqué ici à une personne plutôt qu'à un événement."
+    },
+    {
+      "id": 3,
+      "question": "Dans quel cadre est-il acceptable de mener une recherche multi-plateforme sur le pseudonyme d'une personne réelle ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Dès lors que l'information est techniquement accessible publiquement"
+        },
+        {
+          "key": "B",
+          "text": "Uniquement avec le consentement explicite de la personne concernée pour cette recherche précise, ou dans un cadre légal et mandaté clair"
+        },
+        {
+          "key": "C",
+          "text": "Toujours, tant que l'intention n'est pas malveillante"
+        },
+        {
+          "key": "D",
+          "text": "Seulement si la personne est une personnalité publique"
+        }
+      ],
+      "correct": "B",
+      "explanation": "l'accessibilité technique d'une information ne constitue jamais, à elle seule, une autorisation à la collecter et la corréler sur une personne."
+    },
+    {
+      "id": 4,
+      "question": "Quel est l'intérêt principal d'un outil automatisé comme Sherlock par rapport à une recherche manuelle ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Il permet de pirater des comptes privés"
+        },
+        {
+          "key": "B",
+          "text": "Il interroge rapidement un grand nombre de plateformes, là où une recherche manuelle se limiterait naturellement à quelques-unes"
+        },
+        {
+          "key": "C",
+          "text": "Il devine automatiquement les mots de passe associés"
+        },
+        {
+          "key": "D",
+          "text": "Il ne fonctionne que sur les réseaux sociaux"
+        }
+      ],
+      "correct": "B",
+      "explanation": "l'outil automatise l'exhaustivité de la recherche, sans changer la nature de ce qu'il recherche — des comptes publics associés à un même pseudonyme."
+    },
+    {
+      "id": 5,
+      "question": "Quelle mesure défensive réduit concrètement sa propre empreinte numérique liée aux pseudonymes ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Utiliser le même pseudonyme partout pour simplifier sa gestion"
+        },
+        {
+          "key": "B",
+          "text": "Utiliser des pseudonymes différents pour les contextes que l'on souhaite garder séparés"
+        },
+        {
+          "key": "C",
+          "text": "Ne jamais créer de compte en ligne"
+        },
+        {
+          "key": "D",
+          "text": "Publier une photo de profil identique sur tous les comptes pour rester cohérent"
+        }
+      ],
+      "correct": "B",
+      "explanation": "séparer les identités selon les contextes limite directement le risque de corrélation involontaire entre des sphères de vie que l'on souhaite garder distinctes."
+    }
+  ]
+}

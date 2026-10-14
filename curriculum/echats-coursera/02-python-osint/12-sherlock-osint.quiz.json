@@ -1,0 +1,135 @@
+{
+  "lesson": "12-sherlock-osint",
+  "title": "Sherlock : Automatiser la Recherche de Pseudonymes",
+  "module": "Python & OSINT",
+  "order": 12,
+  "difficulty": "intermediaire",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Sur quel principe repose le fonctionnement de Sherlock ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Il devine les mots de passe associés à un pseudonyme"
+        },
+        {
+          "key": "B",
+          "text": "Il construit une URL prévisible pour chaque site de sa liste et observe la réponse du serveur pour en déduire l'existence d'un profil"
+        },
+        {
+          "key": "C",
+          "text": "Il accède à des bases de données privées des plateformes"
+        },
+        {
+          "key": "D",
+          "text": "Il ne fonctionne que sur les réseaux sociaux les plus connus"
+        }
+      ],
+      "correct": "B",
+      "explanation": "c'est une application directe des principes HTTP déjà étudiés — codes de statut et motifs d'URL — à un usage de reconnaissance."
+    },
+    {
+      "id": 2,
+      "question": "Pourquoi un résultat positif de Sherlock peut-il être un faux positif ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Parce que Sherlock invente des résultats aléatoirement"
+        },
+        {
+          "key": "B",
+          "text": "Parce que certains sites renvoient un code de succès même pour un nom d'utilisateur inexistant"
+        },
+        {
+          "key": "C",
+          "text": "Parce que Sherlock ne teste jamais réellement les sites"
+        },
+        {
+          "key": "D",
+          "text": "Les faux positifs sont impossibles avec cet outil"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la détection automatique du statut d'un compte peut être trompée par un comportement non standard du site testé."
+    },
+    {
+      "id": 3,
+      "question": "Que faut-il faire avant de considérer un résultat Sherlock comme fiable pour une plateforme importante ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Rien, les résultats sont toujours exacts"
+        },
+        {
+          "key": "B",
+          "text": "Vérifier manuellement en ouvrant l'URL indiquée dans son propre navigateur"
+        },
+        {
+          "key": "C",
+          "text": "Relancer Sherlock plusieurs fois de suite"
+        },
+        {
+          "key": "D",
+          "text": "Contacter directement la plateforme concernée"
+        }
+      ],
+      "correct": "B",
+      "explanation": "cette vérification humaine reste indispensable, comme pour tout outil automatisé rencontré dans ce cours."
+    },
+    {
+      "id": 4,
+      "question": "Pourquoi certaines équipes de confiance et sécurité de grandes plateformes utilisent-elles légitimement un outil comme Sherlock ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Pour espionner leurs utilisateurs sans raison"
+        },
+        {
+          "key": "B",
+          "text": "Pour identifier, dans le cadre de leurs politiques de modération, si un compte signalé pour abus en possède d'autres"
+        },
+        {
+          "key": "C",
+          "text": "Parce que la loi les y oblige systématiquement"
+        },
+        {
+          "key": "D",
+          "text": "Pour vendre les données trouvées à des tiers"
+        }
+      ],
+      "correct": "B",
+      "explanation": "cet usage s'inscrit dans un mandat professionnel défini, ce qui en fait un usage légitime au même titre que les autres exemples déjà vus dans ce cours."
+    },
+    {
+      "id": 5,
+      "question": "Pourquoi l'automatisation offerte par Sherlock rend-elle le cadre éthique de la leçon précédente encore plus important à respecter ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Parce que l'automatisation est interdite par la loi"
+        },
+        {
+          "key": "B",
+          "text": "Parce qu'elle permet d'interroger des centaines de sites en quelques secondes, rendant d'autant plus grave un usage non consenti sur une personne réelle"
+        },
+        {
+          "key": "C",
+          "text": "Parce que Sherlock nécessite une autorisation spéciale pour être installé"
+        },
+        {
+          "key": "D",
+          "text": "L'automatisation ne change rien au cadre éthique"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la puissance d'un outil amplifie les conséquences d'un usage inapproprié, ce qui renforce — plutôt qu'il ne dispense de — la nécessité du cadre éthique déjà posé."
+    }
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "lesson": "13-maltego",
+  "title": "Maltego : Visualiser les Relations entre Entités",
+  "module": "Python & OSINT",
+  "order": 13,
+  "difficulty": "intermediaire",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Qu'est-ce qu'un transform dans Maltego ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Un filtre visuel appliqué au graphe"
+        },
+        {
+          "key": "B",
+          "text": "Une action qui part d'une entité existante et en découvre de nouvelles qui lui sont liées"
+        },
+        {
+          "key": "C",
+          "text": "Un format d'exportation de données"
+        },
+        {
+          "key": "D",
+          "text": "Un type d'entité réservé aux adresses IP"
+        }
+      ],
+      "correct": "B",
+      "explanation": "chaque transform exécuté enrichit le graphe de nouvelles entités reliées à celle sur laquelle il a été lancé."
+    },
+    {
+      "id": 2,
+      "question": "En quoi Maltego diffère-t-il fondamentalement des commandes dig et whois pour une reconnaissance DNS ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Il utilise des sources d'information totalement différentes"
+        },
+        {
+          "key": "B",
+          "text": "Il visualise et accumule les relations entre découvertes sous forme de graphe, plutôt que de produire des résultats isolés"
+        },
+        {
+          "key": "C",
+          "text": "Il ne fonctionne que sur des domaines payants"
+        },
+        {
+          "key": "D",
+          "text": "Il remplace entièrement le besoin de comprendre le DNS"
+        }
+      ],
+      "correct": "B",
+      "explanation": "Maltego orchestre souvent les mêmes sources que dig et whois, mais les relie visuellement plutôt que de les afficher séparément."
+    },
+    {
+      "id": 3,
+      "question": "Pourquoi organiser automatiquement un graphe Maltego devient-il utile avec de nombreuses entités ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Parce que Maltego n'affiche pas les entités sans organisation automatique"
+        },
+        {
+          "key": "B",
+          "text": "Parce qu'un graphe dense devient rapidement illisible sans une disposition claire"
+        },
+        {
+          "key": "C",
+          "text": "Parce que l'organisation automatique ajoute de nouvelles entités"
+        },
+        {
+          "key": "D",
+          "text": "Ce n'est jamais nécessaire, quel que soit le nombre d'entités"
+        }
+      ],
+      "correct": "B",
+      "explanation": "les modes d'organisation (cercle, hiérarchique...) améliorent la lisibilité à mesure que le graphe grandit."
+    },
+    {
+      "id": 4,
+      "question": "Pourquoi Maltego est-il également utilisé par des journalistes d'investigation, au-delà de la cybersécurité ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Parce qu'il est gratuit pour la presse uniquement"
+        },
+        {
+          "key": "B",
+          "text": "Parce que le principe de suivre des relations entre entités s'applique aussi bien à des réseaux d'entreprises qu'à une infrastructure technique"
+        },
+        {
+          "key": "C",
+          "text": "Parce qu'il donne accès à des bases de données confidentielles"
+        },
+        {
+          "key": "D",
+          "text": "Parce qu'il remplace le travail d'enquête humain"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la méthode OSINT — partir d'une entité connue et suivre ses relations — dépasse largement le seul cadre technique de la cybersécurité."
+    },
+    {
+      "id": 5,
+      "question": "Quelle affirmation décrit le mieux la relation entre Maltego, Sherlock et dig/whois ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Maltego remplace entièrement les deux autres outils"
+        },
+        {
+          "key": "B",
+          "text": "Ce sont des outils complémentaires, chacun adapté à une étape différente d'une enquête OSINT"
+        },
+        {
+          "key": "C",
+          "text": "Ils font exactement la même chose avec une interface différente"
+        },
+        {
+          "key": "D",
+          "text": "Seul Maltego est utilisable dans un cadre professionnel"
+        }
+      ],
+      "correct": "B",
+      "explanation": "un analyste expérimenté combine ces outils selon le besoin — ciblé et scriptable, automatisé et large, ou visuel et synthétique."
+    }
+  ]
+}

@@ -1,0 +1,236 @@
+{
+  "lesson": "bonus-cryptographie",
+  "title": "LEÇON 4  Cryptographie",
+  "module": "Cryptographie",
+  "order": 90,
+  "difficulty": "intermediaire",
+  "questions_count": 10,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Quel objectif signifie que seules les personnes autorisées lisent le message?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Confidentialité"
+        },
+        {
+          "key": "B",
+          "text": "Intégrité"
+        },
+        {
+          "key": "C",
+          "text": "Disponibilité"
+        },
+        {
+          "key": "D",
+          "text": "Journalisation"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Confidentialité » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 2,
+      "question": "Quel mécanisme produit une empreinte de longueur fixe?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Hachage"
+        },
+        {
+          "key": "B",
+          "text": "Encodage base64"
+        },
+        {
+          "key": "C",
+          "text": "Compression"
+        },
+        {
+          "key": "D",
+          "text": "Routage"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Hachage » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 3,
+      "question": "Le hachage est-il conçu pour être inversé afin de retrouver l’entrée?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Oui"
+        },
+        {
+          "key": "B",
+          "text": "Non"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la bonne pratique professionnelle est « Non » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 4,
+      "question": "Pourquoi utiliser un sel unique avec un dérivé de mot de passe?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Pour différencier des mots de passe identiques et gêner les tables pré-calculées"
+        },
+        {
+          "key": "B",
+          "text": "Pour rendre le réseau plus rapide"
+        },
+        {
+          "key": "C",
+          "text": "Pour remplacer l’authentification"
+        },
+        {
+          "key": "D",
+          "text": "Pour compresser la base"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Pour différencier des mots de passe identiques et gêner les tables pré-calculées » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 5,
+      "question": "Quel mode AES fournit chiffrement et authentification intégrée?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "ECB"
+        },
+        {
+          "key": "B",
+          "text": "GCM"
+        },
+        {
+          "key": "C",
+          "text": "TXT"
+        },
+        {
+          "key": "D",
+          "text": "RAW"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la bonne pratique professionnelle est « GCM » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 6,
+      "question": "Quel élément doit rester secret dans une paire asymétrique?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Clé publique"
+        },
+        {
+          "key": "B",
+          "text": "Clé privée"
+        },
+        {
+          "key": "C",
+          "text": "Nom de domaine"
+        },
+        {
+          "key": "D",
+          "text": "Certificat public"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la bonne pratique professionnelle est « Clé privée » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 7,
+      "question": "Quel est le rôle d’un certificat TLS?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Lier une identité de domaine à une clé publique via une autorité de confiance"
+        },
+        {
+          "key": "B",
+          "text": "Remplacer tous les mots de passe"
+        },
+        {
+          "key": "C",
+          "text": "Compresser HTTP"
+        },
+        {
+          "key": "D",
+          "text": "Ouvrir les ports"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Lier une identité de domaine à une clé publique via une autorité de confiance » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 8,
+      "question": "Pourquoi ECB est-il déconseillé?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Il peut révéler des motifs de blocs identiques"
+        },
+        {
+          "key": "B",
+          "text": "Il est toujours lent"
+        },
+        {
+          "key": "C",
+          "text": "Il exige une clé publique"
+        },
+        {
+          "key": "D",
+          "text": "Il ne fonctionne qu’en IPv6"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Il peut révéler des motifs de blocs identiques » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 9,
+      "question": "Un nonce ne doit-il pas être réutilisé avec la même clé dans un mode authentifié?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Vrai"
+        },
+        {
+          "key": "B",
+          "text": "Faux"
+        }
+      ],
+      "correct": "A",
+      "explanation": "la bonne pratique professionnelle est « Vrai » — à préciser/enrichir par un relecteur."
+    },
+    {
+      "id": 10,
+      "question": "SHA-256 est-il à lui seul une solution adaptée au stockage des mots de passe?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Oui"
+        },
+        {
+          "key": "B",
+          "text": "Non, il faut un dérivé lent et salé adapté"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la bonne pratique professionnelle est « Non, il faut un dérivé lent et salé adapté » — à préciser/enrichir par un relecteur."
+    }
+  ]
+}

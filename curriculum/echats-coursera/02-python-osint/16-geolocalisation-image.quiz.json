@@ -1,0 +1,135 @@
+{
+  "lesson": "16-geolocalisation-image",
+  "title": "Géolocalisation d'Image : Retrouver un Lieu sans Métadonnées",
+  "module": "Python & OSINT",
+  "order": 16,
+  "difficulty": "avance",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Pourquoi une photo reste-t-elle souvent géolocalisable même après la suppression de ses métadonnées EXIF ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Parce que les métadonnées se régénèrent automatiquement"
+        },
+        {
+          "key": "B",
+          "text": "Parce que l'image elle-même contient des indices visuels exploitables, indépendamment de ses métadonnées"
+        },
+        {
+          "key": "C",
+          "text": "Parce que toutes les photos contiennent un filigrane invisible"
+        },
+        {
+          "key": "D",
+          "text": "Ce n'est en réalité jamais possible sans métadonnées"
+        }
+      ],
+      "correct": "B",
+      "explanation": "panneaux, architecture, végétation et autres indices visuels permettent une géolocalisation méthodique, indépendamment des métadonnées du fichier."
+    },
+    {
+      "id": 2,
+      "question": "Pourquoi faut-il commencer l'analyse par les indices les plus spécifiques plutôt que par les indices généraux ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Parce que les indices généraux ne servent jamais à rien"
+        },
+        {
+          "key": "B",
+          "text": "Parce qu'un indice spécifique permet souvent de confirmer ou restreindre rapidement une zone, alors que les indices généraux servent surtout à confirmer une hypothèse déjà posée"
+        },
+        {
+          "key": "C",
+          "text": "Parce que c'est une règle imposée par les outils de cartographie"
+        },
+        {
+          "key": "D",
+          "text": "Il n'y a aucune différence d'efficacité entre les deux types d'indices"
+        }
+      ],
+      "correct": "B",
+      "explanation": "un nom de rue lisible restreint immédiatement l'espace de recherche, alors qu'un style architectural seul laisse une zone bien plus large."
+    },
+    {
+      "id": 3,
+      "question": "Que signifie classer une géolocalisation comme « probable » plutôt que « confirmée » ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Que la conclusion est fausse"
+        },
+        {
+          "key": "B",
+          "text": "Qu'un faisceau d'indices cohérents existe, mais sans confirmation visuelle directe au niveau de la rue"
+        },
+        {
+          "key": "C",
+          "text": "Que l'analyse n'a pas été réalisée sérieusement"
+        },
+        {
+          "key": "D",
+          "text": "Que l'image contient encore ses métadonnées"
+        }
+      ],
+      "correct": "B",
+      "explanation": "cette échelle de confiance permet de communiquer honnêtement le niveau de certitude réellement atteint par l'analyse."
+    },
+    {
+      "id": 4,
+      "question": "Dans quel contexte des collectifs comme Bellingcat appliquent-ils couramment la géolocalisation visuelle ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Pour localiser des personnes privées à des fins commerciales"
+        },
+        {
+          "key": "B",
+          "text": "Pour vérifier si une image correspond réellement au lieu et au contexte qu'elle prétend représenter, notamment en période de conflit ou de désinformation"
+        },
+        {
+          "key": "C",
+          "text": "Uniquement pour des affaires de propriété immobilière"
+        },
+        {
+          "key": "D",
+          "text": "Pour remplacer entièrement le travail des agences de renseignement"
+        }
+      ],
+      "correct": "B",
+      "explanation": "cette méthode sert avant tout à authentifier ou infirmer des affirmations visuelles, un enjeu central de lutte contre la désinformation."
+    },
+    {
+      "id": 5,
+      "question": "Pourquoi la géolocalisation visuelle reste-t-elle, par nature, un exercice de probabilité plutôt que de certitude absolue ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Parce que les cartes en ligne sont toujours inexactes"
+        },
+        {
+          "key": "B",
+          "text": "Parce que des lieux différents peuvent se ressembler fortement, et que des images peuvent être recadrées ou sorties de leur contexte"
+        },
+        {
+          "key": "C",
+          "text": "Parce que cette méthode n'a jamais fonctionné dans la pratique"
+        },
+        {
+          "key": "D",
+          "text": "Parce que seules les professionnels peuvent l'utiliser correctement"
+        }
+      ],
+      "correct": "B",
+      "explanation": "ces limites justifient la documentation explicite d'un niveau de confiance plutôt que l'affirmation d'une certitude non justifiée par les indices disponibles."
+    }
+  ]
+}

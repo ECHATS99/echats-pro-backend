@@ -1,0 +1,135 @@
+{
+  "lesson": "17-email-osint",
+  "title": "E-mail et OSINT : ce qu'une Adresse Révèle",
+  "module": "Python & OSINT",
+  "order": 17,
+  "difficulty": "intermediaire",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Que révèle généralement la partie locale d'une adresse e-mail professionnelle (avant le @) ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Le mot de passe de la personne"
+        },
+        {
+          "key": "B",
+          "text": "Souvent une convention de nommage propre à l'organisation, permettant parfois de déduire d'autres adresses probables"
+        },
+        {
+          "key": "C",
+          "text": "L'adresse physique de l'organisation"
+        },
+        {
+          "key": "D",
+          "text": "Rien d'exploitable en OSINT"
+        }
+      ],
+      "correct": "B",
+      "explanation": "une fois la convention identifiée sur une adresse connue, elle peut permettre de formuler une hypothèse sur l'adresse d'une autre personne de la même organisation."
+    },
+    {
+      "id": 2,
+      "question": "À quoi correspond chaque bloc Received dans les en-têtes d'un e-mail ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Au contenu du message"
+        },
+        {
+          "key": "B",
+          "text": "À un saut, un serveur traversé par l'e-mail durant son trajet"
+        },
+        {
+          "key": "C",
+          "text": "À une pièce jointe"
+        },
+        {
+          "key": "D",
+          "text": "À l'adresse du destinataire uniquement"
+        }
+      ],
+      "correct": "B",
+      "explanation": "ce principe rejoint directement celui du routage et de traceroute, chaque saut correspondant à une étape du trajet technique du message."
+    },
+    {
+      "id": 3,
+      "question": "Que vérifie le mécanisme SPF ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Que le contenu du message n'a pas été modifié"
+        },
+        {
+          "key": "B",
+          "text": "Que le serveur qui a envoyé l'e-mail est bien autorisé à le faire pour ce domaine"
+        },
+        {
+          "key": "C",
+          "text": "Que l'e-mail ne contient aucune pièce jointe dangereuse"
+        },
+        {
+          "key": "D",
+          "text": "Que le destinataire a bien reçu le message"
+        }
+      ],
+      "correct": "B",
+      "explanation": "SPF vérifie l'autorisation du serveur d'envoi ; DKIM vérifie l'intégrité du message ; DMARC définit la politique en cas d'échec de l'un ou l'autre."
+    },
+    {
+      "id": 4,
+      "question": "Pourquoi faut-il se limiter à vérifier ses propres adresses dans un service de recherche de fuites de données ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Parce que ces services sont payants pour les adresses de tiers"
+        },
+        {
+          "key": "B",
+          "text": "Parce qu'interroger l'adresse d'un tiers sans son consentement sort du cadre éthique posé dans ce module"
+        },
+        {
+          "key": "C",
+          "text": "Parce que ces services ne fonctionnent que sur ses propres adresses techniquement"
+        },
+        {
+          "key": "D",
+          "text": "Il n'y a aucune restriction particulière"
+        }
+      ],
+      "correct": "B",
+      "explanation": "ce principe prolonge directement le cadre éthique déjà posé pour toute recherche OSINT portant sur des informations personnelles."
+    },
+    {
+      "id": 5,
+      "question": "Lequel de ces signaux, visible dans les en-têtes complets, est caractéristique d'un possible e-mail de phishing ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Un champ Date cohérent avec l'heure de réception"
+        },
+        {
+          "key": "B",
+          "text": "Un champ Reply-To différent du champ From, redirigeant les réponses vers une autre adresse"
+        },
+        {
+          "key": "C",
+          "text": "Un seul saut Received, correspondant à un envoi direct"
+        },
+        {
+          "key": "D",
+          "text": "SPF, DKIM et DMARC tous en pass"
+        }
+      ],
+      "correct": "B",
+      "explanation": "rediriger les réponses vers une adresse différente de l'expéditeur apparent est une technique fréquente dans les campagnes de phishing."
+    }
+  ]
+}

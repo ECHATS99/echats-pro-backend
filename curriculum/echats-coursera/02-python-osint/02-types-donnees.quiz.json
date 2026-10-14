@@ -1,0 +1,160 @@
+{
+  "lesson": "02-types-donnees",
+  "title": "Types de Données Python",
+  "module": "Python & OSINT",
+  "order": 2,
+  "difficulty": "debutant",
+  "questions_count": 6,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Que renvoie `\"cyber\"[1:4]` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "`cyb`"
+        },
+        {
+          "key": "B",
+          "text": "`yber`"
+        },
+        {
+          "key": "C",
+          "text": "`ybe`"
+        },
+        {
+          "key": "D",
+          "text": "`cybe`"
+        }
+      ],
+      "correct": "C",
+      "explanation": "le découpage va de l'indice 1 (inclus) à 4 (exclu) : y, b, e."
+    },
+    {
+      "id": 2,
+      "question": "Quelle structure élimine automatiquement les doublons ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "`list`"
+        },
+        {
+          "key": "B",
+          "text": "`tuple`"
+        },
+        {
+          "key": "C",
+          "text": "`set`"
+        },
+        {
+          "key": "D",
+          "text": "`str`"
+        }
+      ],
+      "correct": "C",
+      "explanation": "un ensemble ne contient que des éléments uniques."
+    },
+    {
+      "id": 3,
+      "question": "Comment accéder en toute sécurité à une clé qui peut ne pas exister dans un dictionnaire `d` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "`d[\"clé\"]`"
+        },
+        {
+          "key": "B",
+          "text": "`d.get(\"clé\")`"
+        },
+        {
+          "key": "C",
+          "text": "`d.find(\"clé\")`"
+        },
+        {
+          "key": "D",
+          "text": "`d(clé)`"
+        }
+      ],
+      "correct": "B",
+      "explanation": "`get` renvoie `None` (ou une valeur par défaut) au lieu de lever une `KeyError`."
+    },
+    {
+      "id": 4,
+      "question": "Quelle structure est immuable parmi les suivantes ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "`list`"
+        },
+        {
+          "key": "B",
+          "text": "`dict`"
+        },
+        {
+          "key": "C",
+          "text": "`tuple`"
+        },
+        {
+          "key": "D",
+          "text": "`set`"
+        }
+      ],
+      "correct": "C",
+      "explanation": "un tuple ne peut plus être modifié après sa création, contrairement à une liste, un dictionnaire ou un ensemble."
+    },
+    {
+      "id": 5,
+      "question": "Que vaut `{22, 80, 443} - {22, 443}` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "`{22, 443}`"
+        },
+        {
+          "key": "B",
+          "text": "`{80}`"
+        },
+        {
+          "key": "C",
+          "text": "`{22, 80, 443}`"
+        },
+        {
+          "key": "D",
+          "text": "`set()`"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la différence renvoie les éléments présents dans le premier ensemble mais pas dans le second."
+    },
+    {
+      "id": 6,
+      "question": "Pourquoi tester `saisie.isdigit()` avant `int(saisie)` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Pour accélérer le programme"
+        },
+        {
+          "key": "B",
+          "text": "Pour éviter une `ValueError` si la saisie n'est pas un nombre"
+        },
+        {
+          "key": "C",
+          "text": "Pour chiffrer la saisie"
+        },
+        {
+          "key": "D",
+          "text": "Ce n'est pas utile"
+        }
+      ],
+      "correct": "B",
+      "explanation": "`int(\"abc\")` provoque une erreur ; valider l'entrée est une bonne pratique de sécurité et de robustesse."
+    }
+  ]
+}

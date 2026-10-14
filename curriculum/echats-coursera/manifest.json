@@ -1,0 +1,669 @@
+{
+  "pack_name": "ECHATS PRO — Lessons Pack v1.0",
+  "version": "1.0.0",
+  "generated_at": "2026-10-10",
+  "total_lessons": 65,
+  "total_words": 175836,
+  "total_modules": 7,
+  "total_questions": 376,
+  "language": "fr",
+  "modules": [
+    {
+      "slug": "01-reseau-linux",
+      "title": "Réseau & Linux",
+      "track": "Fondamentaux Cybersécurité",
+      "difficulty": "debutant",
+      "lessons": [
+        {
+          "file": "01-introduction-reseaux.md",
+          "quiz_file": "01-introduction-reseaux.quiz.json",
+          "questions_count": 5,
+          "title": "Introduction aux Réseaux Informatiques",
+          "duration_minutes": 25,
+          "order": 1,
+          "category": "reseau"
+        },
+        {
+          "file": "02-modele-osi.md",
+          "quiz_file": "02-modele-osi.quiz.json",
+          "questions_count": 5,
+          "title": "Le Modèle OSI",
+          "duration_minutes": 30,
+          "order": 2,
+          "category": "reseau"
+        },
+        {
+          "file": "03-tcp-ip.md",
+          "quiz_file": "03-tcp-ip.quiz.json",
+          "questions_count": 5,
+          "title": "Le Modèle TCP/IP",
+          "duration_minutes": 30,
+          "order": 3,
+          "category": "reseau"
+        },
+        {
+          "file": "04-adressage-ip.md",
+          "quiz_file": "04-adressage-ip.quiz.json",
+          "questions_count": 5,
+          "title": "Adressage IP et Sous-réseaux",
+          "duration_minutes": 35,
+          "order": 4,
+          "category": "reseau"
+        },
+        {
+          "file": "05-dns.md",
+          "quiz_file": "05-dns.quiz.json",
+          "questions_count": 5,
+          "title": "Le DNS : l'annuaire d'Internet",
+          "duration_minutes": 30,
+          "order": 5,
+          "category": "reseau"
+        },
+        {
+          "file": "06-http-https.md",
+          "quiz_file": "06-http-https.quiz.json",
+          "questions_count": 5,
+          "title": "HTTP et HTTPS : le langage du web",
+          "duration_minutes": 35,
+          "order": 6,
+          "category": "reseau"
+        },
+        {
+          "file": "07-routage.md",
+          "quiz_file": "07-routage.quiz.json",
+          "questions_count": 5,
+          "title": "Le Routage",
+          "duration_minutes": 30,
+          "order": 7,
+          "category": "reseau"
+        },
+        {
+          "file": "08-switching-vlan.md",
+          "quiz_file": "08-switching-vlan.quiz.json",
+          "questions_count": 5,
+          "title": "Switching et VLAN",
+          "duration_minutes": 30,
+          "order": 8,
+          "category": "reseau"
+        },
+        {
+          "file": "09-firewall.md",
+          "quiz_file": "09-firewall.quiz.json",
+          "questions_count": 5,
+          "title": "Le Pare-feu (Firewall)",
+          "duration_minutes": 35,
+          "order": 9,
+          "category": "reseau"
+        },
+        {
+          "file": "10-commandes-linux-essentielles.md",
+          "quiz_file": "10-commandes-linux-essentielles.quiz.json",
+          "questions_count": 5,
+          "title": "Commandes Linux Essentielles",
+          "duration_minutes": 40,
+          "order": 10,
+          "category": "linux"
+        },
+        {
+          "file": "11-permissions-linux.md",
+          "quiz_file": "11-permissions-linux.quiz.json",
+          "questions_count": 5,
+          "title": "Permissions et Utilisateurs Linux",
+          "duration_minutes": 35,
+          "order": 11,
+          "category": "linux"
+        },
+        {
+          "file": "12-systemd-services.md",
+          "quiz_file": "12-systemd-services.quiz.json",
+          "questions_count": 5,
+          "title": "Systemd et Gestion des Services",
+          "duration_minutes": 35,
+          "order": 12,
+          "category": "linux"
+        },
+        {
+          "file": "13-bash-scripting.md",
+          "quiz_file": "13-bash-scripting.quiz.json",
+          "questions_count": 5,
+          "title": "Bash Scripting pour la Sécurité",
+          "duration_minutes": 40,
+          "order": 13,
+          "category": "linux"
+        },
+        {
+          "file": "14-ssh-tunneling.md",
+          "quiz_file": "14-ssh-tunneling.quiz.json",
+          "questions_count": 5,
+          "title": "SSH et Tunneling",
+          "duration_minutes": 40,
+          "order": 14,
+          "category": "reseau"
+        },
+        {
+          "file": "15-wireshark-analyse.md",
+          "quiz_file": "15-wireshark-analyse.quiz.json",
+          "questions_count": 5,
+          "title": "Analyse Réseau avec Wireshark",
+          "duration_minutes": 40,
+          "order": 15,
+          "category": "reseau"
+        },
+        {
+          "file": "16-nmap-scan.md",
+          "quiz_file": "16-nmap-scan.quiz.json",
+          "questions_count": 5,
+          "title": "Scan Réseau avec Nmap",
+          "duration_minutes": 40,
+          "order": 16,
+          "category": "reseau"
+        },
+        {
+          "file": "bonus-fondation-reseau.md",
+          "quiz_file": "bonus-fondation-reseau.quiz.json",
+          "questions_count": 10,
+          "title": "LEÇON 1  Le Réseau : Fondation de tout",
+          "duration_minutes": 20,
+          "order": 90,
+          "category": "reseau"
+        },
+        {
+          "file": "bonus-linux-avance.md",
+          "quiz_file": "bonus-linux-avance.quiz.json",
+          "questions_count": 10,
+          "title": "LEÇON 2  Linux : L'OS du Hacker",
+          "duration_minutes": 20,
+          "order": 91,
+          "category": "linux"
+        }
+      ],
+      "lessons_count": 18
+    },
+    {
+      "slug": "02-python-osint",
+      "title": "Python & OSINT",
+      "track": "Fondamentaux Cybersécurité",
+      "difficulty": "debutant",
+      "lessons": [
+        {
+          "file": "01-introduction-python.md",
+          "quiz_file": "01-introduction-python.quiz.json",
+          "questions_count": 5,
+          "title": "Introduction à Python",
+          "duration_minutes": 35,
+          "order": 1,
+          "category": "python"
+        },
+        {
+          "file": "02-types-donnees.md",
+          "quiz_file": "02-types-donnees.quiz.json",
+          "questions_count": 6,
+          "title": "Types de Données Python",
+          "duration_minutes": 40,
+          "order": 2,
+          "category": "python"
+        },
+        {
+          "file": "03-boucles-conditions.md",
+          "quiz_file": "03-boucles-conditions.quiz.json",
+          "questions_count": 5,
+          "title": "Boucles et Conditions",
+          "duration_minutes": 40,
+          "order": 3,
+          "category": "python"
+        },
+        {
+          "file": "04-fonctions-modules.md",
+          "quiz_file": "04-fonctions-modules.quiz.json",
+          "questions_count": 5,
+          "title": "Fonctions, Modules et Gestion des Erreurs",
+          "duration_minutes": 40,
+          "order": 4,
+          "category": "python"
+        },
+        {
+          "file": "05-fichiers-io.md",
+          "quiz_file": "05-fichiers-io.quiz.json",
+          "questions_count": 5,
+          "title": "Fichiers et Entrées/Sorties",
+          "duration_minutes": 40,
+          "order": 5,
+          "category": "python"
+        },
+        {
+          "file": "06-requetes-http-python.md",
+          "quiz_file": "06-requetes-http-python.quiz.json",
+          "questions_count": 5,
+          "title": "Requêtes HTTP en Python",
+          "duration_minutes": 40,
+          "order": 6,
+          "category": "python"
+        },
+        {
+          "file": "07-scraping-beautifulsoup.md",
+          "quiz_file": "07-scraping-beautifulsoup.quiz.json",
+          "questions_count": 5,
+          "title": "Web Scraping avec BeautifulSoup",
+          "duration_minutes": 40,
+          "order": 7,
+          "category": "python"
+        },
+        {
+          "file": "08-api-rest-python.md",
+          "quiz_file": "08-api-rest-python.quiz.json",
+          "questions_count": 5,
+          "title": "API REST en Python",
+          "duration_minutes": 40,
+          "order": 8,
+          "category": "python"
+        },
+        {
+          "file": "09-osint-introduction.md",
+          "quiz_file": "09-osint-introduction.quiz.json",
+          "questions_count": 5,
+          "title": "OSINT : enquêter avec les sources ouvertes",
+          "duration_minutes": 50,
+          "order": 9,
+          "category": "osint"
+        },
+        {
+          "file": "10-google-dorking.md",
+          "quiz_file": "10-google-dorking.quiz.json",
+          "questions_count": 5,
+          "title": "Google Dorking : exploiter les opérateurs de recherche avancés",
+          "duration_minutes": 45,
+          "order": 10,
+          "category": "osint"
+        },
+        {
+          "file": "11-recherche-utilisateur.md",
+          "quiz_file": "11-recherche-utilisateur.quiz.json",
+          "questions_count": 5,
+          "title": "Recherche de Pseudonymes à Travers les Plateformes",
+          "duration_minutes": 45,
+          "order": 11,
+          "category": "osint"
+        },
+        {
+          "file": "12-sherlock-osint.md",
+          "quiz_file": "12-sherlock-osint.quiz.json",
+          "questions_count": 5,
+          "title": "Sherlock : Automatiser la Recherche de Pseudonymes",
+          "duration_minutes": 40,
+          "order": 12,
+          "category": "osint"
+        },
+        {
+          "file": "13-maltego.md",
+          "quiz_file": "13-maltego.quiz.json",
+          "questions_count": 5,
+          "title": "Maltego : Visualiser les Relations entre Entités",
+          "duration_minutes": 45,
+          "order": 13,
+          "category": "osint"
+        },
+        {
+          "file": "14-shodan-censys.md",
+          "quiz_file": "14-shodan-censys.quiz.json",
+          "questions_count": 5,
+          "title": "Shodan et Censys : Cartographier ce qui est Exposé sur Internet",
+          "duration_minutes": 45,
+          "order": 14,
+          "category": "osint"
+        },
+        {
+          "file": "15-analyse-metadonnees.md",
+          "quiz_file": "15-analyse-metadonnees.quiz.json",
+          "questions_count": 5,
+          "title": "Analyse de Métadonnées : ce que les Fichiers Révèlent",
+          "duration_minutes": 40,
+          "order": 15,
+          "category": "osint"
+        },
+        {
+          "file": "16-geolocalisation-image.md",
+          "quiz_file": "16-geolocalisation-image.quiz.json",
+          "questions_count": 5,
+          "title": "Géolocalisation d'Image : Retrouver un Lieu sans Métadonnées",
+          "duration_minutes": 45,
+          "order": 16,
+          "category": "osint"
+        },
+        {
+          "file": "17-email-osint.md",
+          "quiz_file": "17-email-osint.quiz.json",
+          "questions_count": 5,
+          "title": "E-mail et OSINT : ce qu'une Adresse Révèle",
+          "duration_minutes": 40,
+          "order": 17,
+          "category": "osint"
+        },
+        {
+          "file": "18-domaine-whois.md",
+          "quiz_file": "18-domaine-whois.quiz.json",
+          "questions_count": 5,
+          "title": "WHOIS Approfondi : Au-delà des Bases",
+          "duration_minutes": 40,
+          "order": 18,
+          "category": "osint"
+        },
+        {
+          "file": "19-rapport-osint.md",
+          "quiz_file": "19-rapport-osint.quiz.json",
+          "questions_count": 5,
+          "title": "Rédiger un Rapport OSINT",
+          "duration_minutes": 50,
+          "order": 19,
+          "category": "osint"
+        },
+        {
+          "file": "bonus-osint-avance.md",
+          "quiz_file": "bonus-osint-avance.quiz.json",
+          "questions_count": 10,
+          "title": "LEÇON 5  OSINT Avancé",
+          "duration_minutes": 20,
+          "order": 91,
+          "category": "osint"
+        },
+        {
+          "file": "bonus-python-cybersecurite.md",
+          "quiz_file": "bonus-python-cybersecurite.quiz.json",
+          "questions_count": 10,
+          "title": "LEÇON 3  Python pour la Cybersécurité",
+          "duration_minutes": 23,
+          "order": 90,
+          "category": "python"
+        }
+      ],
+      "lessons_count": 21
+    },
+    {
+      "slug": "03-securite-web-pentest",
+      "title": "Sécurité Web & Pentest",
+      "track": "Fondamentaux Cybersécurité",
+      "difficulty": "debutant",
+      "lessons": [
+        {
+          "file": "01-introduction-securite-web.md",
+          "quiz_file": "01-introduction-securite-web.quiz.json",
+          "questions_count": 5,
+          "title": "Juice Shop : vos premières vulnérabilités web",
+          "duration_minutes": 60,
+          "order": 1,
+          "category": "web"
+        },
+        {
+          "file": "02-owasp-top-10.md",
+          "quiz_file": "02-owasp-top-10.quiz.json",
+          "questions_count": 5,
+          "title": "L'OWASP Top 10",
+          "duration_minutes": 35,
+          "order": 2,
+          "category": "web"
+        },
+        {
+          "file": "03-injection-sql.md",
+          "quiz_file": "03-injection-sql.quiz.json",
+          "questions_count": 5,
+          "title": "L'Injection SQL",
+          "duration_minutes": 45,
+          "order": 3,
+          "category": "web"
+        },
+        {
+          "file": "04-xss.md",
+          "quiz_file": "04-xss.quiz.json",
+          "questions_count": 5,
+          "title": "Le Cross-Site Scripting (XSS)",
+          "duration_minutes": 40,
+          "order": 4,
+          "category": "web"
+        },
+        {
+          "file": "05-csrf.md",
+          "quiz_file": "05-csrf.quiz.json",
+          "questions_count": 5,
+          "title": "Le Cross-Site Request Forgery (CSRF)",
+          "duration_minutes": 35,
+          "order": 5,
+          "category": "web"
+        },
+        {
+          "file": "06-ssrf.md",
+          "quiz_file": "06-ssrf.quiz.json",
+          "questions_count": 5,
+          "title": "Le Server-Side Request Forgery (SSRF)",
+          "duration_minutes": 40,
+          "order": 6,
+          "category": "web"
+        },
+        {
+          "file": "07-rce.md",
+          "quiz_file": "07-rce.quiz.json",
+          "questions_count": 5,
+          "title": "L'Exécution de Code à Distance (RCE)",
+          "duration_minutes": 45,
+          "order": 7,
+          "category": "web"
+        },
+        {
+          "file": "08-lfi-rfi.md",
+          "quiz_file": "08-lfi-rfi.quiz.json",
+          "questions_count": 5,
+          "title": "LFI et RFI : Inclusion de Fichiers",
+          "duration_minutes": 40,
+          "order": 8,
+          "category": "web"
+        },
+        {
+          "file": "09-idor.md",
+          "quiz_file": "09-idor.quiz.json",
+          "questions_count": 5,
+          "title": "L'IDOR : Contrôle d'Accès Défaillant",
+          "duration_minutes": 40,
+          "order": 9,
+          "category": "web"
+        },
+        {
+          "file": "10-xxe.md",
+          "quiz_file": "10-xxe.quiz.json",
+          "questions_count": 5,
+          "title": "L'Injection XXE (XML External Entity)",
+          "duration_minutes": 40,
+          "order": 10,
+          "category": "web"
+        },
+        {
+          "file": "11-burp-suite.md",
+          "quiz_file": "11-burp-suite.quiz.json",
+          "questions_count": 5,
+          "title": "Burp Suite : Prise en Main",
+          "duration_minutes": 45,
+          "order": 11,
+          "category": "web"
+        },
+        {
+          "file": "12-owasp-zap.md",
+          "quiz_file": "12-owasp-zap.quiz.json",
+          "questions_count": 5,
+          "title": "OWASP ZAP",
+          "duration_minutes": 40,
+          "order": 12,
+          "category": "web"
+        },
+        {
+          "file": "13-reconnaissance-web.md",
+          "quiz_file": "13-reconnaissance-web.quiz.json",
+          "questions_count": 5,
+          "title": "Reconnaissance Web",
+          "duration_minutes": 40,
+          "order": 13,
+          "category": "web"
+        },
+        {
+          "file": "14-enumeration-sous-domaines.md",
+          "quiz_file": "14-enumeration-sous-domaines.quiz.json",
+          "questions_count": 5,
+          "title": "Énumération de Sous-domaines",
+          "duration_minutes": 40,
+          "order": 14,
+          "category": "web"
+        },
+        {
+          "file": "15-fuzzing.md",
+          "quiz_file": "15-fuzzing.quiz.json",
+          "questions_count": 5,
+          "title": "Le Fuzzing",
+          "duration_minutes": 40,
+          "order": 15,
+          "category": "web"
+        },
+        {
+          "file": "16-exploitation-metasploit.md",
+          "quiz_file": "16-exploitation-metasploit.quiz.json",
+          "questions_count": 5,
+          "title": "Exploitation avec Metasploit",
+          "duration_minutes": 45,
+          "order": 16,
+          "category": "web"
+        },
+        {
+          "file": "17-privilege-escalation-linux.md",
+          "quiz_file": "17-privilege-escalation-linux.quiz.json",
+          "questions_count": 5,
+          "title": "Élévation de Privilèges sous Linux",
+          "duration_minutes": 45,
+          "order": 17,
+          "category": "web"
+        },
+        {
+          "file": "18-privilege-escalation-windows.md",
+          "quiz_file": "18-privilege-escalation-windows.quiz.json",
+          "questions_count": 5,
+          "title": "Élévation de Privilèges sous Windows",
+          "duration_minutes": 45,
+          "order": 18,
+          "category": "web"
+        },
+        {
+          "file": "19-post-exploitation.md",
+          "quiz_file": "19-post-exploitation.quiz.json",
+          "questions_count": 5,
+          "title": "Post-exploitation",
+          "duration_minutes": 40,
+          "order": 19,
+          "category": "web"
+        },
+        {
+          "file": "20-rapport-pentest.md",
+          "quiz_file": "20-rapport-pentest.quiz.json",
+          "questions_count": 5,
+          "title": "Rédaction du Rapport de Pentest",
+          "duration_minutes": 45,
+          "order": 20,
+          "category": "web"
+        },
+        {
+          "file": "bonus-pentest-autorise.md",
+          "quiz_file": "bonus-pentest-autorise.quiz.json",
+          "questions_count": 10,
+          "title": "LEÇON 7  Pentest",
+          "duration_minutes": 20,
+          "order": 91,
+          "category": "pentest"
+        },
+        {
+          "file": "bonus-securite-web.md",
+          "quiz_file": "bonus-securite-web.quiz.json",
+          "questions_count": 10,
+          "title": "LEÇON 6  Web Security",
+          "duration_minutes": 20,
+          "order": 90,
+          "category": "web"
+        }
+      ],
+      "lessons_count": 22
+    },
+    {
+      "slug": "05-red-team-ia",
+      "title": "Red Team & IA",
+      "track": "Fondamentaux Cybersécurité",
+      "difficulty": "intermediaire",
+      "lessons": [
+        {
+          "file": "bonus-red-team-detection.md",
+          "quiz_file": "bonus-red-team-detection.quiz.json",
+          "questions_count": 10,
+          "title": "LEÇON 10  Red Team",
+          "duration_minutes": 20,
+          "order": 90,
+          "category": "red-team"
+        }
+      ],
+      "lessons_count": 1
+    },
+    {
+      "slug": "06-cryptographie",
+      "title": "Cryptographie",
+      "track": "Fondamentaux Cybersécurité",
+      "difficulty": "intermediaire",
+      "lessons": [
+        {
+          "file": "bonus-cryptographie.md",
+          "quiz_file": "bonus-cryptographie.quiz.json",
+          "questions_count": 10,
+          "title": "LEÇON 4  Cryptographie",
+          "duration_minutes": 20,
+          "order": 90,
+          "category": "crypto"
+        }
+      ],
+      "lessons_count": 1
+    },
+    {
+      "slug": "07-malware-analysis",
+      "title": "Malware Analysis",
+      "track": "Fondamentaux Cybersécurité",
+      "difficulty": "intermediaire",
+      "lessons": [
+        {
+          "file": "bonus-analyse-malware.md",
+          "quiz_file": "bonus-analyse-malware.quiz.json",
+          "questions_count": 10,
+          "title": "LEÇON 9  Malware Analysis",
+          "duration_minutes": 20,
+          "order": 90,
+          "category": "malware"
+        }
+      ],
+      "lessons_count": 1
+    },
+    {
+      "slug": "09-anglais-technique",
+      "title": "Anglais Technique en Cybersécurité",
+      "track": "Fondamentaux Cybersécurité",
+      "difficulty": "intermediaire",
+      "lessons": [
+        {
+          "file": "01-anglais-technique.md",
+          "quiz_file": "01-anglais-technique.quiz.json",
+          "questions_count": 10,
+          "title": "LEÇON 11  Anglais Technique en Cybersécurité",
+          "duration_minutes": 20,
+          "order": 1,
+          "category": "anglais"
+        }
+      ],
+      "lessons_count": 1
+    }
+  ],
+  "import_instructions": {
+    "backend_endpoint": "POST /api/admin/import-lessons",
+    "format": "multipart/form-data",
+    "fields": {
+      "manifest": "manifest.json",
+      "lessons": "*.md (tous les fichiers)",
+      "quizzes": "*.quiz.json (un par leçon)"
+    }
+  }
+}

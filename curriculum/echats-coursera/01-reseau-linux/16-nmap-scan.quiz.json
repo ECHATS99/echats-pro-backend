@@ -1,0 +1,135 @@
+{
+  "lesson": "16-nmap-scan",
+  "title": "Scan Réseau avec Nmap",
+  "module": "Réseau & Linux",
+  "order": 16,
+  "difficulty": "intermediaire",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Que signifie l'état « filtered » pour un port dans Nmap ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Le port est ouvert"
+        },
+        {
+          "key": "B",
+          "text": "Le port est fermé avec un RST"
+        },
+        {
+          "key": "C",
+          "text": "Un pare-feu ou filtre empêche de déterminer s'il est ouvert"
+        },
+        {
+          "key": "D",
+          "text": "Le port est chiffré"
+        }
+      ],
+      "correct": "C",
+      "explanation": "filtered indique l'absence de réponse exploitable, généralement à cause d'un pare-feu."
+    },
+    {
+      "id": 2,
+      "question": "Quelle option réalise la découverte d'hôtes sans scan de ports ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "`-sS`"
+        },
+        {
+          "key": "B",
+          "text": "`-sn`"
+        },
+        {
+          "key": "C",
+          "text": "`-sV`"
+        },
+        {
+          "key": "D",
+          "text": "`-p-`"
+        }
+      ],
+      "correct": "B",
+      "explanation": "`-sn` vérifie quelles machines sont actives, sans tester leurs ports."
+    },
+    {
+      "id": 3,
+      "question": "Quelle option identifie les logiciels et leurs versions sur les ports ouverts ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "`-sU`"
+        },
+        {
+          "key": "B",
+          "text": "`-O`"
+        },
+        {
+          "key": "C",
+          "text": "`-sV`"
+        },
+        {
+          "key": "D",
+          "text": "`-Pn`"
+        }
+      ],
+      "correct": "C",
+      "explanation": "`-sV` interroge les services pour déterminer le logiciel et sa version."
+    },
+    {
+      "id": 4,
+      "question": "Dans quel cas est-il légal de scanner un réseau avec Nmap ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Quand on est curieux"
+        },
+        {
+          "key": "B",
+          "text": "Quand on possède le réseau ou qu'on a une autorisation écrite"
+        },
+        {
+          "key": "C",
+          "text": "Quand le scan est rapide"
+        },
+        {
+          "key": "D",
+          "text": "Quand on utilise le mode `-T0`"
+        }
+      ],
+      "correct": "B",
+      "explanation": "l'autorisation et le périmètre définis sont la condition de légalité, quelle que soit la technique."
+    },
+    {
+      "id": 5,
+      "question": "Quel avantage a le SYN scan (`-sS`) par rapport au TCP connect (`-sT`) ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Il ne nécessite aucun privilège"
+        },
+        {
+          "key": "B",
+          "text": "Il n'établit pas de connexion complète, il est plus rapide et laisse moins de traces applicatives"
+        },
+        {
+          "key": "C",
+          "text": "Il chiffre les paquets"
+        },
+        {
+          "key": "D",
+          "text": "Il scanne l'UDP"
+        }
+      ],
+      "correct": "B",
+      "explanation": "le SYN scan envoie un SYN puis un RST sans finir la poignée de main ; il demande en revanche les droits root."
+    }
+  ]
+}

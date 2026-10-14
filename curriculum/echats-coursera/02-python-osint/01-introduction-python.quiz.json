@@ -1,0 +1,135 @@
+{
+  "lesson": "01-introduction-python",
+  "title": "Introduction à Python",
+  "module": "Python & OSINT",
+  "order": 1,
+  "difficulty": "debutant",
+  "questions_count": 5,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Quelle fonction affiche du texte à l'écran en Python ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "`echo()`"
+        },
+        {
+          "key": "B",
+          "text": "`print()`"
+        },
+        {
+          "key": "C",
+          "text": "`display()`"
+        },
+        {
+          "key": "D",
+          "text": "`write()`"
+        }
+      ],
+      "correct": "B",
+      "explanation": "`print()` est la fonction standard d'affichage."
+    },
+    {
+      "id": 2,
+      "question": "Que renvoie toujours la fonction `input()` ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Un entier"
+        },
+        {
+          "key": "B",
+          "text": "Un booléen"
+        },
+        {
+          "key": "C",
+          "text": "Une chaîne de caractères"
+        },
+        {
+          "key": "D",
+          "text": "Un décimal"
+        }
+      ],
+      "correct": "C",
+      "explanation": "même si l'utilisateur tape un nombre, `input()` renvoie du texte ; il faut le convertir avec `int()` ou `float()`."
+    },
+    {
+      "id": 3,
+      "question": "Quel nom de variable est valide ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "`2nom`"
+        },
+        {
+          "key": "B",
+          "text": "`nom-utilisateur`"
+        },
+        {
+          "key": "C",
+          "text": "`nom_utilisateur`"
+        },
+        {
+          "key": "D",
+          "text": "`class`"
+        }
+      ],
+      "correct": "C",
+      "explanation": "un nom ne commence pas par un chiffre, ne contient pas de tiret et ne peut pas être un mot réservé."
+    },
+    {
+      "id": 4,
+      "question": "À quoi sert un environnement virtuel (venv) ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "À accélérer Python"
+        },
+        {
+          "key": "B",
+          "text": "À isoler les dépendances d'un projet"
+        },
+        {
+          "key": "C",
+          "text": "À chiffrer le code"
+        },
+        {
+          "key": "D",
+          "text": "À installer Python"
+        }
+      ],
+      "correct": "B",
+      "explanation": "chaque projet garde ses propres versions de bibliothèques sans perturber les autres ni le système."
+    },
+    {
+      "id": 5,
+      "question": "Quelle est la bonne façon de lire une erreur Python (traceback) ?",
+      "type": "single_choice",
+      "options": [
+        {
+          "key": "A",
+          "text": "Ignorer le message"
+        },
+        {
+          "key": "B",
+          "text": "Lire la dernière ligne (type d'erreur) puis le numéro de ligne indiqué"
+        },
+        {
+          "key": "C",
+          "text": "Relancer le programme"
+        },
+        {
+          "key": "D",
+          "text": "Réinstaller Python"
+        }
+      ],
+      "correct": "B",
+      "explanation": "la dernière ligne donne le type et le message de l'erreur, les lignes précédentes indiquent où elle s'est produite."
+    }
+  ]
+}
