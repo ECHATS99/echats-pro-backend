@@ -3,6 +3,7 @@ uvicorn[standard]
 sqlalchemy
 alembic
 psycopg2-binary
+psycopg[binary]
 pydantic
 pydantic-settings
 email-validator
@@ -19,3 +20,4 @@ python-multipart
 pytest
 pytest-asyncio
 reportlab
+pyyaml
